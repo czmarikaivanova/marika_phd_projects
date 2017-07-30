@@ -48,6 +48,7 @@
 \usepackage{graphicx}
 \usepackage{tkz-graph}
 \usepackage{amsmath, amssymb}
+\usepackage{multirow}
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{amsfonts}
@@ -283,7 +284,11 @@ In this section, we study lower bounds on the delay for several restrictions of 
 Obvious bounds for a general graph instance are given by
 \begin{observation}
 For an instance $(G,S)$ of Problem \ref{prob:min},
-$$\left\lceil\log\frac{n}{|S|}\right\rceil\leq t^* \leq n-|S|.$$
+\begin{equation}
+\left\lceil\log\frac{n}{|S|}\right\rceil\leq t^* \leq n-|S|.
+\label{eq:loglb}
+\end{equation}
+\label{obs:loglb}
 \end{observation}
 
 In the following, we use $m$-step Fibonacci numbers \cite{noe05}, a generalization of well known (2-step) Fibonacci numbers, defined by letting, 
@@ -323,6 +328,7 @@ For a $d$-regular graph on $n$ nodes and $|S|$ sources, a lower bound on the del
 \label{lem:lbreg1}
 \underline{t}=\left\lceil\min\{k:2s\sum\limits_{j=1}^k F^{(d-1)}_j\geq n\}\right\rceil.
 \end{equation*}
+\label{prop:lbfib}
 \end{proposition}
 \begin{proof}
 In order to inform $n$ nodes in the best possible scenario, the signal has to be relayed sufficiently many time steps so that the maximum possible number of informed nodes becomes $n$.
@@ -416,6 +422,7 @@ Finally, $c'$ stores $|V_k\setminus V_{k-1}|$, thus the number of nodes newly in
 
 \begin{proposition}
 If $G$ is an arbitrary graph with $n$ nodes, $m$ sources and node degrees $d_i$, $1\leq i\leq n$, Alg.~\ref{alg:dreg} calculates a lower bound on the delay in $G$.
+\label{prop:deg}
 \end{proposition}
 \begin{proof}
 The assumption that nodes with higher degree in $G$ are informed first in the optimal solution is justified by Lemma \ref{lemma:degorder}.
@@ -427,6 +434,7 @@ As soon as it is possible that at least $n$ nodes are informed, the algorithm re
 \end{proof}
 
 \input{sect5-upper-bounds.tex}
+\input{sect6-experimental-results.tex}
 
 %\begin{acknowledgements}
 %If you'd like to thank anyone, place your comments here
@@ -514,6 +522,10 @@ J. Integer Seq. 8, Article 05.4.4, 2005.
 Scheuermann, P., Wu, G.,
 Heuristic Algorithms for Broadcasting in Point-to-Point Computer Networks,
 IEEE Transactions on Computers, 804 -- 811, 33, 9 (1984)
+
+\bibitem{datasets}
+Singh, A.,
+http://dcis.uohyd.ernet.in/~alokcs/dtp.zip
 
 \bibitem{slater81}
 Slater, P. J., Cockayne, E. J., Hedetniemi, S.T.,
