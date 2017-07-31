@@ -4,14 +4,15 @@ The first set of experiments is carried out on the datasets available online \ci
 Tab. \ref{tab:ins50} shows results for instances with 50 nodes and for number of sources indicated in the first column ranging between 1 and 5. 
 Column \emph{inst} contains name of file in the dataset.
 Columns \emph{log, deg} and \emph{fib} contain lower bound determined by Obs. \ref{obs:loglb}, Prop. \ref{alg:dreg} and Prop. \ref{prop:lbfib}, respectively.
-Next two columns correspond to exact objective function value obtained by solving the optimization model \eqref{mod:basic} and the decision model \eqref{mod:partition}.
+Next two columns correspond to exact objective function value obtained by solving the optimization model \eqref{mod:basic} and the decision model \eqref{mod:partition} 
+extended by symmetry removal \eqref{mod:part:sr}.
 The last column contains upper bounds determined by solving Alg \ref{alg:match}.
 Small instances with 50 nodes are solved within the imposed time limit by all considered methods. 
 
 
 \begin{table}[]
 \begin{tabular}{lllllllll}
- $|S|$ & inst & id & log & deg & fib & ILP-opt & ILP-dec & match \\\hline
+ $|S|$ & inst & id & log & deg & fib & opt & dec & match \\\hline
 \multirow{9}{*}{1}
 & ins\_50\_1.txt & 30113 & 6 & 6 & 6 & 6  & 6   & 7 \\
 & ins\_50\_2.txt & 19143 & 6 & 6 & 6 & 6  & 6   & 8 \\
@@ -67,7 +68,70 @@ Small instances with 50 nodes are solved within the imposed time limit by all co
 & ins\_50\_8.txt & 16206 & 4 & 4 & 4 & 4  & 4   & 4 \\
 & ins\_50\_9.txt & 29836 & 4 & 4 & 4 & 4  & 4   & 4
 \end{tabular}
-\caption{Results for instances with 50 nodes}
+\caption{Objective function values for instances with 50 nodes}
 \label{tab:ins50}
 \end{table}
 
+
+\begin{table}[]
+\begin{tabular}{lllllllll}
+ $|S|$ & inst & id & log & deg & fib & opt & dec & match \\\hline
+\hline 
+\multirow{9}{*}{1}
+& ins\_100\_1.txt & 30113 & 6 & 6 & 6 & 6  & 6  & 7 \\
+& ins\_100\_2.txt & 19143 & 6 & 6 & 6 & 6  & 6  & 8 \\
+& ins\_100\_3.txt & 24458 & 6 & 6 & 6 & 6  & 6  & 7 \\
+& ins\_100\_4.txt & 6401  & 6 & 6 & 6 & 9  & 9  & 11 \\
+& ins\_100\_5.txt & 6720  & 6 & 6 & 6 & 9  & 9  & 10 \\
+& ins\_100\_6.txt & 2723  & 6 & 6 & 6 & 10 & 10 & 12 \\
+& ins\_100\_7.txt & 27741 & 6 & 6 & 6 & 6  & 6  & 7 \\
+& ins\_100\_8.txt & 20708 & 6 & 6 & 6 & 6  & 6  & 8 \\
+& ins\_100\_9.txt & 14312 & 6 & 6 & 6 & 6  & 6  & 8 \\
+\hline 
+\multirow{9}{*}{2}
+& ins\_100\_1.txt & 1986  & 5 & 5 & 5 & 5  & 5  & 6 \\
+& ins\_100\_2.txt & 32595 & 5 & 5 & 5 & 5  & 5  & 6 \\
+& ins\_100\_3.txt & 24423 & 5 & 5 & 5 & 5  & 5  & 6 \\
+& ins\_100\_4.txt & 117   & 5 & 5 & 5 & 7  & 7  & 9 \\
+& ins\_100\_5.txt & 13194 & 5 & 5 & 5 & 6  & 6  & 7 \\
+& ins\_100\_6.txt & 15443 & 5 & 5 & 5 & 7  & 7  & 8 \\
+& ins\_100\_7.txt & 7348  & 5 & 5 & 5 & 5  & 5  & 7 \\
+& ins\_100\_8.txt & 28688 & 5 & 5 & 5 & 5  & 5  & 6 \\
+& ins\_100\_9.txt & 24996 & 5 & 5 & 5 & 5  & 5  & 6 \\
+\hline 
+\multirow{9}{*}{3}
+& ins\_100\_1.txt & 20783 & 4 & 5 & 5 & 5  & 5  & 5 \\
+& ins\_100\_2.txt & 2253  & 4 & 5 & 5 & 5  & 5  & 6 \\
+& ins\_100\_3.txt & 32297 & 4 & 5 & 5 & 5  & 5  & 5 \\
+& ins\_100\_4.txt & 24624 & 4 & 5 & 5 & 7  & 7  & 9 \\
+& ins\_100\_5.txt & 31903 & 4 & 5 & 5 & 5  & 5  & 6 \\
+& ins\_100\_6.txt & 22756 & 4 & 5 & 5 & 7  & 7  & 8 \\
+& ins\_100\_7.txt & 28298 & 4 & 5 & 5 & 5  & 5  & 6 \\
+& ins\_100\_8.txt & 16072 & 4 & 5 & 5 & 5  & 5  & 6 \\
+& ins\_100\_9.txt & 19466 & 4 & 5 & 5 & 5  & 5  & 5 \\
+\hline 
+\multirow{9}{*}{4}
+& ins\_100\_1.txt & 7723  & 4 & 4 & 4 & 4  & 4  & 5 \\
+& ins\_100\_2.txt & 11983 & 4 & 4 & 4 & 4  & 4  & 5 \\
+& ins\_100\_3.txt & 10379 & 4 & 4 & 4 & 4  & 4  & 5 \\
+& ins\_100\_4.txt & 27887 & 4 & 4 & 4 & 5  & 5  & 6 \\
+& ins\_100\_5.txt & 30116 & 4 & 4 & 4 & 5  & 5  & 5 \\
+& ins\_100\_6.txt & 30994 & 4 & 4 & 4 & 6  & 6  & 6 \\
+& ins\_100\_7.txt & 7109  & 4 & 4 & 4 & 4  & 4  & 5 \\
+& ins\_100\_8.txt & 14146 & 4 & 4 & 4 & 4  & 4  & 5 \\
+& ins\_100\_9.txt & 32428 & 4 & 4 & 4 & 4  & 4  & 6 \\
+\hline 
+\multirow{9}{*}{5}
+& ins\_100\_1.txt & 23959 & 4 & 4 & 4 & 4  & 4  & 4 \\
+& ins\_100\_2.txt & 4508  & 4 & 4 & 4 & 4  & 4  & 4 \\
+& ins\_100\_3.txt & 11489 & 4 & 4 & 4 & 4  & 4  & 4 \\
+& ins\_100\_4.txt & 262   & 4 & 4 & 4 & 5  & 5  & 5 \\
+& ins\_100\_5.txt & 28832 & 4 & 4 & 4 & 5  & 5  & 6 \\
+& ins\_100\_6.txt & 29439 & 4 & 4 & 4 & 5  & 5  & 6 \\
+& ins\_100\_7.txt & 29054 & 4 & 4 & 4 & 4  & 4  & 4 \\
+& ins\_100\_8.txt & 16206 & 4 & 4 & 4 & 4  & 4  & 4 \\
+& ins\_100\_9.txt & 29836 & 4 & 4 & 4 & 4  & 4  & 4
+\end{tabular}
+\caption{Objective function values for instances with 100 nodes}
+\label{tab:ins100}
+\end{table}
