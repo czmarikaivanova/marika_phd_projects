@@ -356,17 +356,17 @@ $c\leftarrow m$;%\tcp{every source informs a new node}
 $~k\leftarrow 0$\;
 \While {$c<n$} {
 $k\leftarrow k+1$\;
-$c_n\leftarrow 0$\;
+$c'\leftarrow 0$\;
 \For{$i=1,\dots,c$} {
 	\If {$a_i<d_i$} {
 		$a_i\leftarrow a_i + 1$\;
-		$c_n\leftarrow c_n + 1$\;
-		\If {$c+c_n\leq n$} {
-			$a_{c+c_n}\leftarrow 1$;\tcp{Newly informed node} 
+		$c'\leftarrow c' + 1$\;
+		\If {$c+c'\leq n$} {
+			$a_{c+c'}\leftarrow 1$;\tcp{Newly informed node} 
 		}
 	}
 }
-$c\leftarrow c + c_n$\;
+$c\leftarrow c + c'$\;
 }
 \Return $k$\;
 %\Return $\lceil k/s \rceil$\;
@@ -379,7 +379,7 @@ For each iteration $k$, Alg.~\ref{alg:dreg} stores degrees of nodes in $T^k$ in 
 Note that the forest $T^k$ is not actually constructed. 
 The algorithm operates merely with potential degrees of nodes in $T^k$.
 Next, variable $c$ keeps the value $|V_k|$, i.e., the number nodes informed within $k$ steps.
-Finally, $c_n$ stores $|V_k\setminus V_{k-1}|$, thus the number of nodes newly informed in time step $k$.
+Finally, $c'$ stores $|V_k\setminus V_{k-1}|$, thus the number of nodes newly informed in time step $k$.
 
 \begin{proposition}
 If $G$ is an arbitrary graph with $n$ nodes, $m$ sources and node degrees $d_i$, $1\leq i\leq n$, Alg.~\ref{alg:dreg} calculates a lower bound on the delay in $G$.
