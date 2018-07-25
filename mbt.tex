@@ -40,6 +40,7 @@
 %\documentclass{svjour3}                     % onecolumn (standard format)
 %\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
 \documentclass[smallextended]{svjour3}       % onecolumn (second format)
+\usepackage[T1]{fontenc}
 %\documentclass[twocolumn]{svjour3}          % twocolumn
 %
 \smartqed  % flush right qed marks, e.g. at end of proof
@@ -135,11 +136,11 @@ The task is to disseminate a signal to every node in a shortest possible time (d
 An \emph{informed} node is a node that has received the signal.
 Otherwise, a node is \emph{uninformed}.
 At the beginning, the set of informed nodes is exactly the set of sources.
-An informed node $u$ can send the signal to an uninformed node $v$ if $u$ and $v$ are located within a communication vicinity of each other.
+An informed node can send the signal to an uninformed node if the two nodes are located within a communication vicinity of each other.
 
-The time is divided into discrete time steps.
-At each time step, every informed node can forward the signal to at most one uninformed neighbor.
-The number of informed nodes at some time step can therefore be no more than the double of the number of informed nodes at the previous time step.
+The time is divided into a finite number of time steps.
+Every informed node can, at each time step, forward the signal to at most one uninformed neighbor node.
+Therefore, the number of informed nodes can at most be doubled from one step to the next.
 %\subsection{Motivation and Related Work}
 %This communication protocol differs from various wireless communication models where a signal can be relayed to all nodes within a visibility range of a sender.
 This communication protocol appears in various practical application such as communication among computer processors or telephone networks.
@@ -149,89 +150,120 @@ This is common in satellite communication.
 
 {Literature overview}
 
-MBT has been shown to be NP-complete on arbitrary graphs in \cite{slater81}. 
-The problem remains NP-complete even for several restricted communication networks \cite{jansen95} such as
-split graphs with delay $t^*=2$, chordal graphs,
-bipartite and planar graphs with maximum degree 3 and a single source,
-several variants of grid graphs,
-bipartite planar graphs with delay $t^*=2$ and maximum degree 3. 
-Yet another NP-completeness result for 3-regular planar graphs with delay 2 is shown in \cite{middendorf93}.
+Deciding whether an instance of MBT has a solution with delay at most $t$ has been shown to be NP-complete \cite{slater81}. 
+For bipartite planar graphs with maximum degree 3, NP-completeness persists even if $t=2$ or there is only one source \cite{jansen95}.
+When $t=2$, the problem also remains NP-complete for cubic planar graphs \cite{middendorf93}, grid graphs with maximum degree 3,
+complete grid graphs, chordal graphs, and for split graphs \cite{jansen95}. 
+The single-source variant of the decision version of MBT is NP-complete for grid graphs with maximum degree 4, and for chordal graphs \cite{jansen95}.
 The problem is known to be polynomial in trees \cite{slater81}.
-Whether the problem is polynomial or NP-complete for split graphs with a single source was stated as an open questions in \cite{jansen95}, and hasn't been answered yet to our best knowledge.
+Whether the problem is polynomial or NP-complete for split graphs with a single source was stated as an open questions in \cite{jansen95}, and has to the best of our knowledge not been answered yet.
 
-A number of inexact methods for both general and special graph classes has been proposed in the literature during the last three decades.
-One of the first works of this category is \cite{scheuermann84}, 
-where the authors introduce an exact dynamic programming algorithm based on generating all maximum matchings in an induced bipartite graph.
-Additional contribution of \cite{scheuermann84} are heuristic approaches for near optimal broadcasting.
+A number of inexact methods, for both general and special graph classes, have been proposed in the literature during the last three decades.
+One of the first works of this category \cite{scheuermann84} 
+introduces an exact dynamic programming algorithm based on generating all maximum matchings in an induced bipartite graph.
+Additional contributions of \cite{scheuermann84} are heuristic approaches for near optimal broadcasting.
 From more recent works we mention \cite{hasson04}, which describes a meta heuristic algorithm for MBT, and provides a comparison with other existing methods.
 The communication model is considered in an existing satellite navigation system in \cite{chu17}, where a greedy inexact methods is proposed together with a non-linear mathematical model.
 Examples of additional efficient heuristics can be found e.g. in \cite{harutyunyan06,harutyunyan14,wang10,jimborean13}.
 
 Approximation algorithms for MBT are studied in \cite{kortsarz95}. 
-The authors argue that methods presented in \cite{scheuermann84} provide no guarantee on the performance and state an $n$-node wheel as an example of an unfavourable instance.
+The authors argue that methods presented in \cite{scheuermann84} provide no guarantee on the performance, and show that the $n$-node wheel is an example of an unfavourable instance.
 They introduce an $\mathcal{O}(\sqrt{n})$-additive approximation algorithm for broadcasting in general graphs.
 They further provide approximation algorithms for several graph classes with small separators with approximation ratio proportional to the separator size times $\log n$.
 Another algorithm with $\mathcal{O}\left(\frac{\log n}{\log \log n}\right)$-approximation\footnote{All logarithms in this paper are of base 2} ratio is given in~\cite{elkin03}.
-Most of the works above consider a single source.
+Most of the works cited above consider a single source.
 
-A related problem extensively studied in the literature is the minimum broadcast graph \cite{grigni91,mcgarvey16}. 
+A related problem extensively studied in the literature is the minimum broadcast graph problem \cite{grigni91,mcgarvey16}. 
 A broadcast graph supports a broadcast from any node to all other nodes in optimal time $\lceil\log n\rceil$.
-For a given $n$, the effort is to determine properties such as the minimum number of edges and the minimum degree in broadcast graph on $n$ nodes.
+For a given integer $n$, the problem is to find a broadcast graph of $n$ nodes such that e.g.\ the number of edges, or the maximum node degree, in the graph is minimized.
 The authors of \cite{mcgarvey16} study ILP models for $c$-broadcast graphs, a generalization of the problem that allows transmission of the signal to at most $c$ neighbours in a single time step.
 
 \section{Network Model and Definitions}
 
 The communication network is represented by a connected graph $G=(V,E)$ and a subset $S\subseteq V$ referred to as the set of sources, where $|V|=n$. 
-Let $V\left[F\right]=\{v\in V:\text{ some edge in } F \text{ is incident to } v\}, F\subseteq E$.
-For disjoint node sets $V_1,V_S\subseteq V$, we denote by $G\left[V_1,V_2\right]$ the bipartite graph $(V_1\cup V_2,E')$, where  $E'=\{\{u,v\}\in E: u\in V_1,v\in V_2\}$. 
+% Let $V\left[F\right]=\{v\in V:\text{ some edge in } F \text{ is incident to } v\}, F\subseteq E$.
+% For disjoint node sets $V_1,V_S\subseteq V$, we denote by $G\left[V_1,V_2\right]$ the bipartite graph $(V_1\cup V_2,E')$, where  $E'=\{\{u,v\}\in E: u\in V_1,v\in V_2\}$. 
 
-\begin{definition}
-The \emph{broadcast time} $\tau(G,S)$ of a node set $S\subseteq V$ in $G$ is defined as: 
-\begin{equation*}
-\tau(G,S)=
-\begin{cases}
-	0, S=V,\\
-	1+\min\{\tau(G,S\cup V\left[M\right]):M \text{ is a matching in } G\left[S, V\setminus S\right]\}, S\neq V.
-\end{cases}
-\label{eq:btime}
-\end{equation*}
+\begin{definition} \label{def:broadcasttime}
+The \emph{broadcast time} $\tau(G,S)$ of a node set $S\subseteq V$ in $G$ is defined as the smallest integer $t\geq 0$ for which there exist
+a sequence $V_0\subseteq\dots\subseteq V_t$ of node sets and a function $\pi:V\setminus S\to V$, such that:
+\begin{enumerate}
+  \item $V_0=S$ and $V_t=V$, \label{def:boundary}
+  \item for all $v\in V\setminus S$, $\{v,\pi(v)\}\in E$, \label{def:edge}
+  \item for all $i=1,\ldots,t$ and all $v\in V_i$, $\pi(v)\in V_{i-1}$, and \label{def:parent}
+  \item for all $u,v\in V_i\setminus V_{i-1}$, $\pi(u)=\pi(v)$ only if $u=v$. \label{def:unique}
+\end{enumerate}
+% % \begin{equation*}
+% \tau(G,S)=
+% \begin{cases}
+% 	0, S=V,\\
+% 	1+\min\{\tau(G,S\cup V\left[M\right]):M \text{ is a matching in } G\left[S, V\setminus S\right]\}, S\neq V.
+% \end{cases}
+% \label{eq:btime}
+% \end{equation*}
 \end{definition}
-%Broadcasting is defined as a sequence of sets $(S=V_0\subseteq\dots\subseteq V_k = V)$ where each $V_i$ represents the nodes informed after time step $i$, $0\leq i\leq t$.
-%For each node $v\in V_i\setminus V_{i-1}$, there exists a single node $\pi(v)\in V_{i-1}$ adjacent to $v$, which forwarded the signal to $v$.
-%Also, for every two nodes $u,v\in V_i\setminus V_{i-1}$ we have $\pi(u)=\pi(v)$.
-%The value $k$ is referred to as \emph{delay}.
-The optimization problem in question is formulated as follows \cite{jansen95,middendorf93}:
-\begin{problem}\label{prob:min}
-Given $G=(V,E)$ and $S\subseteq V$, find a sequence $(S=V_0\subseteq\dots\subseteq V_{\tau(G,S)}=V)$ and a function $\pi:V\setminus S\to V$, such that for each $v\in V\setminus S:\{v,\pi(v)\}\in E$, and for each $u,v\in V_i\setminus V_{i-1}: \pi(u)=\pi(v)\Leftrightarrow u=v$.
+% %Broadcasting is defined as a sequence of sets $(S=V_0\subseteq\dots\subseteq V_k = V)$ where each $V_i$ represents the nodes informed after time step $i$, $0\leq i\leq t$.
+% %For each node $v\in V_i\setminus V_{i-1}$, there exists a single node $\pi(v)\in V_{i-1}$ adjacent to $v$, which forwarded the signal to $v$.
+% %Also, for every two nodes $u,v\in V_i\setminus V_{i-1}$ we have $\pi(u)=\pi(v)$.
+% %The value $k$ is referred to as \emph{delay}.
+
+Referring to Section \ref{intro}, the node set $V_i$ is the set of nodes that are informed in time step $i$.
+Initially, only the sources are informed ($V_0=S$), whereas all nodes are informed after $t$ time steps ($V_t=V$),
+and the set of informed nodes is monotonously non-decreasing ($V_{i_1}\subseteq V_i$ for $i=1,\ldots,t$).
+The parent function $\pi$ maps each node to the node from which it received the signal.
+Conditions \ref{def:edge}--\ref{def:parent} of Definition \ref{def:broadcasttime} thus reflect that the sender is a neighbor node in $G$,
+and that it is informed at an earlier time step than the recipient node.
+Because each node can send to at most one neighbor node in each time step,
+condition \ref{def:unique} states that $\pi$ maps the set of nodes which are informed for the first time in step $i$ to distinct parent nodes.
+
+The optimization problem in question is formulated as follows:
+\begin{problem}[\textsc{Minimum Broadcast Time}]\label{prob:min}
+Given $G=(V,E)$ and $S\subseteq V$, find $\tau(G,S)$.
+% a sequence $(S=V_0\subseteq\dots\subseteq V_{\tau(G,S)}=V)$ and a function $\pi:V\setminus S\to V$, such that for each $v\in V\setminus S:\{v,\pi(v)\}\in E$, and for each $u,v\in V_i\setminus V_{i-1}: \pi(u)=\pi(v)\Leftrightarrow u=v$.
 \end{problem}
 
-Given a feasible sequence of node sets and $\pi$, we derive the following broadcast trees \cite{grigni91}:
-For $s\in S$, a broadcast tree $T_s=(V_{T_s},E_{T_s})$ is a time-labeled directed subgraph of $G$ describing a broadcast originated in $s$ by the rules:
-\begin{enumerate}
-\item $T_s$ is rooted at $s$ with arcs directed towards the leaves.
-\item each node $v\in V_i$ is labeled with an integer $\tau(v)=i$,
-\item for $v\in V\setminus S, v\in V_{T_s}\Leftrightarrow \pi(v)\in V_{T_s}$, 
-\item $E_{T_s}=\{\{u,v\}: u,v\in V_{T_s}, \pi(v)=u\}$, and
-\item for two sources $s,s'\in S, s\neq s'$ we have that $V_{T_s}\cap V_{T_{s'}}=\emptyset$. 
-\end{enumerate}
+\begin{definition} \label{def:broadcastgraph}
+For any $V_0,\ldots,V_t$ and $\pi$ satisfying the conditions of Definition \ref{def:broadcasttime},
+the corresponding \emph{communication forest} is
+the digraph $D=(V,A)$, where $A=\left\{\left(v,\pi(v)\right): v\in V\right\}$.
+Each connected component of $D$ is a \emph{communication tree}.
+\end{definition}
 
-Any feasible sequence of node sets and $\pi$ yield a set of trees $T=\{T_s:s\in S\}$ that forms a partition of $G$ into trees referred to as \emph{broadcast forest}.
-The number of leaves leaves in $T_s$ is denoted by $L(T_s)$.
-The function $\alpha:V\to S$ associates a node $v$ with the source in which the tree containing $v$ is rooted.
+\noindent
+It is easily verified that the communication trees are indeed arborescences, rooted at distinct sources, with arcs pointing away from the source.
+Let $T_s=\left(V_{T_s},A_{V_s}\right)$ denote the communication tree rooted at source $s\in S$, and define
+the function $\alpha:V\to S$ such that $v\in V_{T_{\alpha(v)}}$ for all $v\in V$.
+That is, $\alpha$ associates a node $v$ with the source in which the communication tree containing $v$ is rooted.
+For any communication tree $T_s$, let $T^i_s$ be the subtree of $T$ induced by the set of nodes with distance at most $i$ edges from $s$.
+Analogously, let $D^i=\left\{T_s^i: s\in S\right\}$.
 
-Given a broadcast forest $T$, the delay is determined as $\max_{v\in V}\{\tau(v)\}$.
+% Given a feasible sequence of node sets and $\pi$, we derive the following broadcast trees \cite{grigni91}:
+% For $s\in S$, a broadcast tree $T_s=(V_{T_s},E_{T_s})$ is a time-labeled directed subgraph of $G$ describing a broadcast originated in $s$ by the rules:
+% \begin{enumerate}
+% \item $T_s$ is rooted at $s$ with arcs directed towards the leaves.
+% \item each node $v\in V_i$ is labeled with an integer $\tau(v)=i$,
+% \item for $v\in V\setminus S, v\in V_{T_s}\Leftrightarrow \pi(v)\in V_{T_s}$, 
+% \item $E_{T_s}=\{\{u,v\}: u,v\in V_{T_s}, \pi(v)=u\}$, and
+% \item for two sources $s,s'\in S, s\neq s'$ we have that $V_{T_s}\cap V_{T_{s'}}=\emptyset$. 
+% \end{enumerate}
+
+% Any feasible sequence of node sets and $\pi$ yield a set of trees $T=\{T_s:s\in S\}$ that forms a partition of $G$ into trees referred to as \emph{broadcast forest}.
+
+% Given a broadcast forest $T$, the delay is determined as $\max_{v\in V}\{\tau(v)\}$.
 %A set of trees $T=\{T_s:\cup_{s\in S}V_{T_s}=V\}$ forms a partition of $G$ into trees referred to as \emph{broadcast forest}.
 %$T$ can be derived from a given sequence of sets of nodes defining broadcasting and the mapping $\pi$.
-For any integer $i$, let $T^i_s$ be the subtree of $T_s$ obtained by pruning all nodes $v\in V_{T_s}$ with $\tau(v)>i$.
-Analogously, we define $T^i=\{T^i_s:s\in S\}$. 
+% For any integer $i$, let $T^i_s$ be the subtree of $T_s$ obtained by pruning all nodes $v\in V_{T_s}$ with $\tau(v)>i$.
+% Analogously, we define $T^i=\{T^i_s:s\in S\}$. 
 
 
 %We also define the set $A=\{(i,j),(j,i):\{i,j\}\in E\}$ that consists of all arcs that can be derived by directing edges in $E$.
-The degree of node $v$ in $G$ is denoted by $\text{deg}_G(v)$.
-If $G$ is directed, $\text{deg}^-_G(v)$ and $\text{deg}^+_G(v)$ denote in-degree and out-degree, respectively.
+The degree of node $v$ in graph $G$ is denoted by $\text{deg}_G(v)$.
 For the diameter of $G$ we use the symbol $\Delta_G$.
-Whenever there is no danger of confusion, the subscript $G$ is omitted.
-The set of neighbors of $v\in V$ in $G$ is denoted by $N(v)$ and $N^+(v)$ in directed graphs.
+The set of neighbors of $v\in V$ in $G$ is denoted by $N_G(v)$.
+Whenever there is no risk of confusion, the subscript $G$ is omitted.
+Likewise, $\text{deg}^-_D(v)$ and $\text{deg}^+_D(v)$ denote, respectively, the in-degree and the out-degree of digraph $D$,
+and $N_D^+(v)=\left\{u\in V:(v,u)\in A\right\}$ and $N_D^-(v)=\left\{u\in V:(u,v)\in A\right\}$ denote the neighbor sets of node $v$ in $D$.
+The node set $L(D)=\left\{v\in V: N_D^+(v)=\emptyset\right\}$ is referred to as the \emph{leaves} in $D$.
 
 %For convenience, we consider the following definition of broadcast trees \cite{grigni91}:
 %For $s\in S$, a broadcast tree $T_s$ with node set $V_{T_s}$ is a time-labeled directed subgraph of $G$ describing a broadcast originated by $s$ by the following rules:
