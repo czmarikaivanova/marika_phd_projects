@@ -161,7 +161,7 @@ a sequence $V_0\subseteq\dots\subseteq V_t$ of node sets and a function $\pi:V\s
 
 Referring to Section \ref{intro}, the node set $V_i$ is the set of nodes that are informed in time step $i$.
 Initially, only the sources are informed ($V_0=S$), whereas all nodes are informed after $t$ time steps ($V_t=V$),
-and the set of informed nodes is monotonously non-decreasing ($V_{i_1}\subseteq V_i$ for $i=1,\ldots,t$).
+and the set of informed nodes is monotonously non-decreasing ($V_{i-1}\subseteq V_i$ for $i=1,\ldots,t$).
 The parent function $\pi$ maps each node to the node from which it received the signal.
 Conditions \ref{def:edge}--\ref{def:parent} of Definition \ref{def:broadcasttime} thus reflect that the sender is a neighbor node in $G$,
 and that it is informed at an earlier time step than the recipient node.
@@ -185,7 +185,7 @@ Each connected component of $D$ is a \emph{communication tree}.
 It is easily verified that the communication trees are indeed arborescences, rooted at distinct sources, with arcs pointing away from the source.
 Let $T_s=\left(V_{T_s},A_{V_s}\right)$ denote the communication tree rooted at source $s\in S$, and define
 the function $\alpha:V\to S$ such that $v\in V_{T_{\alpha(v)}}$ for all $v\in V$.
-That is, $\alpha$ associates a node $v$ with the source in which the communication tree containing $v$ is rooted.
+That is, $\alpha$ associates a node $v$ with the source at which the communication tree containing $v$ is rooted.
 For any communication tree $T_s$, let $T^i_s$ be the subtree of $T$ induced by the set of nodes with distance at most $i$ edges from $s$.
 Analogously, let $D^i=\left\{T_s^i: s\in S\right\}$.
 
