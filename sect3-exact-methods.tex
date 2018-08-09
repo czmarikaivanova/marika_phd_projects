@@ -48,6 +48,33 @@ It also sets a correct value to the variable $z$ that appears in the objective f
 %The maximum time step at which any transmission takes place is captured by \eqref{mod:basic:tcrel}, and finally, \eqref{mod:basic:positiveCost} states that a node that is not a source never transmits in the first time step.
 %The length of the sequence of subsets is captured by \eqref{mod:basic:tcrel}, and finally, \eqref{mod:basic:positiveCost} state that if $\pi(v)\not\in S$ for some $j\in V$, then $v\not\in V_1$.
 Finally, \eqref{mod:basic:positiveCost} state that non-source nodes do not transmit in the first time step.
+
+%In Model \ref{mod:basic}, superscript of $x$-variables represents a time step in which a signal is transmitted along corresponding arc.
+The nature of MBT suggests another modelling approach derived from Model \ref{mod:basic}. 
+For a given maximum broadcast time $t_{\text{max}}$, we maximize the number of arcs along which a signal is relayed within $t_{\text{max}}$.
+If the optimal value is $n-1$, it is clear that we found a spanning broadcast tree with broadcast time $t_{\text{max}}$.
+In case the optimal value is less than $n-1$, the gien $t_{\text{max}}$ is insufficient and we have to try solving the problem with increased time limit.
+Clearly, an additional knowledge of upper and lower bound spares some computations. 
+A lower bound is the initial value of $t_{\text{max}}$. 
+Similarly, if an upper bound $\bar{t}$ is known and $t_{\text{max}}=\bar{t}-1$, the process can be terminated when the objective function is less then $n-1$, because $\bar{t}$ is than the optimal value.
+
+The decision model \label{mod:basic:dec}  has the form
+\begin{subequations}\label{mod:basic:dec}
+\begin{align}
+\label{mod:basic:dec:obj} \max \sum\limits_{(u,v) \in A}\sum\limits_{k=1}^{t_{\text{max}}}x_{u,v}^k \\ 
+\notag \text{s. t. } \\
+\label{mod:basic:dec:atMost1in} \sum\limits_{k=1}^{t_{\text{max}}}\sum\limits_{v\in N(u)}x_{vu}^k & \leq 1 & u\in V \setminus S,\\
+\label{mod:basic:dec:0toSource} \sum\limits_{k=1}^{t_{\text{max}}}\sum\limits_{v\in N(u)}x_{vu}^k & = 0  & u\in S,\\
+\notag \eqref{mod:basic:onefromroot}, \eqref{mod:basic:tIncreases}, \eqref{mod:basic:positiveCost},\\
+\label{mod:basic:dec:dim}&&x \in \{0,1\}^{A\times V}.
+\end{align}~
+\end{subequations}
+
+Constraint \eqref{mod:basic:singlein} is replaced by \eqref{mod:basic:dec:atMost1in} and \eqref{mod:basic:dec:0toSource}. 
+The former is an inequality, because not all nodes are necessarily reached within the given time limit.
+The latter makes sure that sources are not reached by any signal. 
+This was filtered out by optimality in \eqref{mod:basic}, but it must be forbidden explicitly in \eqref{mod:basic:dec} due to the changed objective function.
+
 \subsection{Binomial tree model}
 
 The binomial tree $B^k$ of order $k$ is an ordered tree defined recursively as follow \cite{cormen90}:
