@@ -1,5 +1,8 @@
 \section{Lower bounds}
-In this section, we study lower bounds on the delay for several restrictions of input graphs.
+Strong lower bounds on the minimum objective function value are of vital importance to combinatorial optimization algorithms.
+In this section, we study three types of lower bounds on the broadcast time $\tau(G,S)$.
+
+\subsection{Analytical lower bounds} \label{sec:lbanalyt}
 %An optimal solution is obtained by solving a sequence of decision problems with varying $t$. 
 %It is therefore desirable to determine tight lower and upper bounds in order to arrive in the optimum after solving as few decision problems as possible.
 Obvious bounds for a general graph instance are given by
@@ -59,7 +62,14 @@ The reason why the result is divided by $|S|$ is that the best case scenario wit
 \qed
 \end{proof}
 
-An additional knowledge of a degree sequence of $G$ can be exploited. 
+\subsection{Continuous relaxations of integer programming models} \label{sec:lblprel}
+DH: \emph{To be written: Demonstrate why LP-bounds are expected to be weak (no stronger than the analytical bounds).}
+
+\subsection{Combinatorial relaxations} \label{sec:lbcombrel}
+
+DH: \emph{I keep the old content here so far, but a suggestion to a new version is given after the old one.}
+
+Monotonous degree sequences of $G$ can be exploited more extensively than what was demonstrated in Section \ref{sec:lbanalyt}. 
 \begin{lemma}
 \label{lemma:degorder}
 Let $(d_1,\dots,d_n)$ be a degree sequence and $t\leq \bar{t}-|S|$ a given delay.
@@ -154,4 +164,48 @@ As soon as it is possible that at least $n$ nodes are informed, the algorithm re
 \qed
 \end{proof}
 
+
+DH: \emph{A suggestion to a new version follows.}
+\bigskip
+
+Lower bounds on the broadcast time $\tau(G,S)$ are obtained by omitting one or more of the conditions imposed in Definition \ref{def:broadcasttime}.
+For the purpose of strongest possible bounds, the relaxations thus constructed can be supplied with conditions that are redundant in the problem definition.
+
+Recall from Section \ref{sec:def} that $D=(V,A)$ is the communication forest corresponding to $V_0,\ldots,V_t$, and $\pi$.
+Conditions \ref{def:boundary}--\ref{def:unique} of Definition \ref{def:broadcasttime} imply that
+\begin{enumerate}
+\setcounter{enumi}{4}
+  \item for all $v\in V$, $\delta_D^+(v)+\delta_D^-(v)\leq\delta_G(v)$. \label{def:degree}
+\end{enumerate}
+
+\noindent
+A lower bound on $\tau(G,S)$ is then given by the solution to:
+\begin{problem}[\textsc{Node Degree Relaxation}]\label{prob:degree}
+Find the smallest integer $t\geq 0$ for which there exist
+a sequence $V_0\subseteq\dots\subseteq V_t$ of node sets and a function $\pi:V\setminus S\to V$,
+satisfying conditions \ref{def:boundary} and \ref{def:parent}--\ref{def:degree}.
+\end{problem}
+
+Except from the node degrees, explicit information about $G$ is not part of the input to Problem \ref{prob:degree},
+and two nodes $u,v\in V\setminus S$, where $\delta_G(u)=\delta_G(v)$, are considered identical.
+
+In order to develop an algorithm for the \textsc{Node Degree Relaxation}, we derive some optimality conditions of its single-source version.
+Thus, let $S=\left\{v_1\right\}$ and $V\setminus S=\left\{v_2,\ldots,v_n\right\}$, where $\delta_G(v_2)\geq\delta_G(v_3)\geq\dots\geq\delta_G(v_n)$,
+and denote $d_i=\delta_G(v_i)$ ($i=1,\ldots,n$).
+Let $\tau_i=\tau\left(T[i],\{v_i\}\right)$ denote the broadcast time of node $v_i$ in the subtree $T[i]$ of $T$ rooted at $v_i$.
+The broadcast time $\tau\left(V,\{v_1\}\right)$ is hence no less than the sum of the time $\lceil\log\beta(v_i)\rceil$ it takes to inform $v_i$,
+and the subsequent time $\tau_i$ needed to inform all nodes in $T[i]$.
+Consequently, if $T$ is an optimal broadcast tree,
+\begin{equation}
+  \tau\left(V,\{v_1\}\right)=\max\left\{\lceil\log\beta(v_i)\rceil+\tau_i: i=2,\ldots,n\right\}. \label{eq:tau}
+\end{equation}
+
+\begin{lemma} \label{lem:degree}
+Problem \ref{prob:degree} has an optimal solution where, for all $i=2,\ldots,n-1$, $\delta_T^+(v_i)\geq\delta_T^+(v_{i+1})$ and $\tau_i\geq\tau_{i+1}$.
+\end{lemma}
+\begin{proof}
+Consider an optimal broadcast tree $T$, and let $j\in\{2,\ldots,n-1\}$ be the largest value of $i$ for which $\tau_i<\tau_{i+1}$.
+\emph{By utilizing (\ref{eq:tau}, go on to argue that a simple swap does not increase $\tau\left(\right)$}
+\emph{Slightly more tricky: Argue that moving subtrees can fix the first inequality. Swap again to restore the second}.
+\end{proof}
 

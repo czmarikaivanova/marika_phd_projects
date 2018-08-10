@@ -130,7 +130,7 @@ every node/.style={shape=circle,fill=gray!40,draw }}
 % \subclass{MSC code1 \and MSC code2 \and more}
 \end{abstract}
 \input{sect1-introduction.tex}
-\section{Network Model and Definitions}
+\section{Network Model and Definitions} \label{sec:def}
 
 The communication network is represented by a connected graph $G=(V,E)$ and a subset $S\subseteq V$ referred to as the set of sources, where $|V|=n$. 
 % Let $V\left[F\right]=\{v\in V:\text{ some edge in } F \text{ is incident to } v\}, F\subseteq E$.
@@ -166,13 +166,17 @@ The parent function $\pi$ maps each node to the node from which it received the 
 Conditions \ref{def:edge}--\ref{def:parent} of Definition \ref{def:broadcasttime} thus reflect that the sender is a neighbor node in $G$,
 and that it is informed at an earlier time step than the recipient node.
 Because each node can send to at most one neighbor node in each time step,
-condition \ref{def:unique} states that $\pi$ maps the set of nodes which are informed for the first time in step $i$ to distinct parent nodes.
+condition \ref{def:unique} states that $\pi$ maps the set of nodes becoming informed in step $i$ to distinct parent nodes.
 
 The optimization problem in question is formulated as follows:
 \begin{problem}[\textsc{Minimum Broadcast Time}]\label{prob:min}
 Given $G=(V,E)$ and $S\subseteq V$, find $\tau(G,S)$.
 % a sequence $(S=V_0\subseteq\dots\subseteq V_{\tau(G,S)}=V)$ and a function $\pi:V\setminus S\to V$, such that for each $v\in V\setminus S:\{v,\pi(v)\}\in E$, and for each $u,v\in V_i\setminus V_{i-1}: \pi(u)=\pi(v)\Leftrightarrow u=v$.
 \end{problem}
+
+Directed versions of Defintion \ref{def:broadcasttime} and Problem \ref{prob:min} are defined analogously.
+For a digraph $D=(V,A)$, condition \ref{def:edge} is modified to state that $(\pi(v),v)\in A$ for all $v\in V\setminus S$.
+We denote by $\tau(D,S)$ the broadcast time of $S$ in $D$.
 
 \begin{definition} \label{def:broadcastgraph}
 For any $V_0,\ldots,V_t$ and $\pi$ satisfying the conditions of Definition \ref{def:broadcasttime},
@@ -186,7 +190,7 @@ It is easily verified that the communication trees are indeed arborescences, roo
 Let $T_s=\left(V_{T_s},A_{V_s}\right)$ denote the communication tree rooted at source $s\in S$, and define
 the function $\alpha:V\to S$ such that $v\in V_{T_{\alpha(v)}}$ for all $v\in V$.
 That is, $\alpha$ associates a node $v$ with the source at which the communication tree containing $v$ is rooted.
-For any communication tree $T_s$, let $T^i_s$ be the subtree of $T$ induced by the set of nodes with distance at most $i$ edges from $s$.
+For any communication tree $T_s$, let $T^i_s$ be the subtree of $T_s$ induced by the set of nodes with distance at most $i$ edges from $s$.
 Analogously, let $D^i=\left\{T_s^i: s\in S\right\}$.
 
 % Given a feasible sequence of node sets and $\pi$, we derive the following broadcast trees \cite{grigni91}:
