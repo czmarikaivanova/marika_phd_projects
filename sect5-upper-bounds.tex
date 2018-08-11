@@ -1,6 +1,37 @@
 \section{Upper bounds}
 
-%The algorithms presented in this section iteratively construct broadcast foerest $T_i, i=1,2,\dots$.
+A knowledge of an upper bound $\bar{t}$ affects the number of variables in all studied models. 
+Particularly in the decision versions, the iterative approach can be terminated once the solution is dissatisfactory for broadcast time limit $\bar{t}-1$.
+The algorithms presented in this section iteratively construct broadcast foerest $T_i, i=1,2,\dots$.
+\subsection{Prim based method}
+
+A fast straightforward algorithm determining an upper bound is inspired by Prim algorithm for minimum spanning tree problem.
+Initially, the constructed broadcast forest consists of all sources. 
+In each iteration, the nodes already in the forest are sorted according to the number of neighbors not yet added to the forest.
+For each node we then select a neighbor to be appended to the forest.
+\begin{algorithm}[]
+\KwData{$G=(V,E), S\subseteq V$}
+\textbf{for }$s\in S\textbf{ do }T_s=(V_s,A_s), V_s\leftarrow \{s\}, E_s\leftarrow\emptyset$\;
+$T=\{T_s:s\in S\}$\ ~~~\tcp{broadcast forest}
+$t\leftarrow 0$\;
+\While{$V_T\neq V$} {
+	Sort nodes in $V_T$ increasingly by the number of neighbors in $V\setminus V_T$\;
+	$W\leftarrow\emptyset$\;
+	\For{$u\in V_T$} {
+		Find $u\in V\setminus (V_T\cup W)$ according to some strategy\; 	
+	}
+	$E_T\leftarrow E_T\cup \{\{u,w\}: u\in V_T, w\in N(u)\cap W\}$\;
+	$V_T\leftarrow V_T\cup W$\;
+	$t\leftarrow t+1$\;
+}
+\Return t\;
+%\Return $\lceil k/s \rceil$\;
+ \caption{A greedy Prim-like method for determining an upper bound}
+\label{alg:match}
+\end{algorithm}
+
+\subsection{Restricted binomial tree method}
+
 The following inexact method is based on the idea of finding maximum cardinality matching in $G\left[V_{T_i},V\setminus V_{T_i}\right]$, and extending $T_i$ by this matching.
 It means that in each iteration $i$, the maximum possible number of nodes are informed.
 The maximum cardinality matching can be regarded as finding $|V_{T_i}|$ node-disjoint  binomial trees of order at most one with roots in $V_{T_i}$, maximizing the number of edges.
@@ -12,7 +43,7 @@ The parameter $p\in \{1,\dots,2^k\}$ is also a part of the input.
 \KwData{$G=(V,E), S\subseteq V, k\in \{1,\dots,n-|S|\}, p\in \{1,\dots,2^k\}$}
 \textbf{for }$s\in S\textbf{ do }T_s=(V_s,A_s), V_s\leftarrow \{s\}, E_s\leftarrow\emptyset$\;
 $I=\{1,\dots,2^k\}$\\
-$T=\{T_s:s\in S\}$\ ~~~\tcp{broadcast forest}
+$T=\{T_s:s\in S\}$\;
 $t\leftarrow 0$\;
 \While{$V_T\neq V$} {
 	$S\leftarrow V_T$\;
@@ -23,42 +54,18 @@ $t\leftarrow 0$\;
 }
 \Return t\;
 %\Return $\lceil k/s \rceil$\;
- \caption{A method for determining an upper bound}
+ \caption{A method for determining an upper bound based on iterative search for pruned binomial trees}
 \label{alg:match}
 \end{algorithm}
 
 Alg. \ref{alg:match} describes the process formally.
 Initially, the broadcast forest consists of isolated sources.
 The binomial trees are determined by solving the ILP model \eqref{mod:genmatch}. 
-This model is a modification of formulation \eqref{mod:partition}, and uses the same type of variables.
-The objective function is to maximize the number of nodes involved in the binomial trees.
-%The index set $I=\{1,\dots,2^k\}$ depends on the input parameter $k$.
-The constraints \eqref{mod:genmatch:nodeBelongs} state that each node belongs to at most one binomial tree.
-Compared to \eqref{mod:part:nodeBelongs}, \eqref{mod:genmatch:nodeBelongs} is an inequality, because the binomial trees do not necessarily form a partition of $G$, and so not all nodes have to be used.
-The remaining constraints are taken from formulation \eqref{mod:partition}. 
 Note that in every iteration, the model is solved with a different set $S$, as all nodes already included in the broadcast forest are roots of the binomial trees.
 The model considers the entire set $V$, but it is also possible to restrict this set to nodes with distance at most $k$ from some node in $V_T$.
 When this restriction is not imposed, nodes with larger distance are not a part of any binomial tree in the current iteration due to \eqref{mod:part:followArcsA} - \eqref{mod:part:followArcsB}.
 
-\begin{subequations}\label{mod:genmatch}
-\begin{align}
-\notag \max\sum\limits_{v\in V}&\sum\limits_{i\in I}\sum\limits_{s\in S}   y_{is}^v,\\
-\notag \text{s. t. } \\
-\label{mod:genmatch:nodeBelongs} \sum\limits_{i\in I}\sum\limits_{s\in S}y^v_{is} & \leq 1 & v\in V,\\
-\notag\eqref{mod:part:treeHasIJ} - \eqref{mod:part:followArcsB},\\
-%\label{mod:genmatch:treeHasIJ} \sum\limits_{v\in V'}y^v_{is} & = 1 & i\in I,s\in V_T,\\
-%\label{mod:genmatch:source1} y_{1s}^s & = 1  & s\in V_T,\\
-%\label{mod:part:noReturn} y^u_{ij}+y^v_{lj} &\leq 1 & i\in I,l\in C(i), j\in J, u\in V_\alpha,v\in V,\\
-%\label{mod:part:followArcs} y^u_{is}+y^v_{\ell s} &\leq 1 & i\in I,\ell\in C(i), s\in S, u,v\in V',(u,v)\not\in A',\\
-%\label{mod:part:followArcsA} y^u_{is}+y^v_{\ell s} &\leq 1 & i\in I,\ell\in C(i), s\in S, u,v\in V,\{u,v\}\not\in E,\\
-%\label{mod:part:followArcsB} y^{v_0}_{is}+y^v_{\ell s} &\leq 1 & i\in I,\ell\in C(i), s\in S, v\in V,\\
-%\label{mod:genmatch:followArcsA}y^{v_0}_{is}+y^u_{i s} + \sum\limits_{v\in V\setminus N(u)}y^v_{\ell s}&\leq 1 & u\in V,i\in I,\ell\in C(i), s\in V_T,  \\
-%\label{mod:genmatch:followArcsB}y^{v_0}_{is}+y^u_{\ell s} + \sum\limits_{v\in V\setminus N(u)}y^v_{i s}&\leq 1 & u\in V,i\in I,\ell\in C(i), s\in V_T,\\ 
-\label{mod:genmatch:dim}&&y \in \{0,1\}^{I\times S\times V'}.
-\end{align}~
-\end{subequations}
-
-
+Not only determine the algorithms the upper bound on the minimum broadcast time, but they also construct a solution with this broadcast time.
 
 %
 %We present a simple general method for determining an upper bound on the optimal solution.
