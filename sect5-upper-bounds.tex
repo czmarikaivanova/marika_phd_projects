@@ -1,34 +1,64 @@
 \section{Upper bounds}
 
 A knowledge of an upper bound $\bar{t}$ affects the number of variables in all studied models. 
-Particularly in the decision versions, the iterative approach can be terminated once the solution is dissatisfactory for broadcast time limit $\bar{t}-1$.
-The algorithms presented in this section iteratively construct broadcast foerest $T_i, i=1,2,\dots$.
-\subsection{Prim based method}
+Particularly in the decision versions, the iterative approach can be terminated once the solution is not satisfactory for broadcast time limit $\bar{t}-1$.
+The algorithms presented in this section iteratively construct broadcast forest $T_i, i=1,2,\dots$.
+\subsection{Matching heuristic}
 
-A fast straightforward algorithm determining an upper bound is inspired by Prim algorithm for minimum spanning tree problem.
-Initially, the constructed broadcast forest consists of all sources. 
+A fast straightforward algorithm determining an upper bound is based on repetitive construction of a matching between already connected nodes and their neighbors.
+Initially, the constructed broadcast forest consists of isolated sources. 
 In each iteration, the nodes already in the forest are sorted according to the number of neighbors not yet added to the forest.
 For each node we then select a neighbor to be appended to the forest.
+Let $T_s=(V_s,A_s)$ be the tree rooted at source $s\in S$, and let $T=(V_T, A_T)=\{T_s:s\in S\}$ be the broadcast forest.
+Further, nodest of the broadcast forest are numbered by integers $V_T=\{v_1,\dots,v_{|V_T|}\}$.
+Alg. \ref{alg:matchheur} formalizes the steps.
+%\begin{algorithm}[]
+%\KwData{$G=(V,E), S\subseteq V$}
+%\textbf{for }$s\in S\textbf{ do } V_s\leftarrow \{s\}, A_s\leftarrow\emptyset$\;
+%$t\leftarrow 0$\;
+%\While{$V_T\neq V$} {
+%	Sort nodes in $V_T$ increasingly by the number of neighbors in $V\setminus V_T$\;
+%	$W\leftarrow\emptyset$\;
+%	\For{$u\in V_T$} {
+%		Find $v\in V\setminus (V_T\cup W)$ such that $(u,v)\in A$\;
+%		$W\leftarrow W\cup\{v\}$\;
+%	}
+%	$A_T\leftarrow A_T\cup \{\{u,w\}: u\in V_T, w\in N(u)\cap W\}$\;
+%	$V_T\leftarrow V_T\cup W$\;
+%	$t\leftarrow t+1$\;
+%}
+%\Return t\;
+%%\Return $\lceil k/s \rceil$\;
+% \caption{A greedy matching heuristic method for determining an upper bound}
+%\label{alg:matchheur}
+%\end{algorithm}
+
 \begin{algorithm}[]
 \KwData{$G=(V,E), S\subseteq V$}
-\textbf{for }$s\in S\textbf{ do }T_s=(V_s,A_s), V_s\leftarrow \{s\}, E_s\leftarrow\emptyset$\;
-$T=\{T_s:s\in S\}$\ ~~~\tcp{broadcast forest}
+\textbf{for }$s\in S\textbf{ do } V_s\leftarrow \{s\}, A_s\leftarrow\emptyset$\;
 $t\leftarrow 0$\;
 \While{$V_T\neq V$} {
-	Sort nodes in $V_T$ increasingly by the number of neighbors in $V\setminus V_T$\;
+	Sort nodes in $V_T$ so that $i<j\Leftrightarrow |N(v_i)\cap(V\setminus V_T)|<|N(v_j)\cap (V\setminus V_T)|$\;
 	$W\leftarrow\emptyset$\;
-	\For{$u\in V_T$} {
-		Find $u\in V\setminus (V_T\cup W)$ according to some strategy\; 	
+	$D\leftarrow\emptyset$\;
+	\For{$i=1,\dots,|V_T|$} {
+		Find $v_j\in V\setminus (V_T\cup W)$ such that $(v_i,v_j)\in A$\;
+		$W\leftarrow W\cup\{v_j\}$\;
+		$D\leftarrow D\cup\{\left(v_i,v_j\right)\}$\;
 	}
-	$E_T\leftarrow E_T\cup \{\{u,w\}: u\in V_T, w\in N(u)\cap W\}$\;
 	$V_T\leftarrow V_T\cup W$\;
+	$A_T\leftarrow A_T\cup D$\;
 	$t\leftarrow t+1$\;
 }
 \Return t\;
 %\Return $\lceil k/s \rceil$\;
- \caption{A greedy Prim-like method for determining an upper bound}
-\label{alg:primlike}
+ \caption{A greedy matching heuristic method for determining an upper bound}
+\label{alg:matchheur}
 \end{algorithm}
+The selection of a neighbor (line 7) can be done arbitrarily, or according to some strategy such as neighbor with maximum degree is selected first.
+Note that for determining an upper bound, it is not necessary to store arcs sets $A_T$ and $D$, because we merely count the number of iterations.
+In order to construct an actual solution with broadcast time equal to the upper bound, the arcs sets are needed.
+Matchings created in each iteration are not necessarily maximum.
 
 \subsection{Restricted binomial tree method}
 

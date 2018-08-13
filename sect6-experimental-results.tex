@@ -2,19 +2,17 @@
 
 The first set of experiments is carried out on the datasets available online \cite{datasets, steinlib}.
 Tab. \ref{tab:time:50} shows results for instances with 50 nodes and for number of sources indicated in the first column. 
-Columns \emph{log, deg} and \emph{fib} contain lower bound determined by Obs. \ref{obs:loglb}, Prop. \ref{alg:dreg} and Prop. \ref{prop:lbfib}, respectively.
+%Columns \emph{log, deg} and \emph{fib} contain lower bound determined by Obs. \ref{obs:loglb}, Prop. \ref{alg:dreg} and Prop. \ref{prop:lbfib}, respectively.
 The times are provided by AMPL built-in parameter $\texttt{\_solve\_elapsed\_time}$ and is cummulated whenever a solution is obtained by a sequence of several runs of a model.
 The time limit is set to 1200 seconds.
 The column titles stand for models \eqref{mod:basic}, \eqref{mod:basic} without objective function, \eqref{mod:basic:dec}, \eqref{mod:genmatch} without objective function and \eqref{mod:genmatch}, respectively.
 The last two models are extended by symmetry removal \eqref{mod:part:sr}.
 
-Tab. \ref{tab:obj:50} contains lower bounds obtained by solving Alg. \ref{alg:dreg}, objective function values determined by models mentioned above and upper bounds given by Alg. \ref{alg:primlike}.
+Tab. \ref{tab:obj:50} contains lower bounds obtained by solving Alg. \ref{alg:dreg}, objective function values determined by models mentioned above and upper bounds given by Alg. \ref{alg:matchheur}.
 
 
 The last column contains upper bounds determined by solving Alg \ref{alg:match}.
 Small instances with 50 nodes are solved within the imposed time limit by all considered methods. 
-
-
 \begin{table}[]
 \begin{tabular}{rrrrrrrr}
 $|S|$               & $|V|$ & $|E|$ & $X$-opt & $X$-dec & $X$-com & $Y$-dec & $Y$-com \\\hline
