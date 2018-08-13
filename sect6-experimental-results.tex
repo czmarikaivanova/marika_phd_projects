@@ -1,137 +1,94 @@
 \section{Experimental Results}
 
-The first set of experiments is carried out on the datasets available online \cite{datasets}.
-Tab. \ref{tab:ins50} shows results for instances with 50 nodes and for number of sources indicated in the first column ranging between 1 and 5. 
-Column \emph{inst} contains name of file in the dataset.
+The first set of experiments is carried out on the datasets available online \cite{datasets, steinlib}.
+Tab. \ref{tab:time:50} shows results for instances with 50 nodes and for number of sources indicated in the first column. 
 Columns \emph{log, deg} and \emph{fib} contain lower bound determined by Obs. \ref{obs:loglb}, Prop. \ref{alg:dreg} and Prop. \ref{prop:lbfib}, respectively.
-Next two columns correspond to exact objective function value obtained by solving the optimization model \eqref{mod:basic} and the decision model \eqref{mod:partition} 
-extended by symmetry removal \eqref{mod:part:sr}.
+The times are provided by AMPL built-in parameter $\texttt{\_solve\_elapsed\_time}$ and is cummulated whenever a solution is obtained by a sequence of several runs of a model.
+The time limit is set to 1200 seconds.
+The column titles stand for models \eqref{mod:basic}, \eqref{mod:basic} without objective function, \eqref{mod:basic:dec}, \eqref{mod:genmatch} without objective function and \eqref{mod:genmatch}, respectively.
+The last two models are extended by symmetry removal \eqref{mod:part:sr}.
+
+Tab. \ref{tab:obj:50} contains lower bounds obtained by solving Alg. \ref{alg:dreg}, objective function values determined by models mentioned above and upper bounds given by Alg. \ref{alg:primlike}.
+
+
 The last column contains upper bounds determined by solving Alg \ref{alg:match}.
 Small instances with 50 nodes are solved within the imposed time limit by all considered methods. 
 
 
 \begin{table}[]
-\begin{tabular}{lllllllllll}
- $|S|$ & inst & id & log & deg & fib & opt & dec & match & opt-time & dec-time \\\hline
-\multirow{9}{*}{1}
-& ins\_50\_1.txt & 30113 & 6 & 6 & 6 & 6  & 6   & 7  &1.86	&1.07	\\
-& ins\_50\_2.txt & 19143 & 6 & 6 & 6 & 6  & 6   & 8  &12.53	&0.75	\\
-& ins\_50\_3.txt & 24458 & 6 & 6 & 6 & 6  & 6   & 7  &1.47	&1.02	\\
-& ins\_50\_4.txt & 6401  & 6 & 6 & 6 & 9  & 9   & 11 & 1.86	&100.31	 \\
-& ins\_50\_5.txt & 6720  & 6 & 6 & 6 & 9  & 9   & 10 & 1.51	&100.25	 \\
-& ins\_50\_6.txt & 2723  & 6 & 6 & 6 & 10 & 10  & 12 & 2.08	&100.52	 \\
-& ins\_50\_7.txt & 27741 & 6 & 6 & 6 & 6  & 6   & 7  &4.13	&12.07	\\
-& ins\_50\_8.txt & 20708 & 6 & 6 & 6 & 6  & 6   & 8  &4.19	&1.89	\\
-& ins\_50\_9.txt & 14312 & 6 & 6 & 6 & 6  & 6   & 8  &8.22	&0.98	\\
-\hline 
-\multirow{9}{*}{2}
-& ins\_50\_1.txt & 1986  & 5 & 5 & 5 & 5  & 5   & 6 &1.55	&1.32	\\
-& ins\_50\_2.txt & 32595 & 5 & 5 & 5 & 5  & 5   & 6 &1.90	&0.55	\\
-& ins\_50\_3.txt & 24423 & 5 & 5 & 5 & 5  & 5   & 6 &1.47	&0.53	\\
-& ins\_50\_4.txt & 117   & 5 & 5 & 5 & 7  & 7   & 9 &1.65	&44.45	\\
-& ins\_50\_5.txt & 13194 & 5 & 5 & 5 & 6  & 6   & 7 &1.90	&4.37	\\
-& ins\_50\_6.txt & 15443 & 5 & 5 & 5 & 7  & 7   & 8 &1.73	&18.33	\\
-& ins\_50\_7.txt & 7348  & 5 & 5 & 5 & 5  & 5   & 7 &5.08	&6.23	\\
-& ins\_50\_8.txt & 28688 & 5 & 5 & 5 & 5  & 5   & 6 &3.74	&2.65	\\
-& ins\_50\_9.txt & 24996 & 5 & 5 & 5 & 5  & 5   & 6 &0.73	&0.56	\\
-\hline 
-\multirow{9}{*}{3}
-& ins\_50\_1.txt & 20783 & 4 & 5 & 5 & 5  & 5   & 5 &1.64	&0.93	\\
-& ins\_50\_2.txt & 2253  & 4 & 5 & 5 & 5  & 5   & 6 &1.38	&0.84	\\
-& ins\_50\_3.txt & 32297 & 4 & 5 & 5 & 5  & 5   & 5 &1.27	&0.73	\\
-& ins\_50\_4.txt & 24624 & 4 & 5 & 5 & 7  & 7   & 9 &1.71	&24.95	\\
-& ins\_50\_5.txt & 31903 & 4 & 5 & 5 & 5  & 5   & 6 &1.99	&3.31	\\
-& ins\_50\_6.txt & 22756 & 4 & 5 & 5 & 7  & 7   & 8 &1.36	&4.60	\\
-& ins\_50\_7.txt & 28298 & 4 & 5 & 5 & 5  & 5   & 6 &4.17	&0.84	\\
-& ins\_50\_8.txt & 16072 & 4 & 5 & 5 & 5  & 5   & 6 &3.29	&1.21	\\
-& ins\_50\_9.txt & 19466 & 4 & 5 & 5 & 5  & 5   & 5 &0.58	&0.58	\\
-\hline 
-\multirow{9}{*}{4}
-& ins\_50\_1.txt & 7723  & 4 & 4 & 4 & 4  & 4   & 5 &5.58	&0.37\\
-& ins\_50\_2.txt & 11983 & 4 & 4 & 4 & 4  & 4   & 5 &3.22	&0.40\\
-& ins\_50\_3.txt & 10379 & 4 & 4 & 4 & 4  & 4   & 5 &1.31	&0.40\\
-& ins\_50\_4.txt & 27887 & 4 & 4 & 4 & 5  & 5   & 6 &1.70	&2.18\\
-& ins\_50\_5.txt & 30116 & 4 & 4 & 4 & 5  & 5   & 5 &1.60	&0.51\\
-& ins\_50\_6.txt & 30994 & 4 & 4 & 4 & 6  & 6   & 6 &1.46	&1.59\\
-& ins\_50\_7.txt & 7109  & 4 & 4 & 4 & 4  & 4   & 5 &2.55	&0.59\\
-& ins\_50\_8.txt & 14146 & 4 & 4 & 4 & 4  & 4   & 5 &0.79	&0.31\\
-& ins\_50\_9.txt & 32428 & 4 & 4 & 4 & 4  & 4   & 6 &0.75	&0.30\\
-\hline 
-\multirow{9}{*}{5}
-& ins\_50\_1.txt & 23959 & 4 & 4 & 4 & 4  & 4   & 4 &6.39	&0.0\\
-& ins\_50\_2.txt & 4508  & 4 & 4 & 4 & 4  & 4   & 4 &5.25	&0.4\\
-& ins\_50\_3.txt & 11489 & 4 & 4 & 4 & 4  & 4   & 4 &0.68	&0.4\\
-& ins\_50\_4.txt & 262   & 4 & 4 & 4 & 5  & 5   & 5 &1.43	&0.5\\
-& ins\_50\_5.txt & 28832 & 4 & 4 & 4 & 5  & 5   & 6 &1.60	&1.0\\
-& ins\_50\_6.txt & 29439 & 4 & 4 & 4 & 5  & 5   & 6 &1.35	&0.7\\
-& ins\_50\_7.txt & 29054 & 4 & 4 & 4 & 4  & 4   & 4 &3.36	&0.3\\
-& ins\_50\_8.txt & 16206 & 4 & 4 & 4 & 4  & 4   & 4 &0.59	&0.3\\
-& ins\_50\_9.txt & 29836 & 4 & 4 & 4 & 4  & 4   & 4 &0.47	&0.3
+\begin{tabular}{rrrrrrrr}
+$|S|$               & $|V|$ & $|E|$ & $X$-opt & $X$-dec & $X$-com & $Y$-dec & $Y$-com \\\hline
+\multirow{15}{*}{1} & 50    & 276   & 1.26    & 0.27    & 0.22    & 3.43    & 7.39    \\
+                    & 50    & 262   & 1.00    & 0.28    & 0.19    & 2.89    & 4.76    \\
+                    & 50    & 269   & 2.11    & 0.29    & 0.20    & 3.25    & 8.43    \\
+                    & 50    & 122   & 0.24    & 0.05    & 0.42    & 186.25  & 197.26  \\
+                    & 50    & 118   & 0.30    & 0.13    & 0.25    & 387.99  & 154.76  \\
+                    & 50    & 126   & 0.37    & 0.12    & 0.48    & 1200.71 & 525.69  \\
+                    & 50    & 194   & 0.63    & 0.15    & 0.30    & 26.39   & 9.81    \\
+                    & 50    & 192   & 0.25    & 0.11    & 0.14    & 4.89    & 2.72    \\
+                    & 50    & 188   & 0.68    & 0.15    & 0.16    & 4.81    & 4.75    \\
+                    & 50    & 63    & 0.22    & 0.03    & 0.40    & 32.64   & 10.73   \\
+                    & 50    & 63    & 0.18    & 0.07    & 0.17    & 29.45   & 7.71    \\
+                    & 50    & 63    & 0.17    & 0.05    & 0.19    & 32.48   & 8.49    \\
+                    & 50    & 100   & 0.22    & 0.17    & 0.11    & 8.50    & 6.59    \\
+                    & 50    & 100   & 0.24    & 0.02    & 0.11    & 12.06   & 3.85    \\
+                    & 50    & 100   & 0.26    & 0.10    & 0.16    & 9.93    & 7.49    \\\hline
+\multirow{15}{*}{2} & 50    & 276   & 1.33    & 0.11    & 0.18    & 2.42    & 4.37    \\
+                    & 50    & 262   & 1.18    & 0.15    & 0.20    & 2.16    & 2.67    \\
+                    & 50    & 269   & 1.26    & 0.18    & 0.10    & 2.43    & 2.62    \\
+                    & 50    & 122   & 0.23    & 0.08    & 0.28    & 43.04   & 29.13   \\
+                    & 50    & 118   & 0.23    & 0.07    & 0.17    & 4.12    & 4.51    \\
+                    & 50    & 126   & 0.15    & 0.10    & 0.23    & 10.71   & 15.65   \\
+                    & 50    & 194   & 0.46    & 0.13    & 0.13    & 2.93    & 3.08    \\
+                    & 50    & 192   & 0.44    & 0.08    & 0.15    & 2.79    & 3.16    \\
+                    & 50    & 188   & 0.58    & 0.14    & 0.09    & 1.33    & 2.26    \\
+                    & 50    & 63    & 0.09    & 0.02    & 0.15    & 13.62   & 6.75    \\
+                    & 50    & 63    & 0.15    & 0.02    & 0.15    & 10.88   & 1.83    \\
+                    & 50    & 63    & 0.12    & 0.05    & 0.17    & 46.87   & 11.82   \\
+                    & 50    & 100   & 0.16    & 0.05    & 0.09    & 4.04    & 2.54    \\
+                    & 50    & 100   & 0.11    & 0.08    & 0.09    & 1.69    & 3.12    \\
+                    & 50    & 100   & 0.19    & 0.01    & 0.08    & 4.79    & 2.59   
 \end{tabular}
-\caption{Objective function values for instances with 50 nodes}
-\label{tab:ins50}
+\caption{Solve elapsed time of models running on instances with 50 nodes and 1 or 2 sources}
+\label{tab:time:50}
 \end{table}
 
 
+
 \begin{table}[]
-\begin{tabular}{lllllllllll}
- $|S|$ & inst & id & log & deg & fib & opt & dec & match & opt-time & dec-time \\
-\hline 
-\multirow{9}{*}{1}
-& ins\_100\_1.txt & 23395 & 7 & 7 & 7 &7   & 7 & 8 & 910.87 &	14.56	\\
-& ins\_100\_2.txt & 18628 & 7 & 7 & 7 &23  & 7 & 8 &1201.18 &	11.98	\\
-& ins\_100\_3.txt & 22317 & 7 & 7 & 7 &24  & 7 & 8 &1200.98 &	16.64	\\
-& ins\_100\_4.txt & 26058 & 7 & 7 & 7 &7   & 7 & 9 & 336.35 &	583.53	 \\
-& ins\_100\_5.txt & 25118 & 7 & 7 & 7 &7   & 7 & 8 &  25.66 &	222.41	 \\
-& ins\_100\_6.txt & 14496 & 7 & 7 & 7 &7   & 7 & 8 & 279.73 &	255.54	 \\
-& ins\_100\_7.txt & 14876 & 7 & 7 & 7 &9   & 8 & 11 &  86.88 &	1200.40	\\
-& ins\_100\_8.txt & 14133 & 7 & 7 & 7 &8   & 8 & 9 & 180.90 &	1200.64	\\
-& ins\_100\_9.txt & 3797  & 7 & 7 & 7 &8   & 8 & 10 & 666.94 &	342.82	\\
-\hline 
-\multirow{9}{*}{2}
-& ins\_100\_1.txt & 19075 & 6 & 6 & 6 & 6  & 6  & 7 &857.29	&7.34	\\
-& ins\_100\_2.txt & 30757 & 6 & 6 & 6 & 6  & 6  & 7 &1176.83	&8.47	\\
-& ins\_100\_3.txt & 28920 & 6 & 6 & 6 & 6  & 6  & 7 &1036.39	&10.06	\\
-& ins\_100\_4.txt & 17518 & 6 & 6 & 6 & 6  & 6  & 9 &38.08	&6.53	\\
-& ins\_100\_5.txt & 20361 & 6 & 6 & 6 & 6  & 6  & 7 &41.33	&8.93	\\
-& ins\_100\_6.txt & 18291 & 6 & 6 & 6 & 6  & 6  & 7 &15.48	&18.66	\\
-& ins\_100\_7.txt & 21324 & 6 & 6 & 6 & 8  & 7  & 10&14.22	&1200.38	\\
-& ins\_100\_8.txt & 16586 & 6 & 6 & 6 & 7  & 7  & 8 &6.59	&160.01	\\
-& ins\_100\_9.txt & 8916  & 6 & 6 & 6 & 6  & 6  & 8 &129.43	&112.89	\\
-\hline 
-\multirow{9}{*}{3}
-& ins\_100\_1.txt & 28173 & 6 & 6 & 6 & 6  & 6  & 7 &1200.88&	8.82	\\
-& ins\_100\_2.txt & 9968  & 6 & 6 & 6 & 21 & 6  & 6 &1201.05&	10.04	\\
-& ins\_100\_3.txt & 27419 & 6 & 6 & 6 & 22 & 6  & 6 &1200.94&	11.74	\\
-& ins\_100\_4.txt & 22248 & 6 & 6 & 6 & 6  & 6  & 7 &53.67  &    10.43	\\
-& ins\_100\_5.txt & 22774 & 6 & 6 & 6 & 6  & 6  & 6 &21.99  &    24.31	\\
-& ins\_100\_6.txt & 13526 & 6 & 6 & 6 & 6  & 6  & 6 &14.33  &    18.33	\\
-& ins\_100\_7.txt & 26983 & 6 & 6 & 6 & 8  & 7  & 9 &9.18   &    1200.59	\\
-& ins\_100\_8.txt & 2341  & 6 & 6 & 6 & 6  & 6  & 7 &6.01   &    7.63	\\
-& ins\_100\_9.txt & 24980 & 6 & 6 & 6 & 6  & 6  & 8 &113.60 &    16.20	\\
-\hline 
-\multirow{9}{*}{4}
-& ins\_100\_1.txt & 9264  & 5 & 5 & 5 & 5  & 5  & 6 &1201.00&	5.39 \\
-& ins\_100\_2.txt & 20581 & 5 & 5 & 5 & 21 & 5  & 6 &1201.21&	6.75 \\
-& ins\_100\_3.txt & 11278 & 5 & 5 & 5 & 22 & 5  & 6 &1200.93&	5.91 \\
-& ins\_100\_4.txt & 135   & 5 & 5 & 5 & 5  & 5  & 6 &165.75 &    6.69 \\
-& ins\_100\_5.txt & 22756 & 5 & 5 & 5 & 5  & 5  & 6 &30.36  &    3.92 \\
-& ins\_100\_6.txt & 25870 & 5 & 5 & 5 & 5  & 5  & 5 &13.72  &    0.14 \\
-& ins\_100\_7.txt & 11592 & 5 & 5 & 5 & 7  & 7  & 9 &8.22   &    38.93\\
-& ins\_100\_8.txt & 1117  & 5 & 5 & 5 & 5  & 5  & 7 &5.27   &    14.40\\
-& ins\_100\_9.txt & 30673 & 5 & 5 & 5 & 5  & 5  & 6 &116.44 &    43.58\\
-\hline 
-\multirow{9}{*}{5}
-& ins\_100\_1.txt & 7643  & 5 & 5 & 5 & 5  & 5  & 5 &666.67	&0.18	\\
-& ins\_100\_2.txt & 8042  & 5 & 5 & 5 & 20 & 5  & 5 &1201.08	&0.19	\\
-& ins\_100\_3.txt & 27305 & 5 & 5 & 5 & 5  & 5  & 5 &911.20	&0.20	\\
-& ins\_100\_4.txt & 3509  & 5 & 5 & 5 & 5  & 5  & 6 &24.54	&5.60	\\
-& ins\_100\_5.txt & 30727 & 5 & 5 & 5 & 5  & 5  & 6 &419.17	&6.52	\\
-& ins\_100\_6.txt & 21375 & 5 & 5 & 5 & 5  & 5  & 5 &13.35	&0.19	\\
-& ins\_100\_7.txt & 24994 & 5 & 5 & 5 & 5  & 5  & 7 &9.19	&15.71	\\
-& ins\_100\_8.txt & 26840 & 5 & 5 & 5 & 5  & 5  & 7 &5.07	&54.10	\\
-& ins\_100\_9.txt & 19805 & 5 & 5 & 5 & 5  & 5  & 6 &107.38	&6.96	
+\begin{tabular}{rrrrrrrrrr}
+$|S|$               & $|V|$ & $|E|$ & LB & $X$-opt & $X$-dec & $X$-com & $Y$-dec & $Y$-com & UB    \\\hline
+\multirow{15}{*}{1} & 50  & 276   & 6  & 6       & 6       & 6       & 6       & 6       & 8  \\
+                    & 50  & 262   & 6  & 6       & 6       & 6       & 6       & 6       & 8  \\
+                    & 50  & 269   & 6  & 6       & 6       & 6       & 6       & 6       & 7  \\
+                    & 50  & 122   & 6  & 9       & 9       & 9       & 9       & 9       & 10 \\
+                    & 50  & 118   & 6  & 9       & 9       & 9       & 9       & 9       & 10 \\
+                    & 50  & 126   & 6  & 10      & 10      & 10      & 10      & 10      & 10 \\
+                    & 50  & 194   & 6  & 6       & 6       & 6       & 6       & 6       & 8  \\
+                    & 50  & 192   & 6  & 6       & 6       & 6       & 6       & 6       & 8  \\
+                    & 50  & 188   & 6  & 6       & 6       & 6       & 6       & 6       & 9  \\
+                    & 50  & 63    & 6  & 8       & 8       & 8       & 8       & 8       & 10 \\
+                    & 50  & 63    & 6  & 8       & 8       & 8       & 8       & 8       & 10 \\
+                    & 50  & 63    & 6  & 9       & 9       & 9       & 9       & 9       & 10 \\
+                    & 50  & 100   & 6  & 6       & 6       & 6       & 6       & 6       & 8  \\
+                    & 50  & 100   & 6  & 6       & 6       & 6       & 6       & 6       & 8  \\
+                    & 50  & 100   & 6  & 6       & 6       & 6       & 6       & 6       & 8  \\
+\multirow{15}{*}{2} & 50  & 276   & 5  & 5       & 5       & 5       & 5       & 5       & 7     \\\hline
+                    & 50  & 262   & 5  & 5       & 5       & 5       & 5       & 5       & 6     \\
+                    & 50  & 269   & 5  & 5       & 5       & 5       & 5       & 5       & 6     \\
+                    & 50  & 122   & 5  & 7       & 7       & 7       & 7       & 7       & 9     \\
+                    & 50  & 118   & 5  & 6       & 6       & 6       & 6       & 6       & 8     \\
+                    & 50  & 126   & 5  & 7       & 7       & 7       & 7       & 7       & 9     \\
+                    & 50  & 194   & 5  & 5       & 5       & 5       & 5       & 5       & 7     \\
+                    & 50  & 192   & 5  & 5       & 5       & 5       & 5       & 5       & 6     \\
+                    & 50  & 188   & 5  & 5       & 5       & 5       & 5       & 5       & 7     \\
+                    & 50  & 63    & 5  & 7       & 7       & 7       & 7       & 7       & 9     \\
+                    & 50  & 63    & 5  & 7       & 7       & 7       & 7       & 7       & 9     \\
+                    & 50  & 63    & 5  & 8       & 8       & 8       & 8       & 8       & 10    \\
+                    & 50  & 100   & 5  & 5       & 5       & 5       & 5       & 5       & 7     \\
+                    & 50  & 100   & 5  & 5       & 5       & 5       & 5       & 5       & 6     \\
+                    & 50  & 100   & 5  & 5       & 5       & 5       & 5       & 5       & 7    
 \end{tabular}
-\caption{Objective function values for instances with 100 nodes}
-\label{tab:ins100}
+\caption{Objective function value obtained by running various methods for instances with 50 nodes and 1 or 2 sources}
+\label{tab:obj:50}
 \end{table}
