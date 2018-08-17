@@ -107,7 +107,9 @@ the number of informed nodes within the give time step is no worse than when the
 \qed
 \end{proof}
 
-Alg.~\ref{alg:dreg} calculates a lower bound on the delay when given number of nodes, sources and a degree sequence in $G$ as an input.
+Alg.~\ref{alg:dreg} calculates a lower bound on the delay when given number of nodes, sources and a degree sequence in $G$ that takes account of sources as an input.
+Specifically, the first $|S|$ positions in the degree sequence correspond to degrees of sources, and are ordered non-increasingly.
+The remaining $n-|S|$ positions represent degrees of non-source nodes also in a non-increasing order.
 The algorithm iteratively updates possible node degrees in $T^k$ in each time step $k$, and records the maximum possible number of nodes in $V_k$.
 For the purpose of finding lower bounds, it is assumed that each node $v\in V_k$ with $\deg_{T^k}(v)<\deg_G(v)$ informs a new uninformed node.
 The number of iterations is then the lowest possible delay for given input.
@@ -119,10 +121,12 @@ Once a node $v$ reaches its maximum degree, i.e., when $\text{deg}_{T^k}=\deg_G(
 %These values are updated iteratively using dynamic programming until the number of informed nodes reaches $n$. 
 
 \begin{algorithm}
-\KwData{$n,m,d_1,\dots,d_n\in \mathbb{N}, m\leq n,\newline 1\leq d_n\leq\dots\leq d_2\leq d_1$}
-$a_1\leftarrow\dots\leftarrow a_{m}\leftarrow 1$\;%\tcp{this is a comment}
-$a_{m+1}\leftarrow\dots\leftarrow a_{n}\leftarrow 0$\;%\tcp{this is a comment}
-$c\leftarrow m$;%\tcp{every source informs a new node}
+\KwData{$n,|S|,d_1,\dots,d_n\in \mathbb{N}, |S|\leq n,$\newline 
+$1\leq d_{|S|}\leq\dots\leq d_2\leq d_1$,\newline
+$1\leq d_n\leq\dots\leq d_{|S|+1}$} 
+$a_1\leftarrow\dots\leftarrow a_{|S|}\leftarrow 1$\;%\tcp{this is a comment}
+$a_{|S|+1}\leftarrow\dots\leftarrow a_{n}\leftarrow 0$\;%\tcp{this is a comment}
+$c\leftarrow |S|$;%\tcp{every source informs a new node}
 $~k\leftarrow 0$\;
 \While {$c<n$} {
 $k\leftarrow k+1$\;
