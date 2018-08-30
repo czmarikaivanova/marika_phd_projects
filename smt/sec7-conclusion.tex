@@ -1,0 +1,30 @@
+\section{Conclusion and Future Work}
+\label{sec:conclusion}
+We have presented and analyzed two approaches of modelling the SMT problem as an integer linear program.
+The first formulation, $\mathcal{X}_1$, is based on a formulation of the broadcast version of the problem, while the second one, $\mathcal{F}_1$, is an extension of network flow formulation of the minimum Steiner tree problem.
+Both formulations are improved by valid inequalities resulting in models $\mathcal{X}_2$ and $\mathcal{F}_2$, respectively. 
+Further strengthening is achieved by introducing variables of higher dimension and associated constraints, which leads to models $\mathcal{X}_3$ and $\mathcal{F}_3$.
+A theoretical analysis of the formulations shows that  $\mathcal{F}_1$ and $\mathcal{F}_2$ are at least as strong as $\mathcal{X}_1$ and $\mathcal{X}_2$, respectively. 
+It is conjectured that an analogous relation holds between $\mathcal{F}_3$ and $\mathcal{X}_3$.
+Experimental evaluation reveals that instances with up to approximately 20 nodes are practically solvable to optimality.
+Subsequent investigation suggests that the LP relaxations of $\mathcal{F}_3$ and $\mathcal{X}_3$ are fairly strong, but the running time prohibits direct solution.
+Nevertheless, experiments also show that a constraint generation procedure applied to $\mathcal{X}_3$, developed in the current work, provides tight lower bounds.
+The procedure also demonstrates that when the number of nodes is no more than 30, many instances of the LP relaxation of $\mathcal{X}_3$ have an integer optimum.
+
+Follow-up research should uncover whether the conjecture on the relation between the LP relaxations of $\mathcal{F}_3$ and $\mathcal{X}_3$ holds.
+A search for facet-defining valid inequalities, or even convex hull formulations, is an interesting and ambitious direction of future work.
+Owing to the limited size of solvable instances, there is a potential in studying inexact methods, such as approximation algorithms and domain specific heuristics.
+Instance preprocessing combined with variable fixing can possibly increase the size of instances solvable to optimality with the current models.
+
+%We have presented two approaches of modelling SMT as an integer linear program.
+%The first formulation is based on broadcast trees, while the second  formulation is an extension of network flow model of the minimum Steiner tree problem.
+%Both formulations are improved by valid inequalities and further strengthened by variables of higher dimension and associated constraints.
+%A~theoretical analysis reveals that the models based on network flows are at least as strong as the broadcast tree models, with one exception of the strongest extensions of the models, where this claim remains a conjecture.
+%Experimental study discovers that practically solvable to optimality are instances with up to approximately 20 nodes.
+%Subsequent investigation of LP relaxations suggests that constraint generation applied to the strongest broadcast tree based models is a promising technique for obtaining lower bounds.
+%
+%%The follow-up research should prove the conjecture that also the strongest network flow based models are at least as strong as the corresponding broadcast tree based models.
+%The follow-up research should prove the remaining conjecture regarding relations between the models.
+%Additional investigation of facet defining valid inequalities, or even convex hull formulations is a possible direction of future work.
+%Owing to the limited size of solvable instances, there is a potential in studying inexact methods such as approximation algorithms and domain specific heuristics.
+%Instance preprocessing together with variable fixing could possibly increase the size of instances solvable to optimality with existing models.

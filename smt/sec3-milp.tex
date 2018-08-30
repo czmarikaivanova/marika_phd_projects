@@ -1,0 +1,459 @@
+\section{IP Formulations}
+\label{sec:ILP}
+
+A basic element of every IP formulation for SMT is a set of constraints modelling a Steiner tree.
+We investigate two such constraint sets formulated in terms of variables with up to three node indices, and make necessary extensions required by the objective function of SMT.
+The resulting models are subsequently strengthened by valid inequalities.
+
+\subsection{Formulation based on broadcast trees}
+
+The first model extends the SBT formulation introduced by \citet{Haugland12Dual} by non-destination nodes, in order to formulate the multicast version of the problem \citep{ivanova16isco}.
+
+\subsubsection{Underlying Steiner tree formulation}
+
+Feasible solutions to SMT are characterized by a Steiner tree $T$ covering $D$.
+Define for each edge $\{i,j\}\in E$ and each destination node $s\in D$, the binary variables $y\in\{0,1\}^E$ and $X\in\{0,1\}^{A\times D}$,
+where $y_{ij}=1$ iff $\{i,j\} \in E_T$,
+and $X^{s}_{ij}=1$ iff $(i,j)\in A^s$.
+% \[y_{ij}=
+% \begin{cases}
+%     1 & \text{if $\{i,j\} \in E_T$},\\
+%     0 & \text{otherwise},
+%   \end{cases}
+% \]
+% 
+% \[X^{s}_{ij}=
+% \begin{cases}
+%     1 & \text{if $(i,j)$ is an arc in the arborescence $T^s$},\\
+%     0 & \text{otherwise}.
+%   \end{cases}
+% \]
+To induce a graph with an acyclic connected component spanning $D$, the following constraints are imposed:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     % 
+%     STEINER TREE MODEL  X0          %
+%                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{subequations}\label{mod:x0}
+\begin{align}
+\label{con:dd:arrowFromDest} \sum\limits_{j\in V_i}X^s_{ji} & = 1 & i,s\in D,i\neq s,\\
+\label{con:dd:arrowFromNonDestB} \sum\limits_{j\in V_{i}}X^s_{ji} & \leq 1 & i\in V \setminus D, s\in D,\\
+\label{con:dd:arrowFromNonDestA} X^s_{ij} & \leq \sum\limits_{k\in V_{i}\setminus \{j\}}X^s_{ki} & i\in V \setminus D,(i,j)\in A, s\in D,\\
+\label{con:dd:oneDir} X^s_{ij} + X^s_{ji} & = y_{ij} & \{i,j\}\in E, s\in D,\\
+\label{con:dd:startInSource} X^s_{is} & = 0 &  s\in D, (i,s)\in A,&\\
+\label{con:dd:vardim}y \in \{0,1\}^{E}, X & \in \{0,1\}^{A\times D}.
+\end{align}~
+\end{subequations}
+
+Constraints (\ref{con:dd:arrowFromDest}) ensure that all destination nodes but $s$ have a unique entering arc in $T^s$.
+Inequalities (\ref{con:dd:arrowFromNonDestB})--(\ref{con:dd:arrowFromNonDestA})
+say that non-destination nodes do not have more than one entering arc, and that they do have one if they have leaving arcs.
+Constraints (\ref{con:dd:oneDir}) state that the arc set of $T^s$ consists of directed versions of the edge set of $T$,
+and (\ref{con:dd:startInSource}) ensure that $s$ is the root of $T^s$.
+More formally, the effect of the constraints can be stated as follows:
+
+\begin{lemma} \label{lem:x0valid}
+If $(X,y)$ satisfies (\ref{con:dd:arrowFromDest})--(\ref{con:dd:vardim}), then $G_y$ has a tree spanning $D$ as one of its connected components.
+Conversely, for any tree $T\subseteq G$ spanning $D$, there exists a pair $(X,y)$ satisfying (\ref{con:dd:arrowFromDest})--(\ref{con:dd:vardim}) such that $T$
+is a connected component of $G_y$.
+\end{lemma}
+\begin{proof}
+By (\ref{con:dd:startInSource}) and (\ref{con:dd:arrowFromDest})--(\ref{con:dd:arrowFromNonDestB}),
+the in-degree of $s\in D$ is 0 in $G_{X^s}$, whereas it is at most one at all other nodes.
+Hence, the connected components of $G_{X^s}$ are directed cycles, arborescences, and isolated nodes,
+and one of the components is an arborescence rooted at $s$.
+Constraints (\ref{con:dd:oneDir}) imply that $G_y$ consists of undirected versions of the same components,
+showing that no cycle in $G_y$ contains destination nodes.
+Let $t\in D$, and let $P$
+be the maximal path in $G_{X^s}$ that terminates in $t$.
+Existence and uniqueness of this path is assured since $t$ belongs to an acyclic connected component.
+According to (\ref{con:dd:arrowFromNonDestA}), each non-destination in $P$ has an entering arc in $P$,
+while (\ref{con:dd:arrowFromDest}) ensures that the same is true for every destination node, except $s$.
+It follows that the first node of $P$ is $s$.
+Thus, destinations $s$ and $t$ belong to a joint, acyclic connected component of $G_y$.
+
+The second claim of the lemma is obvious.\qed
+\end{proof}
+
+
+\subsubsection{SMT model [$\mathcal{X}_1$]} \label{sec:x1}
+
+To reflect that only expensive edges in $T$ contribute to the objective function of Problem \ref{def:problem}, we introduce the variables:
+\newline\newline
+$\pi^s_{ij}=
+\begin{cases}
+    1 & \text{if $(i,j)$ is the most expensive arc leaving node $i$ in $T^s$},\\
+    0 & \text{otherwise},
+  \end{cases}$
+\newline\newline
+leading to the following formulation $\mathcal{X}_1$ of SMT:
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     % 
+%             MODEL X1                %
+%           (3 idx vars)              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{subequations}[resume]\label{eq:smt-x2}
+\begin{align}
+\label{objective:mf} \makebox[0pt][l]{$\displaystyle{} \min \sum\limits_{(i,j) \in A} p_{ij} \sum\limits_{s \in D} \pi^s_{ij} $}\\
+\notag\text{s.t.}\\
+\notag(\ref{con:dd:arrowFromDest}) &- (\ref{con:dd:vardim})\\
+\label{con:dd:yvar} X^s_{ij} & \leq \sum_{k\in W_{ij}}\pi^s_{ik} & s\in D, (i,j)\in A,\\
+\label{con:dd:vardimy} \pi & \in \{0,1\}^{A\times D}.
+\end{align}~
+\end{subequations}
+
+Constraints (\ref{con:dd:yvar}) say that if $(i,j)\in A_{T^s}$, then the cost of the most expensive arc in $T^s$ leaving $i$ is at least $p_{ij}$.
+Since $\sum_{s\in D}\pi_{ij}^s=n_{ij}(T)$ is the number of arborescences in which $(i,j)$ is the most expensive arc leaving $i$,
+(\ref{objective:mf}) thus agrees with the objective of Problem \ref{def:problem}.
+
+\begin{prop}
+\label{prop:x1valid}
+If $(X,y,\pi)$ is an optimal solution to $\mathcal{X}_1$, then $G_y$ consists of isolated non-destination nodes and a tree that
+solves Problem \ref{def:problem}.
+\end{prop}
+\begin{proof}
+Follows directly from $p\geq 0$ and Lemma \ref{lem:x0valid}.
+\qed
+\end{proof}
+
+Model $\mathcal{X}_1$ is a slightly modified version of the SMT model introduced by \citet{ivanova16isco},
+which contains a set of constraints disallowing non-destination leaves, and a weaker version of constraints (\ref{con:dd:arrowFromNonDestA}).
+Formulation (\ref{objective:mf})--(\ref{con:dd:vardimy}) is \emph{minimal},
+in the sense that each set of constraints is necessary in order to give a valid formulation.
+In the next section, we strengthen the formulation by adding redundant valid inequalities.
+
+\subsubsection{Valid inequalities [$\mathcal{X}_2$]} \label{sec:x2}
+
+Adding the following valid inequalities to $\mathcal{X}_1$ gives another SMT-model, denoted $\mathcal{X}_2$:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     % 
+%             MODEL X2                %
+%      (3 idx vars + VIs )            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{subequations}[resume]
+\begin{align}
+\label{con:dd:extraCon} \sum\limits_{j\in V_{i}}X^s_{ji} & \leq \sum\limits_{j\in V_{i}}X^s_{ij}  & 	i\in V\setminus D, s\in D,\\
+\label{con:vi:Y1} \sum\limits_{j\in V_s}  \pi^{s}_{sj} & =1 & s\in D,\\
+\label{con:vi:sumYImpSumX} \sum\limits_{j\in V_i\setminus\{s\} }\pi^{s}_{ij} & = \sum\limits_{j\in V_i}  X^{s}_{ji} & i\in V\setminus D, s\in D.
+\end{align}
+\end{subequations}
+Constraints (\ref{con:dd:extraCon}) ensure that the number of arcs leaving a non-destination in $T^s$ is no less than the number of entering arcs.
+Their effect is to disallow non-destination leaves.
+Equations (\ref{con:vi:Y1}) say that in arborescence $T^s$, exactly one arc $(s,j)$ leaving the root $s$ is declared to be largest.
+Validity of the constraints follows immediately because the root has at least one leaving arc.
+As constraints (\ref{con:vi:sumYImpSumX}) state, if an arc enters non-destination node $i$ in $T^s$, then $i$ also has at least one out-going arc,
+exactly one of which is the most expensive.
+The root $s$ is excluded from the summation set on the left of (\ref{con:vi:sumYImpSumX}) since no arcs in $T^s$ enter $s$.
+
+\begin{remark} \label{rem:x2}
+The sets (\ref{con:dd:extraCon})--(\ref{con:vi:sumYImpSumX}) of valid inequalities are \emph{independent} in the following sense:
+There exist instances where the removal of either set implies that $z(\text{LP}(\mathcal{X}_2))$ takes a smaller value.
+This includes the instance where $|V|=9$, $|D|=5$, all power requirements (arc costs) $p_{ij}$ equal the square of the Euclidean distance between nodes $i$ and $j$,
+and the nodes are located in the plane with respective coordinates (destinations mentioned first)
+(47, 65), (8, 65), (26, 12), (78, 27), (8, 8), (73, 66), (13, 55), (91, 44), and (76, 74).
+\end{remark}
+
+\subsection{Formulation based on network flows}
+
+There are many formulations for the \textsc{Minimum Steiner Tree} problem \citep{goemans93catalog} that can serve as a basis for modelling SMT.
+We consider the multi-commodity network flow model developed by \citet{Polzin} (denoted $P_{F}$ in their work).
+A given destination $s_0\in D$ plays a particular role in the models.
+For the sake of simplified notation, $s_0$ as subscript (superscript) is henceforth replaced by subscript (superscript) 0.
+
+\subsubsection{Underlying Steiner tree formulation}
+
+To identify a Steiner arborescence $T^0=(V^0,A^0)$ rooted at $s_0$, we define variables $g\in\{0,1\}^A$ and $F\in\{0,1\}^{A\times D_0}$,
+where $g_{ij}=1$ iff $(i,j)\in A$, and $F_{ij}^s=1$ iff  the path in $T^0$ from $s_0$ to destination $s$ contains arc $(i,j)$.
+% the following variables are introduced for each arc $(i,j)\in A$ and destination $s\in D_0$:
+% \newline\newline
+%   $g_{ij}=
+% \begin{cases}
+%     1 & \text{if $(i,j) \in A^0$},\\
+%     0 & \text{otherwise},
+% \end{cases}$
+% \newline\newline
+%   $F^{s}_{ij}=
+% \begin{cases}
+%     1 & \text{if the path from $s_0$ to $s$ in $T^0$ contains $(i,j)$},\\
+%     0 & \text{otherwise}.
+% \end{cases}$
+% \newline\newline
+%
+Variables $g_{ij}$ and $F_{ij}^s$ are traditionally referred to as the \emph{design variable} of arc $(i,j)$ and the
+\emph{flow of commodity $s$} along $(i,j)$, respectively.
+The constraints of the \emph{multi-commodity flow formulation}
+of the \textsc{Minimum Steiner Tree} problem are:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     % 
+%     STEINER ARBORESCENCE F0         %
+%        (from Polzin)                %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{subequations}
+\begin{align}
+\label{con:pf1:xfrel} F^{s}_{ij} & \leq g_{ij} & s\in D_0, (i,j)\in A, \\
+\label{con:pf1:flow} \sum\limits_{\substack{ j \in V_i }}F^{s}_{ji}-\sum\limits_{\substack{j\in V_i}}F^{s}_{ij} &= 
+  \begin{cases}
+    1, & i=s,\\
+    0, & i\in V\setminus \{s_0, s\},
+  \end{cases} & s\in D_0,\\
+\label{con:pf1:B}  \sum_{j\in V_i}g_{ji}&\leq 1 & i\in V\setminus D,\\
+\label{con:pf1:noflowFromT} F_{si}^s&=0 & s\in D_0, i\in V_s,\\
+\label{con:pf1:fitt=xit} F_{is}^s&=g_{is} & s\in D_0, i\in V_s,\\
+\label{con:pf1:xi0=0} g_{i0}&=0 & i\in V_0,\\
+\label{con:pf1:dim}g \in \{0,1\}^{A},F&\in\{0,1\}^{A \times D_0}.
+\end{align}~
+\end{subequations}
+
+The \emph{flow conservation} constraints (\ref{con:pf1:flow}) ensure that $T^0$ is connected,
+and the \emph{capacity} constraints (\ref{con:pf1:xfrel}) state that flow of any commodity is allowed only if $(i,j)\in A^0$.
+Multi-commodity flow formulations appear abundantly in the network design literature, and proof of the following claim is therefore omitted:
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     %
+%         Proposition  		      %
+% (F1 models an arborescence)         %
+%                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{lemma}
+\label{lem:modelcorrect}
+Assume $(F,g)$ satisfies (\ref{con:pf1:xfrel})--(\ref{con:pf1:dim}).
+Then some connected component $T^0\subseteq G_{g}$ is an $s_0$-rooted arborescence spanning $D$,
+and some connected component of $G_{F^s}\subseteq T^0$ is a path from $s_0$ to $s\in D_0$.
+Conversely, for any $s_0$-rooted arborescence $T^0$ spanning $D$, there exists a pair $(F,g)$ satisfying (\ref{con:pf1:xfrel})--(\ref{con:pf1:dim}) such that $T^0$
+is a connected component of $G_g$.
+\end{lemma}
+ 
+To model the objective function of SMT, the following result is useful:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     %
+%         Proposition  		      %
+%   (transformation X_{ij}^s)         %
+%                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{prop}\label{prop:transx}
+Assume $(F,g)$ satisfies (\ref{con:pf1:xfrel})--(\ref{con:pf1:dim}),
+and let $T^s=(V^s,A^s)$ be the arborescence obtained by redirecting the arcs in $T^0$ such that they point away from $s\in D_0$. Then
+$$
+g_{ij} - F^s_{ij}+F^s_{ji} = 
+	\begin{cases}
+		1, ~\text{if $(i,j)\in A^s$}, \\
+		0, ~\text{otherwise.}
+	\end{cases}
+$$
+\end{prop}
+%
+\begin{proof}
+Because $T^0$ is acyclic, it follows from the capacity constraints (\ref{con:pf1:xfrel}) that $g_{ij}+F^s_{ji}\leq 1$.
+The same constraints also imply $g_{ij} - F^s_{ij}\geq 0$.
+Hence, $g_{ij} - F^s_{ij}+F^s_{ji}\in\{0,1\}$.
+
+Arborescence $T^s$ contains arc $(i,j)$ iff $(i,j)$ is in $A^0$ but not on a path to $s$, or its reverse arc $(j,i)$ is on such a path.
+By Lemma \ref{lem:modelcorrect}, this disjunction is equivalent to $g_{ij}-F_{ij}^s=1$ or $F_{ji}=1$.
+The result then follows since the two conditions are mutually exclusive.
+\qed
+\end{proof}
+
+% $\mathcal{F}_1$ based on $\mathcal{F}_0$.
+% For this purpose, it is necessary to find a way to represent the constraint (\ref{con:dd:yvar}) in the $\mathcal{F}_1$ space.
+% The $\pi$-variables from $\mathcal{X}_1$ have to be used in $\mathcal{F}_1$, because they appear in the objective function which remains unchanged.
+
+\subsubsection{SMT model [$\mathcal{F}_1$]}
+
+Recall from Section \ref{sec:x1} that $\pi_{ij}^s$ determines whether $(i,j)$ is the most expensive arc leaving node $i$ in arborescence $T^s$.
+Taking advantage of Prop.\ \ref{prop:transx}, we can thus formulate Problem \ref{def:problem} in terms of variables $F$, $g$, and $\pi$,
+resulting in model $\mathcal{F}_1$:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     % 
+%             MODEL F1                %
+%        (3 idx vars)                 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{subequations}[resume]
+\begin{align}
+\notag\min & \sum\limits_{(i,j) \in A} p_{ij} \sum\limits_{s \in D} \pi^s_{ij}\\ 
+\notag\text{s.t.} && \\
+\notag(\ref{con:pf1:xfrel}) - (\ref{con:pf1:dim})\\
+\label{con:pf1:yvar} g_{ij} - F^s_{ij}+F^s_{ji} & \leq \sum_{k\in W_{ij}}\pi^s_{ik}  & s\in D_0, (i,j)\in A,\\
+\label{con:pf1:yvar0} g_{ij} & \leq \sum_{k\in W_{ij}}\pi^0_{ik}   &  (i,j)\in A,\\
+\label{con:pf1:dimy} \pi&\in \{0,1\}^{A\times D}.
+\end{align}~
+\end{subequations}
+
+Like (\ref{con:dd:yvar}), constraints (\ref{con:pf1:yvar}) ensure that if $(i,j)\in A^s$, then $\pi_{ik}^s=1$ for some
+arc $(i,k)$ at least as expensive as $(i,j)$.
+As $g_{ij}$ determines whether $(i,j)\in A^0$, the corresponding constraint for destination $s_0$ is simplified to (\ref{con:pf1:yvar0}).
+Validity of $\mathcal{F}_1$ is thus stated as a corollary to Prop.\ \ref{prop:transx}:
+
+\begin{cor}
+If $(F,g,\pi)$ is an optimal solution to $\mathcal{F}_1$, then $G_g$ consists of isolated non-destination nodes and an arborescence $T^0$.
+The tree obtained by disregarding arc directions in $T^0$ is an optimal solution to Problem \ref{def:problem}.
+\end{cor}
+
+\begin{remark} \label{rem:f1a}
+Like $\mathcal{X}_1$, also $\mathcal{F}_1$ is a minimal formulation.
+Constraints (\ref{con:pf1:B}) prevent non-destinations from having multiple entering arcs.
+In a \textsc{Minimum Steiner Tree} formulation, where a linear function of $g$ is minimized subject to constraints
+(\ref{con:pf1:xfrel})--(\ref{con:pf1:flow}) and (\ref{con:pf1:noflowFromT})--(\ref{con:pf1:dim}),
+constraints (\ref{con:pf1:B}) are implied by optimality.
+The necessity of (\ref{con:pf1:B}) in formulation $\mathcal{F}_1$ of SMT is demonstrated by the optimal solution to $\mathcal{F}_1$ after removal of (\ref{con:pf1:B})
+in the following instance: $V=\{s_0,a,\ldots,i\}$ with coordinates
+(3, 61),
+(79, 80),
+(32, 54),
+(93, 21),
+(12, 70),
+(93, 60),
+(72, 78),
+(76, 80),
+(39, 84), and
+(82, 80), respectively, edge costs equal to the square of the Euclidean distance between end points, and $D=\{s_0,a,\ldots,f\}$.
+Figure \ref{fig:BProof} depicts the optimal solution to SMT, and the solution to $\mathcal{F}_1$ after removal of (\ref{con:pf1:B}).
+%The optimal solution with objective value 25156 to the depicted instance obtained by solving SMT-$\mathcal{X}_1$ is shown in Fig. \ref{fig:BorigSMT}.
+%The solution in Fig \ref{fig:Bpf2} yielded by solving SMT-$\mathcal{F}_1$ without the constraint (\ref{con:pf1:B}) has objective value 25148, but is not a feasible solution to Problem \ref{def:problem}, because of the cycle $(g,h,i,d,g)$.
+%The non-existence of such a cycle in a solution given by model $\mathcal{X}_1$ is ensured by constraints (\ref{con:dd:arrowFromDest}), (\ref{con:dd:arrowFromNonDestB}) and (\ref{con:dd:oneDir}).
+%A detailed proof of this claim can be found in \cite{ivanova16isco}.
+%A transmission commenced in node $c$ is sent via arc $(g,f)$.
+%As a consequence of the link between $g$ and $d$ in Fig. \ref{fig:Bpf2}, the node $d$ also receives the message.
+%This link is absent in Fig. \ref{fig:BorigSMT}, and so $i$ has to relay the signal using arc $(i,d)$, causing the higher total objective value.
+\end{remark}
+\begin{remark} \label{rem:f1b}
+The obviously valid inequalities (\ref{con:pf1:noflowFromT})--(\ref{con:pf1:fitt=xit}) are not necessary in the \textsc{Minimum Steiner Tree} formulation,
+but have to be included in the formulation $\mathcal{F}_1$ of SMT in order to disallow nodes in $D_0$ to have multiple entering arcs.
+Removal of (\ref{con:pf1:noflowFromT}) or (\ref{con:pf1:fitt=xit}) implies that the optimal solution to the instance where
+$V=\{s_0,a,\ldots,k\}$ with coordinates
+(43, 15),
+(89, 88),
+(56, 12),
+(44, 66),
+(60, 42),
+(91, 48),
+(64, 8),
+(64, 34),
+(68, 9),
+(41, 53),
+(85, 67), and
+(93, 49), respectively,
+edge costs defined as in Remark \ref{rem:f1a}, and $D=\{s_0,a,\ldots,h\}$,
+is not a feasible solution to SMT.
+\end{remark}
+
+% \begin{figure}[!htb]
+%     \centering
+%     \begin{subfigure}[b]{0.4\textwidth}
+%         \includegraphics[width=\textwidth]{conBNec}
+%         \caption{Optimal SMT-solution with total cost 25156.\newline~}
+%         \label{fig:BorigSMT}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[b]{0.4\textwidth}
+%         \includegraphics[width=\textwidth]{conBNec2}
+%         \caption{Optimal solution $G_g$ to $\mathcal{F}_1$ after omission of constraints (\ref{con:pf1:B}).
+%                  Its total cost is 25148, but as it is acyclic, it is infeasible in SMT.}
+%         \label{fig:Bpf2}
+%     \end{subfigure}
+%     \caption{Instance with $D=\{s_0,a,\ldots,e\}$ demonstrating necessity of constraints (\ref{con:pf1:B}) in $\mathcal{F}_1$.
+% 		The edge labels denote costs.
+% 		For better legibility, some edges are contracted in the illustration.} 
+%     \label{fig:BProof}
+% \end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Figure                                        %
+%    explaining why some constraints are necessary   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\drawnodes}{
+\begin{scope}[every node/.style={circle,draw=black,fill=gray!40,minimum size=1.5em, inner sep=2, scale=.8}]
+ \node (s0) at (11,10) {$s_0$};
+ \node (a) at (9,11) {$a$};
+ \node (b) at (8,8) {$b$};
+ \node[fill=none] (f) at (5,11) {$f$};
+ \node[fill=none] (g) at (4.5,5) {$g$};
+ \node[fill=none] (h) at (4,3) {$h$};
+ \node[fill=none] (i) at (4.5,0.8) {$i$};
+ \node (c) at (5,2) {$c$};
+ \node (d) at (8,1) {$d$};
+ \node (e) at (12,0.5) {$e$};
+\end{scope}
+}
+\begin{figure}[!htb]
+\centering
+\begin{subfigure}[b]{0.48\textwidth}
+\begin{tikzpicture}[scale=.6]
+ \drawnodes
+ \begin{scope}[above=5pt, every edge/.style={draw=black,thick}, every node/.style={scale=.8}]
+ \draw  (s0) edge node[right=5pt,above=-1pt]{162} (a);
+ \draw  (a) edge node{925} (f);
+ \draw  (f) edge node[right=2pt]{949} (b);
+ \draw  (f) edge node[right=-1pt]{1125} (g);
+ \draw  (g) edge node[left=-1pt]{20} (h);
+ \draw  (h) edge node[right=3pt,above=-2pt]{9} (c);
+ \draw  (c) edge node[left=3pt,above=-3pt]{9} (i);
+ \draw  (i) edge node{521} (d);
+ \draw  (d) edge node{1521} (e);
+ \end{scope}
+\end{tikzpicture}
+\caption{Optimal SMT-solution with total cost 25156.\newline~}
+\label{fig:BorigSMT}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.48\textwidth}
+\begin{tikzpicture}[scale=.6]
+\drawnodes
+ \begin{scope}[->,above=5pt, every edge/.style={draw=black,thick}, every node/.style={scale=.8}]
+ \draw  (s0) edge node[right=5pt,above=-1pt]{162} (a);
+ \draw  (a) edge node{925} (f);
+ \draw  (f) edge node[right=2pt]{949} (b);
+ \draw  (f) edge node[right=-1pt]{1125} (g);
+ \draw  (g) edge node[left=-1pt]{20} (h);
+ \draw  (g) edge node[right=-1pt]{53} (c);
+ \draw  (d) edge node[right=2pt]{765} (g);
+ \draw  (h) edge node[left=6pt,above=-6pt]{36} (i);
+ \draw  (i) edge node{521} (d);
+ \draw  (d) edge node{1521} (e);
+ \end{scope}
+\end{tikzpicture}
+\caption{Optimal solution $G_g$ to $\mathcal{F}_1$ after omission of constraints (\ref{con:pf1:B}).
+         Its total cost is 25148, but the cycle shows that it is infeasible in SMT.}
+\label{fig:Bpf2}
+\end{subfigure}
+\caption{Instance demonstrating necessity of constraints (\ref{con:pf1:B}) in $\mathcal{F}_1$.
+         Edge labels denote costs.
+         For better legibility, some edges are contracted in the illustration.} 
+\label{fig:BProof}
+\end{figure}
+
+\subsubsection{Valid inequalities [$\mathcal{F}_2$]}
+
+Valid inequalities analogous to those leading to model $\mathcal{X}_2$ in Section \ref{sec:x2} are added to $\mathcal{F}_1$, resulting in a model denoted $\mathcal{F}_2$.
+Analogously to (\ref{con:dd:extraCon}), to enforce non-destination nodes included in the spanning arborescence to have at least one child node,
+the following constraints are introduced \citep{Polzin}:
+\begin{subequations}[resume]
+\begin{flalign}
+\label{con:pf1:flowX}  \sum\limits_{\substack{ j\in V_i }}g_{ji}-\sum\limits_{\substack{j\in V_i}}g_{ij}    & \leq 0    \qquad\qquad i\in V\setminus D.
+\end{flalign}
+\end{subequations}
+
+According to Prop.\ \ref{prop:transx}, if $i\in V\setminus D$ and $g_{ji} - F^s_{ji}+F^s_{ij}=1$ for some $j\in V_i$ and $s\in D_0$,
+then $i$ is a Steiner node used to establish connection between $s$ and some other destination.
+Since $i$ also has a leaving arc in $T^s$, we have $\pi_{ik}^s=1$ for some $k\neq i,s$.
+This proves validity of the constraint $\sum_{j\in V_i}\left(g_{ji} - F^s_{ji}+F^s_{ij}\right)=\sum_{j\in V_i\setminus\{s\}}\pi_{ij}^s$
+Application of flow conservation (\ref{con:pf1:flow}) yields the valid constraints
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     %
+%             MODEL F2                %
+%                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{subequations}[resume]
+\begin{flalign}
+\label{con:vi:sumYImpSumXTrans} \sum\limits_{j\in V_i\setminus\{s\}}\pi^{s}_{ij} & = \sum\limits_{j\in V_i}  g_{ji}  \quad\quad   i\in V\setminus D, s\in D. 
+\end{flalign}
+\end{subequations}
+
+\noindent
+Finally, constraints (\ref{con:vi:Y1}) are valid,
+completing formulation $\mathcal{F}_2$ as model $\mathcal{F}_1$ extended by (\ref{con:pf1:flowX})--(\ref{con:vi:sumYImpSumXTrans}) and (\ref{con:vi:Y1}).
+%
+\begin{remark} \label{rem:f2}
+With $s_0$ equal to the destination node in position (47, 65), the instance given in Remark \ref{rem:x2} also proves independence of the three sets
+(\ref{con:vi:Y1}), (\ref{con:vi:sumYImpSumXTrans})--(\ref{con:pf1:flowX}) of valid inequalities.
+\end{remark}

@@ -1,0 +1,403 @@
+%%%%%%%%%%%%%%%%%%%%%%% file template.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This is a general template file for the LaTeX package SVJour3
+% for Springer journals.          Springer Heidelberg 2010/09/16
+%
+% Copy it to a new file with a new name and use it as the basis
+% for your article. Delete % signs as needed.
+%
+% This template includes a few options for different layouts and
+% content for various journals. Please consult a previous issue of
+% your journal as needed.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\RequirePackage{fix-cm}
+%
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+\documentclass[natbib,smallextended]{svjour3}       % onecolumn (second format)
+%\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+\bibliographystyle{aps-nameyear}
+%
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{subcaption}
+\usepackage{hyperref}
+%\usepackage{pdflscape} % Landscape pages
+\usepackage{color}	% Different font colors
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage[]{algorithm2e}
+\usepackage{color}
+\usepackage{multirow} % Merging rows in tables
+\usepackage{multicol} % Merging columns in tables
+\usepackage{booktabs} % Horizontal rules in tables
+\usepackage{mathrsfs} % Fancy math font for model labels
+\usepackage{tikz}
+
+\newcommand{\indentitem}{\setlength\itemindent{18pt}}
+\renewcommand{\labelitemi}{$\bullet$}
+\captionsetup{compatibility=false}
+\newtheorem{prop}{Proposition}
+\newtheorem{obs}{Observation}
+\newtheorem{cor}{Corollary}
+\newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
+\SetCommentSty{mycommfont}
+\SetKwRepeat{Do}{do}{while}
+%
+% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+%\usepackage{latexsym}
+% etc.
+%
+% please place your own definitions here and don't use \def but
+% \newcommand{}{} 
+%
+% Insert the name of "your journal" with
+% \journalname{myjournal}
+%
+% original amsmath definition
+% \subequations:
+% \long macro:->\refstepcounter {equation}\protected@edef \theparentequation {\theequation }\setcounter {parentequation}{\value {equation}}\setcounter {equation}{0}\def \theequation {\theparentequation \alph {equation}}\ignorespaces 
+
+% saved by hyperref in
+% > \HyOrg@subequations=\long macro:
+
+% hyperref-patched \subequations: (\endsubequations not modified)
+% > \subequations=macro:
+% ->\stepcounter {equation}\protected@edef \theHparentequation {\@ifundefined {th
+% eHequation}\theequation \theHequation }\addtocounter {equation}{-1}\HyOrg@subeq
+% uations \def \theHequation {\theHparentequation \alph {equation}}\ignorespaces 
+% .
+
+
+% extending the environment
+%   1. with optional parameter: expected values resume or intermezzo or none.
+%   2. while keeping the hyperref customization.
+
+\makeatletter
+\def\user@resume{resume}
+\def\user@intermezzo{intermezzo}
+%
+\newcounter{previousequation}
+\newcounter{lastsubequation}
+\newcounter{savedparentequation}
+\setcounter{savedparentequation}{1}
+% 
+% The following code causes that we are able to continue with numbering of a model in a next \align .
+% For example:
+%    a < b    (1a)
+%    a < c    (1b)
+% some text comes here and the numbering will continue:
+%    a < d    (1c)
+%
+\renewenvironment{subequations}[1][]{%
+      \def\user@decides{#1}%
+      \setcounter{previousequation}{\value{equation}}%
+      \ifx\user@decides\user@resume 
+           \setcounter{equation}{\value{savedparentequation}}%
+      \else  
+      \ifx\user@decides\user@intermezzo
+           \refstepcounter{equation}%
+      \else
+           \setcounter{lastsubequation}{0}%
+           \refstepcounter{equation}%
+      \fi\fi
+      \protected@edef\theHparentequation{%
+          \@ifundefined {theHequation}\theequation \theHequation}%
+      \protected@edef\theparentequation{\theequation}%
+      \setcounter{parentequation}{\value{equation}}%
+      \ifx\user@decides\user@resume 
+           \setcounter{equation}{\value{lastsubequation}}%
+         \else
+           \setcounter{equation}{0}%
+      \fi
+      \def\theequation  {\theparentequation  \alph{equation}}%
+      \def\theHequation {\theHparentequation \alph{equation}}%
+      \ignorespaces
+}{%
+%  \arabic{equation};\arabic{savedparentequation};\arabic{lastsubequation}
+  \ifx\user@decides\user@resume
+       \setcounter{lastsubequation}{\value{equation}}%
+       \setcounter{equation}{\value{previousequation}}%
+  \else
+  \ifx\user@decides\user@intermezzo
+       \setcounter{equation}{\value{parentequation}}%
+  \else
+       \setcounter{lastsubequation}{\value{equation}}%
+       \setcounter{savedparentequation}{\value{parentequation}}%
+       \setcounter{equation}{\value{parentequation}}%
+  \fi\fi
+%  \arabic{equation};\arabic{savedparentequation};\arabic{lastsubequation}
+  \ignorespacesafterend
+}
+\makeatother
+
+\begin{document}
+
+\title{Integer Programming Formulations for the Shared Multicast Tree Problem
+%\thanks{Grants or other notes
+%about the article that should go on the front page should be
+%placed here. General acknowledgments should be placed at the end of the article.}
+}
+% \subtitle{Tightening the LP bounds}
+\titlerunning{IP formulations for SMT}        % if too long for running head
+
+\author{Marika Ivanova        \and
+         Dag Haugland
+}
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{M. Ivanova \at
+              Department of Informatics, University of Bergen, Norway \\
+              Tel.: +47 942 77 070\\
+              \email{Marika.Ivanova@uib.no}         %  \\
+%             \emph{Present address:} of F. Author  %  if needed
+           \and
+           D. Haugland \at
+              Department of Informatics, University of Bergen, Norway \\
+              Tel.: +47 55584033\\
+              \email{Dag.Haugland@uib.no}         %  \\
+}
+
+\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+\maketitle
+
+\begin{abstract}
+We study the Shared Multicast Tree (SMT) problem in wireless networks.
+To support a multicast session between a set of network nodes, SMT aims to establish a wireless 
+connection between them, such that the total energy consumption is minimized.
+All destinations of the multicast message must be connected, while non-destinations are optional nodes that can be used to relay messages. 
+In the well-studied minimum energy multicast (MEM)
+problem, the optimal tree depends on the source of the message.
+In contrast, SMT asks for a source-independent tree, which substantially reduces the processing overhead at each node.
+This means that SMT can be regarded as a Steiner tree problem.
+The objective function reflecting power consumption, however, distinguishes SMT clearly from the traditional minimum Steiner tree problem.
+
+In the present work, we develop two 
+integer programming formulations for SMT.
+Both models are subsequently extended and strengthened by redundant valid inequalities.
+Further strengthening is achieved by extending the set of variables and corresponding constraints.
+Theorems on relations between the LP bounds corresponding to the models are stated and proved.
+As the number of variables in the strongest formulations is a polynomial of degree four in the number of network nodes,
+the models are impractical for computing lower bounds in instances beyond a fairly small size.
+To make them applicable to larger instances, a constraint generation scheme is developed.
+Results from computational experiments with the models demonstrate good promise of the approaches taken.
+\keywords{Wireless communication, multicast tree, Steiner tree, LP bound, valid inequalities}
+% \PACS{PACS code1 \and PACS code2 \and more}
+% \subclass{MSC code1 \and MSC code2 \and more}
+\end{abstract}
+
+\input{sec1-intro.tex}
+\input{sec2-sbtsmt.tex}
+\input{sec3-milp.tex}
+\input{sec4-relations.tex}
+\input{sec5-strong.tex}
+\input{sec6-exp.tex}
+\input{sec7-conclusion.tex}
+
+%as required. Don't forget to give each section
+%and subsection a unique label (see Sect.~\ref{sec:1}).
+%\paragraph{Paragraph headings} Use paragraph headings as needed.
+%\begin{equation}
+%a^2+b^2=c^2
+%\end{equation}
+
+% For one-column wide figures use
+%\begin{figure}
+% Use the relevant command to insert your figure file.
+% For example, with the graphicx package use
+%  \includegraphics{example.eps}
+% figure caption is below the figure
+%\caption{Please write your figure caption here}
+%\label{fig:1}       % Give a unique label
+%\end{figure}
+%
+% For two-column wide figures use
+%\begin{figure*}
+% Use the relevant command to insert your figure file.
+% For example, with the graphicx package use
+%  \includegraphics[width=0.75\textwidth]{example.eps}
+% figure caption is below the figure
+%\caption{Please write your figure caption here}
+%\label{fig:2}       % Give a unique label
+%\end{figure*}
+%
+% For tables use
+%\begin{table}
+% table caption is above the table
+%\caption{Please write your table caption here}
+%\label{tab:1}       % Give a unique label
+% For LaTeX tables use
+%\begin{tabular}{lll}
+%\hline\noalign{\smallskip}
+%first & second & third  \\
+%\noalign{\smallskip}\hline\noalign{\smallskip}
+%number & number & number \\
+%number & number & number \\
+%\noalign{\smallskip}\hline
+%\end{tabular}
+%\end{table}
+
+
+%\begin{acknowledgements}
+%If you'd like to thank anyone, place your comments here
+%and remove the percent signs.
+%\end{acknowledgements}
+
+% BibTeX users please use one of
+%\bibliographystyle{spbasic}      % basic style, author-year citations
+%\bibliographystyle{spmpsci}      % mathematics and physical sciences
+%\bibliographystyle{spphys}       % APS-like style for physics
+%\bibliography{}   % name your BibTeX data base
+
+% Non-BibTeX users please use
+\begin{thebibliography}{}
+
+%
+% and use \bibitem to create references. Consult the Instructions
+% for authors for reference list style.
+%
+% \bibitem[Dian{\'e} and Plesn{\'i}k(1993)]{diane93ipf}
+% Dian{\'e} M, Plesn{\'i}k J (1993)
+% An integer programming formulation of the Steiner problem in graphs.
+% Zeitschrift f{\"u}r Operations Research
+% 37(1):107--111
+
+\bibitem[Althaus et al.(2003)]{althaus03}
+Althaus E, C\u{a}linescu G, M\u{a}ndoiu II, Prasad S, Tchervenski N, Zelikovsky A (2003)
+Power efficient range assignment in ad-hoc wireless networks.
+In: Proceedings IEEE WCNC’03, pp 1889--1894
+
+\bibitem[Altinkemer et al.(2005)]{altinkemer05}
+Altinkemer K, Salman FS, Bellur P (2005)
+Solving the minimum energy broadcasting problem in ad hoc wireless networks by integer programming.
+In: Proceedings INOC 2005, pp B2.635--B2.642
+
+\bibitem[Bauer et al.(2008)]{bauer08}
+Bauer J, Haugland D, Yuan D (2008)
+Analysis and computational study of several integer programming formulations for minimum-energy multicasting in wireless ad hoc networks.
+Networks 52(2):57–68
+
+\bibitem[\v{C}agalj et al.(2002)]{cagalj02}
+\v{C}agalj M, Hubaux J-P, Enz C (2002)
+Minimum-energy broadcast in all-wireless networks: NP-completeness and distribution issues.
+In: Proceedings ACM MOBICOM 2002 pp 172--182
+
+\bibitem[Clementi et al.(1999)]{clementi99}
+Clementi A, Penna P, Silvestri R (1999)
+Hardness results for the power range assignment problem in packet radio networks.
+In: Hochbaum D et al. (eds) RANDOM-APPROX’99,
+LNCS 1671:197--208
+
+\bibitem[Das et al.(2003)]{das03}
+Das AK, Marks RJ, El-Sharkawi M, Arabshani P, Gray A (2003)
+Minimum power broadcast trees for wireless networks: integer programming formulations.
+In: Proceedings IEEE INFOCOM 2003 Vol.\ 2, pp 1001--1010
+
+\bibitem[Das et al.(2005)]{das05}
+Das AK, Marks RJ, El-Sharkawi E, Arabshahi P, Gray A (2005)
+Optimization methods for minimum power bidirectional topology construction in wireless networks with sectored antennas.
+In: Proceedings IEEE GLOBECOM ’05, pp 3962--3968
+
+\bibitem[Goemans and Myung(1993)]{goemans93catalog}
+Goemans MX, Myung Y-S (1993)
+A catalog of Steiner tree formulations.
+Networks
+23(1):19--28
+
+\bibitem[Haugland and Yuan(2011)]{Haugland11Compact}
+Haugland D, Yuan D (2011)
+Compact integer programming models for power-optimal trees in ad hoc wireless networks.
+In: Kennington J, Olinick E, Rajan D (eds) Wireless network design - optimization models and solution procedure.
+International series in operations research \& management science.
+Springer, New York, pp 219--246
+
+\bibitem[Hsiao et al.(2013)]{hsiao13}
+Hsiao P-C, Chiang T-C, Fu L-C (2013)
+Static and dynamic minimum energy broadcast problem in wireless ad-hoc networks: A PSO-based approach and analysis
+Applied Soft Computing
+13:786--4801
+
+\bibitem[Ivanova(2016)]{ivanova16isco}
+Ivanova M (2016)
+Shared Multicast Trees in Ad Hoc Wireless Networks.
+In: Cerulli R, Fujishige S, Mahjoub A (eds) Combinatorial Optimization ISCO 2016,
+LNCS 9849:273--284
+
+\bibitem[Kirousis et al.(1997)]{kirousis97}
+Kirousis LM, Kranakis E, Krizanc D, Pelc A (1997)
+Power consumption in packet radio networks.
+In: Reischuk M (ed): STACS'97 Proceedings,
+LNCS 1200:363--374
+
+\bibitem[Leggieri et al.(2008)]{leggieri08}
+Leggieri V, Nobili P, Triki C (2008)
+Minimum power multicasting problem in wireless networks.
+Math Meth Oper Res 68:295–311
+
+\bibitem[Montemanni and Gambardella(2004)]{montemanni04}
+Montemanni R, Gambardella LM (2004)
+Exact algorithms for the minimum power symmetric connectivity problem in wireless networks.
+Comput Oper Res 31(10):1667--1680
+
+\bibitem[Montemanni and Leggieri(2011)]{montemanni11}
+Montemanni R, Leggieri V (2011)
+A branch and price algorithm for the minimum power multicasting problem in wireless sensor networks.
+Math Meth Oper Res
+74:327--342
+
+\bibitem[Papadimitriou and Georgiadis(2006)]{Papadimitriou06SBT}
+Papadimitriou I, Georgiadis L (2006)
+Minimum-energy Broadcasting in Multi-hop Wireless Networks Using a Single Broadcast Tree.
+Mobile Netw Appl
+11(3):361--375
+
+\bibitem[Polzin and Daneshmand(2001)]{Polzin}
+Polzin T, Daneshmand SV (2001)
+A comparison of Steiner tree relaxations.
+Discrete Appl Math
+112(1--3):241--261
+
+\bibitem[Wieselthier et al.(2000)]{Wieseltier00onthe}
+Wieselthier JE, Nguyen GD, Ephremides A (2000)
+On the Construction of Energy-Efficient Broadcast and Multicast Trees in Wireless Networks,
+In: Proceedings IEEE INFOCOM 2000 Vol.\ 2, pp 585--594
+
+\bibitem[Yuan(2005)]{yuan05}
+Yuan D (2005)
+An integer programming approach for the minimum-energy broadcast problem in wireless networks.
+In: Proceedings INOC 2005, pp B2.643–B2.650
+
+\bibitem[Yuan et al.(2008)]{yuan08}
+Yuan D, Bauer J, Haugland D (2008)
+Minimum-energy broadcast and multicast in wireless networks: An
+integer programming approach and improved heuristic algorithms.
+Ad Hoc Netw
+6(5):696–717
+
+\bibitem[Yuan and Haugland(2012)]{Haugland12Dual}
+Yuan D, Haugland D (2012)
+Dual Decomposition for Computational Optimization of Minimum-Power Shared Broadcast Tree in Wireless Networks.
+IEEE T Mobile Comput
+12(11):2008--2019
+
+%\bibitem{RefJ}
+% Format for Journal Reference
+%Author, Article title, Journal, Volume, page numbers (year)
+% Format for books
+%\bibitem{RefB}
+%Author, Book title, page numbers. Publisher, place (year)
+% etc
+\end{thebibliography}
+
+\end{document}
+% end of file template.tex
+

@@ -1,0 +1,230 @@
+\section{Stronger Formulations}
+\label{sec:strong}
+
+Aiming for stronger LP bounds than those provided by the relaxations of the models introduced in Section \ref{sec:ILP},
+this section is devoted to extensions of $\mathcal{X}_2$ and $\mathcal{F}_2$.
+Variables with four node indices are added to both models.
+Constraints connecting new and original variables then contribute to the improved bounds.
+
+\subsection{Extension of $\mathcal{X}_2$ by destination-to-destination variables [$\mathcal{X}_3$]}
+\label{sec:smtx3}
+
+Let $A(D)=A\cap(D\times D)$ be the set of ordered pairs of distinct destination nodes.
+For a tree $T$ solving Problem \ref{def:problem}, define the variables $x\in\{0,1\}^{A\times A(D)}$, where
+$x_{ij}^{st}=1$ iff $(i,j) \in A$ is an arc on the path from $s$ to $t$ in arborescence $T^s$.
+% \newline\newline
+% $x_{ij}^{st}=
+% \begin{cases}
+%     1 & \text{if $(i,j) \in A$ is an arc on the path from $s$ to $t$ in $T$, $(s,t)\in A(D)$},\\
+%     0 & \text{otherwise}.
+% \end{cases}$
+% \newline\newline
+Model $\mathcal{X}_2$ is strengthened by constraints on $x$, which yields model $\mathcal{X}_3$: 
+\newline
+\newline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     % 
+%             MODEL X3                %
+%             (4 idx vars)            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{subequations}[resume]\label{eq:smt-x3}
+\begin{align}
+\notag\makebox[0pt][l]{$\displaystyle{} \min \sum\limits_{(i,j) \in A} p_{ij} \sum\limits_{s \in D} \pi^s_{ij} $}\\
+\text{s.t.} \notag \\
+(\ref{con:dd:arrowFromDest}) - (\ref{con:dd:vardim}) &\text{ and }(\ref{con:dd:yvar}) - (\ref{con:vi:sumYImpSumX}) \notag\\
+\label{con:mf:flowNormal} \sum\limits_{\substack{ j\in V_i}}x^{st}_{ij}-\sum\limits_{\substack{j\in V_i }}x^{st}_{ji} & = 0 & (s,t)\in A(D), i\in V\setminus\{s,t\},\\
+\label{con:mf:flowDest} \sum\limits_{\substack{j\in V_t}}x^{st}_{jt}    & = 1  & (s,t)\in A(D),\\
+\label{con:mf:fcap} x^{st}_{ij} &\leq X^{s}_{ij}& (i,j)\in A, (s,t)\in A(D),\\
+\label{con:mf:fsym} x^{st}_{ij} &=  x^{ts}_{ji}& (i,j)\in A, (s,t)\in A(D),\\ 
+\label{con:vi:sumFImpSumY} \sum_{k\in W_{ij}}x^{st}_{ik} & \leq \sum_{k\in W_{ij}} \pi^{s}_{jk} & (i,j)\in A, (s,t)\in A(D),\\
+\label{con:mf:xydim} x&\in\{0,1\}^{A\times A(D)}. 
+\end{align}~
+\end{subequations}
+
+Variable $x_{ij}^{st}$ is also interpreted as the \emph{flow of commodity $(s,t)$} along arc $(i,j)$.
+Correspondingly, (\ref{con:mf:flowNormal})--(\ref{con:mf:flowDest}) can be viewed as flow conservation constraints,
+stating that there exists a path from $s$ to $t$ in $T^s$.
+Next, constraints (\ref{con:mf:fcap}) express the obvious relation between $X$ and $x$, that $(i,j)$ is an arc on the path from $s$ to $t$ only if it exists in $T^s$.
+The flow symmetry equations (\ref{con:mf:fsym}) state that the path from $s$ to $t$ contains $(i,j)$ iff the reverse path contains the reverse arc $(j,i)$.
+Finally, constraints (\ref{con:vi:sumFImpSumY}) reflect that if the path from $s$ to $t$ intersects $(i,j)$,
+then the most expensive arc leaving $i$ in $T^s$ has cost $p_{ij}$ or more.
+
+% In terms of multicast trees, $x_{ij}^{st}=1$ if and only if $(i,j)$ carries a signal that is initiated in $s$ and destined for $t$.
+% Consider nodes $i,j\in V$ and a pair $(s,t)$ of destinations.
+% If a message from $s$ to $t$ is sent through $(j,k)$ such that $p_{jk}\geq p_{ji}$, then the message from $s$ must be relayed by $j$ using power level at least $p_{ji}$.
+% This is expressed by valid inequality (\ref{con:vi:sumFImpSumY}).
+
+\subsection{Extension of $\mathcal{F}_2$ by variables of joint flow [$\mathcal{F}_3$]}
+
+Similarly to the extension $\mathcal{X}_3$ of $\mathcal{X}_2$ by $x$-variables, the model $\mathcal{F}_2$ is extended by variables with four node indices.
+Analogously to $A(D)$, let $E(D_0)=E\cap (D_0\times D_0)$ be the set of pairs of \emph{unordered} destination nodes other than $s_0$.
+Define variables $f\in\{0,1\}^{A\times E(D)}$, where
+$f_{ij}^{st}=f_{ji}^{ts}$ takes the value 1 iff the path in $T^0$ from $s_0$ to $s$ intersects with the path from $s_0$ to $t$ at arc $(i,j)$.
+% \newline\newline
+% $f^{st}_{ij}=f^{ts}_{ij}=
+% \begin{cases}
+%     1 & \text{if the paths in $T^0$ from $s_0$ to respectively $s$ and $t$ intersect} \\
+%       & \text{at $(i,j)$,} \\
+%     0 & \text{otherwise.}
+% \end{cases}$
+% \newline\newline
+%
+Variables $f_{ij}^{st}$ can also be regarded as a the \emph{joint flow} from $s_0$ to $s$ and $t$ \citep{Polzin}.
+In the cited work, they are successfully used to strengthen formulations for the \textsc{Minimum Steiner Tree} problem.
+The new variables enable formulation of an extended model denoted $\mathcal{F}_3$: 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     %
+%             MODEL F3                %
+%                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{subequations}[resume]
+\begin{align}
+\notag\min & \sum\limits_{(i,j) \in A} p_{ij} \sum\limits_{s \in D} \pi^s_{ij}\\ \notag
+\text{s.t.}& && \\
+\notag(\ref{con:pf1:flow})-(\ref{con:vi:sumYImpSumXTrans}) & ~\text{and} ~(\ref{con:vi:Y1}) \\
+\label{con:pf2:flowHook} \sum\limits_{\substack{ j \in V_i }}\left(f^{st}_{ij}-f^{st}_{ji}\right) & \leq 
+  \begin{cases}
+    1, & i = s_0, \\
+    0, & i\in V_0,
+  \end{cases} \quad \{s,t\}\in E(D_0), \\
+\label{con:pf2:startInSource}  f^{st}_{ij} & \leq F^s_{ij} \quad (i,j)\in A, \{s,t\}\in E(D_0),\\
+\label{con:pf2:stopInDest}  f^{st}_{ij} & \leq F^t_{ij} \quad (i,j)\in A, \{s,t\}\in E(D_0),\\
+\label{con:pf2:stronger}  F^{s}_{ij}+F^{t}_{ij}-f^{st}_{ij} &\leq g_{ij} \quad (i,j)\in A, \{s,t\}\in E(D_0),\\ 
+\label{con:pf2:sumFImpSumY} \sum\limits_{k\in W_{ij}}\left(F^{t}_{ik} + F^{s}_{ki} - f^{st}_{ik} - f^{st}_{ki}\right) & \leq \sum\limits_{k\in W_{ij}}  \pi^{s}_{ik} \quad (i,j)\in A,\{s,t\}\in E(D_0),\\
+\label{con:pf2:sumFImpSumY2} \sum\limits_{k\in W_{ij}}F^{t}_{ik} & \leq \sum\limits_{k\in W_{ij}}  \pi^{0}_{ik} \quad (i,j)\in A, t\in D_0,\\
+\label{con:pf2:dim} f&\in\{0,1\}^{A\times E(D_0)}.
+\end{align}~
+\end{subequations}
+
+By (\ref{con:pf2:flowHook}), it is ensured that the joint flow is non-increasing by increasing distance from the root $s_0$.
+While constraints (\ref{con:pf2:startInSource})--(\ref{con:pf2:stopInDest}) ensure $f_{ij}^{st}=0$ if $F_{ij}^s=0$ or $F_{ij}^t=0$,
+inequalities (\ref{con:pf2:stronger}) impose $f_{ij}^{st}=1$ if $F_{ij}^s=F_{ij}^t=1$.
+By virtue of (\ref{con:pf2:stopInDest}), (\ref{con:pf2:stronger}) replace the weaker capacity constraints (\ref{con:pf1:xfrel}).
+Finally, (\ref{con:pf2:sumFImpSumY})--(\ref{con:pf2:sumFImpSumY2}) are valid inequalities justified by:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     %
+%         Proposition  		      %
+%   (transformation x_{ij}^{st})      %
+%                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{prop}\label{prop:transX}
+Assume $(F,f,g,\pi)$ satisfies (\ref{con:pf1:flow})--(\ref{con:vi:sumYImpSumXTrans}), (\ref{con:vi:Y1}), (\ref{con:pf2:flowHook})--(\ref{con:pf2:stronger}), and (\ref{con:pf2:dim}).
+Let $T^0\subseteq G_g$ be the arborescence spanning $D$ (see Lemma \ref{lem:modelcorrect}),
+and let $T^s$ be the arborescence obtained by redirecting the arcs in $T^0$ such that they point away from $s\in D$. Then, for all nodes $i$ and $j$ ($i\neq j$) spanned by $T^0$,
+$$
+F^t_{ij}+F^s_{ji}-f^{st}_{ij}-f^{st}_{ji} = 
+	\begin{cases}
+		1, ~\text{if $(i,j)$ is an arc on the path from~$s$ to $t$ in $T^s$,} \\
+		0, ~\text{otherwise.}
+	\end{cases}
+$$
+\end{prop}
+%
+\begin{proof}
+Because $g_{ij}+g_{ji}\leq 1$, we have $F^t_{ij}+F^s_{ji}\leq 1$.
+Constraints (\ref{con:pf2:startInSource})--(\ref{con:pf2:stopInDest}) thus yield $f^{st}_{ij}+f^{st}_{ji}\leq 1$, and
+$F^t_{ij}+F^s_{ji}-f^{st}_{ij}-f^{st}_{ji}\in \{0,1\}$ follows.
+Inequalities (\ref{con:pf2:stronger}) in combination with (\ref{con:pf2:startInSource})--(\ref{con:pf2:stopInDest}) also imply $f^{st}_{ij}=F^t_{ij}F^s_{ji}$.
+
+The path from $s$ to $t$ in $T^s$ contains $(i,j)$ iff $(i,j)\in A_{F^t}\setminus A_{F^s}$ or $(j,i)\in A_{F^s}\setminus A_{F^t}$.
+This condition is equivalent to $F_{ij}^t=1-F_{ij}^s=1$ or $F_{ji}^s=1-F_{ji}^t=1$,
+which holds iff $F_{ij}^t(1-F_{ij}^s)+F_{ji}^s(1-F_{ji}^t)=F_{ij}^t-f_{ij}^{st}+F_{ji}^s-f_{ji}^{st}=1$.
+\qed
+\end{proof}
+
+Constraints (\ref{con:pf2:sumFImpSumY}) reflect the observation that if $(i,j)$ is on the path from $s$ to $t$ in $T^s$,
+then the cost of the most expensive arc leaving $i$ in $T^s$ is at least $p_{ij}$.
+Validity of (\ref{con:pf2:sumFImpSumY2}) is explained analogously, as $F_{ij}^t=1$ iff $(i,j)$ is on the path from $s_0$ to $t$ in $T^0$.
+
+\subsection{Constraint Generation Scheme}
+\label{sec:cg}
+Owing to the large number of constraints in the stronger models, $\text{LP}(\mathcal{X}_3)$ and $\text{LP}(\mathcal{F}_3)$ are impractical for computing lower bounds, even in fairly small instances.
+To enable computation of strong lower bounds, we first solve a reduced version of the LP, where some of the constraints are omitted.
+Some of the relaxed constraints that are violated in the solution are next added, and the process is repeated until no violations exist.
+This approach is known as a \emph{constraint generation} (CG) scheme.
+
+\subsubsection{Implementation}%
+
+Preliminary computational experiments indicate that solving $\text{LP}(\mathcal{F}_k)$ ($k=1,2$)
+in order to compute a stronger bound than the one output from $\text{LP}(\mathcal{X}_k)$ is also more time-consuming.
+The disproportion in running time is even more considerable in a comparison between $\text{LP}(\mathcal{F}_3)$ and $\text{LP}(\mathcal{X}_3)$ (see Section \ref{sec:expsmall}).
+For these practical reasons, we apply the CG idea to $\text{LP}(\mathcal{X}_3)$.
+
+Consider an optimal solution $(X,y,\pi)$ to $\text{LP}(\mathcal{X}_2)$, and let $X$ and $\pi$ be fixed.
+Whether there exists an $x\in\left[0,1\right]^{A\times A(D)}$ satisfying (\ref{con:mf:flowNormal})-(\ref{con:mf:fcap}) can be checked by solving a maximum flow problem for each $(s,t)\in A(D)$.
+The constraints state that it should be feasible to send one unit of flow from source $s\in D$ to destination $t\in D_s$,
+such that the flow on arc $(i,j)$ is no more than $X_{ij}^s$.
+Further, the symmetry constraints (\ref{con:mf:fsym}) implicitly impose the upper bound $X_{ji}^t$ on the same flow.
+Finally, the side constraints (\ref{con:vi:sumFImpSumY}) impose upper bounds on the total flow on subsets of arcs leaving a given node.
+By applying the symmetry $x_{ij}^{st}=x_{ji}^{ts}$ also to (\ref{con:vi:sumFImpSumY}), the extended maximum flow model, denoted $\mathcal{MF}$, is completed as
+(the $x$-variables do not have the superscripts $s$ and $t$ as $\{s,t\}$ is fixed within each model instance):
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     %
+%          Model 2MF                  %
+%        (13a) - (13f)                %
+%                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{subequations}\label{eq:mf}
+\begin{align}
+\label{objective:maxf} &\max\sum\limits_{i \in V_s} x_{si} \\ 
+\text{s.t.}  \notag   \\
+\label{con:maxf:flowNormal}  \sum\limits_{\substack{ j\in V_i}}\left(x_{ij}-x_{ji}\right) & = 0 & i\in V\setminus\{s,t\},\\
+\label{con:maxf:fcapst}   x_{ij} &\leq \min\{X_{ij}^s, X_{ji}^t\}     &  (i,j)\in A,  \\ 	 
+\label{con:maxf:sumFImpSumYst} \sum_{k\in W_{ij}}x_{ik} & \leq \sum_{k\in W_{ij}} \pi^{s}_{ik} & (i,j)\in A,\\
+\label{con:maxf:sumFImpSumYts} \sum_{k\in W_{ij}}x_{ki} & \leq \sum_{k\in W_{ij}} \pi^{t}_{ik} & (i,j)\in A,\\
+\label{con:maxf:fdim}x&\in\left[0,1\right]^{A}. 
+\end{align}~
+\end{subequations}  
+  
+For $Q\subseteq E(D)=\left\{\{s,t\}\in E: s,t\in D\right\}$, let $\mathcal{X}_2+Q$ denote the extension of $\mathcal{X}_2$ by constraints (\ref{con:mf:flowNormal})--(\ref{con:vi:sumFImpSumY}) for all $\{s,t\}\in Q$.
+In the CG procedure described in Algorithm \ref{alg:cg},
+we first solve $\text{LP}(\mathcal{X}_2)$ to obtain solution vectors $X$ and $\pi$.
+For each $\{s,t\}\in E(D)$, we then check whether the relaxed constraints (\ref{con:mf:flowNormal})--(\ref{con:vi:sumFImpSumY}) can be satisfied,
+given the values of $X$ and $\pi$.
+This question is answered by solving $\mathcal{MF}$
+since the objective function in $\mathcal{MF}$ takes optimal value 1 iff the constraints are satisfiable.
+In each iteration,
+relaxed constraints corresponding to a selection of pairs $\{s,t\}$ for which the maximum flow is below 1, are added to the original model.
+How to make this selection is discussed next.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                     %
+%         Algorithm 1                 %
+%                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{algorithm}
+$Q\leftarrow\emptyset$\;
+\Do {$\Delta Q\neq\emptyset$}{
+	$(X,y,\pi)\leftarrow\text{optimal solution to $\text{LP}(\mathcal{X}_2+Q)$}$\;
+	\For{$\{s,t\}\in E(D)\setminus Q$} {
+		$v_{st}\leftarrow \text{optimal objective function value in $\mathcal{MF}$}$\;
+	}
+	$Q'\leftarrow\left\{\{s,t\}\in E(D)\setminus Q: v_{st}<1\right\}$\;
+	Select some $\Delta Q\subseteq Q'$ such that $\Delta Q\neq\emptyset$ if $Q'\neq\emptyset$\;
+	$Q\leftarrow Q\cup\Delta Q$\;
+}
+ \caption{Constraint generation}
+\label{alg:cg}
+\end{algorithm}
+
+\subsubsection{Constraint selection}
+
+Preliminary experiments have demonstrated that in many instances, the optimal values of $X$ and $\pi$ in $\text{LP}(\mathcal{X}_2)$ are too restrictive to allow for unit maximum flow.
+For most $\{s,t\}\in E(D)$, the objective function of $\mathcal{MF}$ takes a value below 1 in optimum.
+Adding the constraints corresponding to all $\{s,t\}$ for which this occurs thus involves computations almost as extensive as solving $\text{LP}(\mathcal{X}_3)$ directly.
+
+Selection of pairs $\{s,t\}$ to be included in $\Delta Q$ in Algorithm \ref{alg:cg} is based on the following intuitive considerations:
+\begin{description}
+  \item[\textbf{Adjacency matters}:] Extending $Q$ by $\{s,t\}$ is more likely to imply $v_{uw}=1$ in the following iteration if $\{s,t\}\cap\{u,w\}\neq\emptyset$ ($\{u,w\}\in E(D)\setminus Q$).
+  \item[\textbf{Extent of violation matters}:] The growth of $z\left(\text{LP}(\mathcal{X}_2+Q)\right)$ increases by decreasing value of $v_{st}$.
+\end{description}
+
+Balancing the needs for rapid growth in $z\left(\text{LP}(\mathcal{X}_2+Q)\right)$ and small value of $|Q|$,
+we pursue the CG scheme as follows:
+In the graph $(D,Q')$, where edges correspond to pairs $\{s,t\}$ at which $v_{st}<1$, let the edge weights be $1-v_{st}$.
+Let $\Delta Q$ be a matching of maximum weight in $(D,Q')$.
+Thus, for each $\{u,w\}\in E(D)\setminus Q$ where (\ref{con:mf:flowNormal})--(\ref{con:vi:sumFImpSumY}) are not satisfiable given the current values of $X$ and $\pi$,
+$Q$ is extended by an adjacent edge.
+

@@ -1,0 +1,88 @@
+\section{Introduction}
+\label{intro}
+
+Wireless ad hoc networks (WANETs) are suitable in various practical applications in both civil and military sector, where a communication infrastructure is either absent or cannot be relied on.
+Owing to their quick deployment and simple configuration, WANETs are useful in emergency operations such as natural disaster relief and military command and control.
+Recently, the WANET concept has been introduced in ad hoc smart lighting in homes and in offices as well as ad hoc street light networks, where the control includes adjusting dimmable lights.
+ 
+The purpose of a multicast communication session in a WANET is to route information from a sending device to a set of receiving devices.
+Connection links are established by assigning sufficient power to the sending devices.
+Since the devices typically use batteries as power supply, they are heavily energy-constrained.
+Therefore, power efficiency is an important measure in designing WANETs.
+Individual devices work as transceivers, which means that they have the ability to both transmit and receive a signal.
+Moreover, the power level of a device can be dynamically adjusted during a multicast session.
+\citet{montemanni11} name several applications of wireless sensor networks where power saving is essential.
+
+Unlike wired networks, where signal passing takes place along predefined links, nodes in WANETs use omnidirectional antennas, and hence a message reaches all nodes within the communication range of its sender.
+This range is determined by the power assigned to the sender, which is the maximum rather than the sum of the powers necessary to reach all intended receivers.
+This feature is often referred to as the \emph{wireless advantage} \citep{Wieseltier00onthe}.
+
+A well-known and extensively studied problem in the network design literature is the \textsc{Minimum Energy Broadcast} (MEB) problem.
+Given a set of wireless devices with one designated source node, the goal is to assign powers to individual nodes.
+The power assignments determine the communication ranges, and induce a broadcast tree such that a signal initiated by the source reaches, directly or via other nodes,
+all the remaining nodes.
+In the MEB problem, the task is to find power assignments enabling such a signal broadcast while minimizing the total energy consumption.
+A natural and frequently addressed extension of MEB, is the \textsc{Minimum Energy Multicast} (MEM) problem.
+Analogous to the difference between the \textsc{Minimum Spanning Tree} and the \textsc{Minimum Steiner Tree} problems,
+MEM is distinguished from MEB in that not all nodes in the network are destinations of the multicast message.
+Hence, the more general problem amounts to finding a Steiner tree spanning the destination nodes such that the sum of the power assignments is minimized.
+Non-destination nodes are allowed in the Steiner tree, and will be included to the extent that they contribute to reduced power consumption.
+
+In certain practical settings, MEB fails to reflect reality adequately.
+Consider an application where more than one node can act as a source.
+% Every node may initiate a message intended for the remaining nodes.
+The optimal broadcast trees corresponding to two different sources are not necessarily identical,
+and the optimal broadcast trees must be calculated separately for every possible source node.
+In order to relay a received signal correctly, the nodes must be able to recognize which node initiated the received signal, and therefore also determine which broadcast tree to use.
+Further, which power level to be set must be assessed by the relaying node.
+Such overhead calculations require additional energy, and enabling the communication devices to accomplish them may even be impractical.
+
+The idea behind the \textsc{Minimum Shared Broadcast Tree} (SBT) problem is to maintain a single, shared broadcast tree, to be applied regardless of which node is the signal source.
+Such a tree is not necessarily optimal for any of the individual sources, but routing at each node is considerably simplified.
+Provided that a shared broadcast tree is used, the nodes are no longer required to identify the source of the message in order to set a correct power level.
+Instead, only the immediate neighbour from which the signal was received must be recognized.
+The objective function in SBT captures not only the power levels of the nodes, but depends also on how frequently a node actually transmits with a certain power level.
+
+The combinatorial optimization literature is already rich on Integer Programming (IP) approaches to power minimization in wireless networks.
+Since the work of \citet{Wieseltier00onthe}, in particular the MEB and MEM problems have been studied extensively.
+Noteworthy contributions to this research include the IP models studied by \citet{das03},
+\citet{altinkemer05}, \citet{leggieri08}, \citet{yuan05}, \citet{yuan08}, \citet{bauer08}, and \citet{montemanni11}.
+\citet{cagalj02} proved that MEB, and thereby MEM, is NP-hard.
+Numerous contributions to fast, but possible inexact methods for MEM have thus appeared, and the interested reader is referred to \citep{hsiao13} for an overview.
+
+The SBT problem has also received some attention in the scientific literature.
+It was introduced by \citet{Papadimitriou06SBT}, who also proved that the problem is NP-hard.
+In the same article, an approximation algorithm for SBT was developed and analyzed experimentally.
+Building on this work, \citet{Haugland12Dual} presented an integer programming model for SBT, along with an associated decomposition approach.
+
+The SBT and SMT problems resemble the more frequently studied \textsc{Range Assignment Problem} (RAP) in the sense that they all ask for an undirected source-independent tree of minimum power.
+However, RAP concerns cases where a connected topology must be established by means of \emph{bidirectional} links,
+with the feature that power must be assigned to both the sending and the receiving device in each link.
+This scenario induces a spanning tree problem, where costs are incurred only for edges that are the most expensive ones incident to any of their end nodes.
+Simple instances \citep{Haugland12Dual} show that because of the difference in objective functions, the optimal solutions to RAP and SBT can differ substantially.
+\citet{kirousis97} and \citet{clementi99} conduct
+hardness results for instances of RAP embedded in three- and two-dimensional Euclidean space, respectively.
+Later, IP models have been developed by e.g.\ \citet{althaus03}, \citet{montemanni04}, \citet{das05}, and \citet{Haugland11Compact}.
+
+For the same reasons that MEB has been generalized to MEM, it is natural and desirable to extend SBT to its multicast equivalent.
+The \textsc{Minimum Shared Multicast Tree} (SMT) problem is thus at the forefront of this paper,
+and neither MEB, MEM, nor RAP will be considered further.
+Focus is henceforth on instances in which some of the nodes neither initiate new messages nor need messages from others.
+Utilizing such \emph{non-destination} nodes to forward messages can in many cases contribute to substantial reductions in the total power consumption.
+Non-destination nodes thus have the potential to play the role of Steiner nodes in the multicast tree.
+All devices that can initiate a transmission, referred to as \emph{destination} nodes, also have to receive every message.
+
+Some preliminary work on SMT has recently been published.
+\citet{ivanova16isco} introduces the problem, and develops an IP model.
+Moreover, the author studies inexact construction and improvement methods, for which computational results are reported.
+Contributions from the present work include two sets of IP models for SMT, presented in order of increasing lower bounding capabilities.
+By rigorous analysis of the models, we prove relations between the bounds offered by the corresponding continuous relaxations.
+Intended for instances beyond the size that can be solved to optimality, we also develop a constraint generation procedure by which strong bounds can be computed.
+
+The remainder of this paper is organized as follows: Section \ref{sec:SBT} describes the SMT problem and gives detailed explanation of its objective function.
+Integer linear programming formulations, valid inequalities and their analysis are presented in Section \ref{sec:ILP},
+followed by Section \ref{sec:comp}, where the models under study are compared with respect to strength.
+In Section \ref{sec:strong}, the models are further extended by variables in higher dimensional spaces,
+and a constraint generation procedure is developed.
+Computational results are reported in Section \ref{sec:exp},
+and suggestions to future work are summarized in Section \ref{sec:conclusion}.
