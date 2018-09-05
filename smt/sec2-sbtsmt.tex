@@ -110,5 +110,14 @@ Problem \ref{def:problem} also has close resemblance with the SBT problem, which
 Like many other network design problems, \textsc{Minimum Shared Multicast Tree} is NP-hard.
 This follows directly from the NP-hardness of SBT \citep{Papadimitriou06SBT}.
 
+Different energy models can be found in the literature. 
+\cite{halgamuge} present a comprehensive energy model for wireless sensor networks, 
+where the sources of energy consumption consist of sensing, logging, processing, transimission, actuation, transient and cluster formation.
+Our energy model focuses on the energy consumed by transmission, which is also tho most energy consuming aspect of wireless networks (51\% according to \cite{halgamuge}).
+Some of the measures such as sensing and cluster formation are not relevant in our model.
+Another distinction is that nodes in our model are all equivalent and the data is not aggregated in the nodes.
+For that reason we disregard the potential energy consumption sources occuring in sensor networks.
+However, it is easy to incorporate some of the disregarded measures by adding a constant for every used Steiner node.
+
 In the forthcoming sections, we develop and analyze IP models for SMT.
 All formulations under study are extensions of models previously developed for the related problems mentioned above.
