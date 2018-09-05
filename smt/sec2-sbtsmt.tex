@@ -30,7 +30,7 @@ where the domain of each variable is replaced by the interval $[0,1]$.
 Further, $z\left(\mathcal{M}\right)$ and $z\left(\text{LP}(\mathcal{M})\right)$ denote the optimal objective function values of the respective models.
 
 
-\subsection{Problem definition} \label{sec:probdef}
+\subsection{Network model} \label{sec:netmod}
 
 To illustrate the problem under study, consider the tree depicted in Fig. \ref{fig:objexp}.
 Six destination nodes ($D=\{i_1,i_2,a,b,c,d\}$) are spanned by use of three Steiner nodes ($V\setminus D = \{e,i,i_3\}$).
@@ -80,6 +80,17 @@ In the example in Fig.\ \ref{fig:objexp}, the expected power consumption at node
 Summing over all nodes yields the total cost of the tree.
 % The objective in the problem addressed in the current work is to minimize this cost.
 
+Different energy models can be found in the literature. 
+\cite{halgamuge} present a comprehensive energy model for wireless sensor networks, 
+where the sources of energy consumption consist of sensing, logging, processing, transimission, actuation, transient and cluster formation.
+Our energy model focuses on the energy consumed by transmission, which is also tho most energy consuming aspect of wireless networks (51\% according to \cite{halgamuge}).
+Some of the measures such as sensing and cluster formation are not relevant in our model.
+Another distinction is that nodes in our model are all equivalent and the data is not aggregated in the nodes.
+For that reason we disregard the potential energy consumption sources occuring in sensor networks.
+However, it is easy to incorporate some of the disregarded measures by adding a constant for every used Steiner node.
+
+\subsection{Problem definition} \label{sec:probdef}
+
 To express the cost of $T$ more rigorously, let $T^s=(V_T,A^s)$ denote the directed tree (arborescence) obtained by directing all edges in $E_T$ such that they point away from the \emph{root} at $s$.
 For each arc $(i,j)\in A$, we let $n_{ij}(T)$ denote the number of destinations $s$ such that $(i,j)$ is the most expensive arc leaving node $i$ in $T^s$.
 That is,
@@ -110,14 +121,6 @@ Problem \ref{def:problem} also has close resemblance with the SBT problem, which
 Like many other network design problems, \textsc{Minimum Shared Multicast Tree} is NP-hard.
 This follows directly from the NP-hardness of SBT \citep{Papadimitriou06SBT}.
 
-Different energy models can be found in the literature. 
-\cite{halgamuge} present a comprehensive energy model for wireless sensor networks, 
-where the sources of energy consumption consist of sensing, logging, processing, transimission, actuation, transient and cluster formation.
-Our energy model focuses on the energy consumed by transmission, which is also tho most energy consuming aspect of wireless networks (51\% according to \cite{halgamuge}).
-Some of the measures such as sensing and cluster formation are not relevant in our model.
-Another distinction is that nodes in our model are all equivalent and the data is not aggregated in the nodes.
-For that reason we disregard the potential energy consumption sources occuring in sensor networks.
-However, it is easy to incorporate some of the disregarded measures by adding a constant for every used Steiner node.
 
 In the forthcoming sections, we develop and analyze IP models for SMT.
 All formulations under study are extensions of models previously developed for the related problems mentioned above.

@@ -175,20 +175,23 @@ We study the Shared Multicast Tree (SMT) problem in wireless networks.
 To support a multicast session between a set of network nodes, SMT aims to establish a wireless 
 connection between them, such that the total energy consumption is minimized.
 All destinations of the multicast message must be connected, while non-destinations are optional nodes that can be used to relay messages. 
-In the well-studied minimum energy multicast (MEM)
-problem, the optimal tree depends on the source of the message.
-In contrast, SMT asks for a source-independent tree, which substantially reduces the processing overhead at each node.
-This means that SMT can be regarded as a Steiner tree problem.
-The objective function reflecting power consumption, however, distinguishes SMT clearly from the traditional minimum Steiner tree problem.
+% MI: I believe these sentences can be disregarded, because the related problems are discussed in detail in the Introduction.
+%In the well-studied minimum energy multicast (MEM)
+%problem, the optimal tree depends on the source of the message.
+%In contrast, SMT asks for a source-independent tree, which substantially reduces the processing overhead at each node.
+%This means that SMT can be regarded as a Steiner tree problem.
+%The objective function reflecting power consumption, however, distinguishes SMT clearly from the traditional minimum Steiner tree problem.
+The objective function reflecting power consumption distinguishes SMT clearly from the traditional minimum Steiner tree problem.
 
-In the present work, we develop two 
-integer programming formulations for SMT.
-Both models are subsequently extended and strengthened by redundant valid inequalities.
-Further strengthening is achieved by extending the set of variables and corresponding constraints.
+%In the present work,
+We develop two integer programming formulations for SMT.
+Both models are subsequently extended and strengthened. % by redundant valid inequalities.
+%Further strengthening is achieved by extending the set of variables and corresponding constraints.
 Theorems on relations between the LP bounds corresponding to the models are stated and proved.
 As the number of variables in the strongest formulations is a polynomial of degree four in the number of network nodes,
-the models are impractical for computing lower bounds in instances beyond a fairly small size.
-To make them applicable to larger instances, a constraint generation scheme is developed.
+the models are impractical for computing lower bounds in instances beyond a fairly small size, 
+%To make them applicable to larger instances, a constraint generation scheme is developed.
+and therefore a constraint generation scheme is developed.
 Results from computational experiments with the models demonstrate good promise of the approaches taken.
 \keywords{Wireless communication, multicast tree, Steiner tree, LP bound, valid inequalities}
 % \PACS{PACS code1 \and PACS code2 \and more}
@@ -196,6 +199,7 @@ Results from computational experiments with the models demonstrate good promise 
 \end{abstract}
 
 \input{sec1-intro.tex}
+\input{sec2-literature.tex}
 \input{sec2-sbtsmt.tex}
 \input{sec3-milp.tex}
 \input{sec4-relations.tex}
