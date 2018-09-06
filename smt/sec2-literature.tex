@@ -3,31 +3,23 @@
 The combinatorial optimization literature is already rich on Integer Programming (IP) approaches to power minimization in wireless networks.
 Since the work of \citet{Wieseltier00onthe}, in particular the MEB and MEM problems have been studied extensively.
 Noteworthy contributions to this research include the IP models studied by \citet{das03},
-\citet{altinkemer05}, \citet{leggieri08}, \citet{yuan05}, \citet{yuan08}, \citet{bauer08}, and \citet{montemanni11}.
+\citet{altinkemer05}, \citet{yuan05}, \citet{yuan08}, \citet{bauer08}, \citet{montemanni11} and \citet{leggieri08}. 
+\textcolor{blue}{
+The latter paper proposes an IP formulation of MEM based on a Set Covering model together with a preprocessing procedure reducing the number of constraints.}
 \citet{cagalj02} proved that MEB, and thereby MEM, is NP-hard.
-Numerous contributions to fast, but possible inexact methods for MEM have thus appeared, and the interested reader is referred to \citep{hsiao13} for an overview.
+Numerous contributions to fast, but possible inexact methods for MEM have thus appeared, and the interested reader is referred to \citep{hsiao13} for an overview. 
+\textcolor{blue}{Another study concerning MEM is \cite{guo}, where the authors investigate energy conservation while using adaptive antennas. 
+Unlike omnidirectional antennas, adaptive antennas can concentrate their transmission power in a smaller angle.}
 
 The SBT problem has also received some attention in the scientific literature.
 It was introduced by \citet{Papadimitriou06SBT}, who also proved that the problem is NP-hard.
 In the same article, an approximation algorithm for SBT was developed and analyzed experimentally.
 Building on this work, \citet{Haugland12Dual} presented an integer programming model for SBT, along with an associated decomposition approach.
 
-The SBT and SMT problems resemble the more frequently studied \textsc{Range Assignment Problem} (RAP) in the sense that they all ask for an undirected source-independent tree of minimum power.
-However, RAP concerns cases where a connected topology must be established by means of \emph{bidirectional} links,
-with the feature that power must be assigned to both the sending and the receiving device in each link.
-This scenario induces a spanning tree problem, where costs are incurred only for edges that are the most expensive ones incident to any of their end nodes.
 Simple instances \citep{Haugland12Dual} show that because of the difference in objective functions, the optimal solutions to RAP and SBT can differ substantially.
 \citet{kirousis97} and \citet{clementi99} conduct
 hardness results for instances of RAP embedded in three- and two-dimensional Euclidean space, respectively.
 Later, IP models have been developed by e.g.\ \citet{althaus03}, \citet{montemanni04}, \citet{das05}, and \citet{Haugland11Compact}.
-
-For the same reasons that MEB has been generalized to MEM, it is natural and desirable to extend SBT to its multicast equivalent.
-The \textsc{Minimum Shared Multicast Tree} (SMT) problem is thus at the forefront of this paper,
-and neither MEB, MEM, nor RAP will be considered further.
-Focus is henceforth on instances in which some of the nodes neither initiate new messages nor need messages from others.
-Utilizing such \emph{non-destination} nodes to forward messages can in many cases contribute to substantial reductions in the total power consumption.
-Non-destination nodes thus have the potential to play the role of Steiner nodes in the multicast tree.
-All devices that can initiate a transmission, referred to as \emph{destination} nodes, also have to receive every message.
 
 Some preliminary work on SMT has recently been published.
 \citet{ivanova16isco} introduces the problem, and develops an IP model.

@@ -30,7 +30,7 @@ where the domain of each variable is replaced by the interval $[0,1]$.
 Further, $z\left(\mathcal{M}\right)$ and $z\left(\text{LP}(\mathcal{M})\right)$ denote the optimal objective function values of the respective models.
 
 
-\subsection{Network model} \label{sec:netmod}
+\textcolor{blue}{\subsection{Network model} \label{sec:netmod}}
 
 To illustrate the problem under study, consider the tree depicted in Fig. \ref{fig:objexp}.
 Six destination nodes ($D=\{i_1,i_2,a,b,c,d\}$) are spanned by use of three Steiner nodes ($V\setminus D = \{e,i,i_3\}$).
@@ -80,14 +80,18 @@ In the example in Fig.\ \ref{fig:objexp}, the expected power consumption at node
 Summing over all nodes yields the total cost of the tree.
 % The objective in the problem addressed in the current work is to minimize this cost.
 
+\textcolor{blue}{
 Different energy models can be found in the literature. 
 \cite{halgamuge} present a comprehensive energy model for wireless sensor networks, 
 where the sources of energy consumption consist of sensing, logging, processing, transimission, actuation, transient and cluster formation.
 Our energy model focuses on the energy consumed by transmission, which is also tho most energy consuming aspect of wireless networks (51\% according to \cite{halgamuge}).
 Some of the measures such as sensing and cluster formation are not relevant in our model.
 Another distinction is that nodes in our model are all equivalent and the data is not aggregated in the nodes.
-For that reason we disregard the potential energy consumption sources occuring in sensor networks.
-However, it is easy to incorporate some of the disregarded measures by adding a constant for every used Steiner node.
+On top of that, all the related works menioned in Section \ref{sec:literature} assume transmission as the sole energy consumption source. 
+For these reasons we disregard the potential energy consumption sources occuring in sensor networks.}
+
+\textcolor{blue}{
+However, it is easy to incorporate some of the disregarded measures by adding a constant for every used Steiner node.}
 
 \subsection{Problem definition} \label{sec:probdef}
 

@@ -17,6 +17,8 @@ Unlike wired networks, where signal passing takes place along predefined links, 
 This range is determined by the power assigned to the sender, which is the maximum rather than the sum of the powers necessary to reach all intended receivers.
 This feature is often referred to as the \emph{wireless advantage} \citep{Wieseltier00onthe}.
 
+\textcolor{blue}{\subsection{Related problems}}
+
 A well-known and extensively studied problem in the network design literature is the \textsc{Minimum Energy Broadcast} (MEB) problem.
 Given a set of wireless devices with one designated source node, the goal is to assign powers to individual nodes.
 The power assignments determine the communication ranges, and induce a broadcast tree such that a signal initiated by the source reaches, directly or via other nodes,
@@ -43,14 +45,32 @@ Provided that a shared broadcast tree is used, the nodes are no longer required 
 Instead, only the immediate neighbour from which the signal was received must be recognized.
 The objective function in SBT captures not only the power levels of the nodes, but depends also on how frequently a node actually transmits with a certain power level.
 
+The SBT and SMT problems resemble the more frequently studied \textsc{Range Assignment Problem} (RAP) in the sense that they all ask for an undirected source-independent tree of minimum power.
+However, RAP concerns cases where a connected topology must be established by means of \emph{bidirectional} links,
+with the feature that power must be assigned to both the sending and the receiving device in each link.
+This scenario induces a spanning tree problem, where costs are incurred only for edges that are the most expensive ones incident to any of their end nodes.
+
+\textcolor{blue}{\subsection{Contributions}}
+
 Contributions from the present work include two sets of IP models for SMT, presented in order of increasing lower bounding capabilities.
 By rigorous analysis of the models, we prove relations between the bounds offered by the corresponding continuous relaxations.
 Intended for instances beyond the size that can be solved to optimality, we also develop a constraint generation procedure by which strong bounds can be computed.
 
+For the same reasons that MEB has been generalized to MEM, it is natural and desirable to extend SBT to its multicast equivalent.
+The \textsc{Minimum Shared Multicast Tree} (SMT) problem is thus at the forefront of this paper,
+and neither MEB, MEM, nor RAP will be considered further.
+Focus is henceforth on instances in which some of the nodes neither initiate new messages nor need messages from others.
+Utilizing such \emph{non-destination} nodes to forward messages can in many cases contribute to substantial reductions in the total power consumption.
+Non-destination nodes thus have the potential to play the role of Steiner nodes in the multicast tree.
+All devices that can initiate a transmission, referred to as \emph{destination} nodes, also have to receive every message.
+
+
+\textcolor{blue}{\subsection{Structure of the paper}}
+
 The remainder of this paper is organized as follows: 
-Section \ref{sec:literature} summarizes relevant literature and previous works.
+\textcolor{blue}{Section \ref{sec:literature} summarizes relevant literature and previous works.}
 %Section \ref{sec:SBT} describes the SMT problem and gives detailed explanation of its objective function.
-Section \ref{sec:SBT} divided into three subsections introduces the notation, explains the network model, and gives formal definition of the problem.
+\textcolor{blue}{Section \ref{sec:SBT} divided into three subsections introduces the notation, explains the network model, and gives formal definition of the problem.}
 Integer linear programming formulations, valid inequalities and their analysis are presented in Section \ref{sec:ILP},
 followed by Section \ref{sec:comp}, where the models under study are compared with respect to strength.
 In Section \ref{sec:strong}, the models are further extended by variables in higher dimensional spaces,
