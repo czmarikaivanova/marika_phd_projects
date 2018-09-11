@@ -126,8 +126,7 @@ by applying B\&B to $\mathcal{F}_1$ for a restricted amount of time.
 While the initial bound $z\left(\text{LP}(\mathcal{F}_1)\right)$ might be weak, fast solution of $\text{LP}(\mathcal{F}_1)$ enables rapid growth in the B\&B-tree,
 and, possibly, also in the corresponding lower bound.
 
-We compare the progress of the lower bounds obtained by the CG method with the one obtained by B\&B applied to $\mathcal{F}_1$.
- as a function of running time.
+We compare the progress of the lower bounds obtained by the CG method with the one obtained by B\&B applied to $\mathcal{F}_1$ as a function of running time.
 Instances with $|V|=2|D|\in\{24, 26,\ldots, 34\}$ are investigated, with 5 instances for each value of $|V|$.
 The results are illustrated in Fig. \ref{fig:cggr}.
 Each curve represents the progress of the lower bound within each instance set.
@@ -174,7 +173,16 @@ The vertical axes correspond to the lower bounds as a percentage of $z\left(\tex
         \caption{$|V|=34, |D|=17$}
         \label{fig:cggr34-17}
     \end{subfigure}
-  \caption{Comparison of lower bounds obtained by CG and B\&B on model $\mathcal{F}_1$. }
+  \caption{Comparison of lower bounds obtained by CG and B\&B on model $\mathcal{F}_1$.
+	\textcolor{blue}{Each figure depicts a progress of lower bounds for instances with varying number of destination and non-destination nodes.
+	The lower bounds are obtained by solving CG scheme applied on model $\mathcal{F}_1$ (black curves), and produced during the course of classic B\&B algorithm (grey curves)
+	The tightness of the bounds increases with time, and it can be observed from the graphs that the CG bound becomes tighter at some point.
+	We express the quality of lower bounds with respect to the value of simple continuous relaxatin, as indicated by the vertical axes.
+	It can also be noted that the lower bound obtained from B\&B grows sharply during the computation of the simplex method in the root of the B\&B tree, 
+	which is happening until the curve reaches 100\%.
+	After that point the bound grows rather slowly.
+	CG on the other hand produces bound that grows faster even after the value of first relaxation in the root is reached.
+	}}
   \label{fig:cggr}
 \end{figure} 
 
