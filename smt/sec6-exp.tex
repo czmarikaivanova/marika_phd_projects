@@ -156,13 +156,24 @@ If an edge appears in neither of the solutions, its edge is multiplied by 1000, 
 }
 \begin{table}[]
 \centering
+\setlength{\tabcolsep}{8pt} % Default value: 6pt
+\renewcommand{\arraystretch}{1.4} % Default value: 1
 \textcolor{blue}{
 \begin{tabular}{rrrrrrrrrrr}
 \multicolumn{1}{l}{}      & \multicolumn{1}{l}{}      & \multicolumn{3}{c}{5 min}  & \multicolumn{3}{c}{10 min} & \multicolumn{3}{c}{20 min}     \\\hline
-\multicolumn{1}{l}{$|V|$} & \multicolumn{1}{l}{$|D|$} & \multicolumn{1}{l}{$\mathcal{X}_1$} & \multicolumn{1}{l}{$\mathcal{F}_1$} & \multicolumn{1}{l}{$\mathcal{M}$} & \multicolumn{1}{l}{$\mathcal{X}_1$} & \multicolumn{1}{l}{$\mathcal{F}_1$} & \multicolumn{1}{l}{$\mathcal{M}$} & \multicolumn{1}{l}{$\mathcal{X}_1$} & \multicolumn{1}{l}{$\mathcal{F}_1$} & \multicolumn{1}{l}{$\mathcal{M}$} \\\hline
-20  & 10   &     &   &   &   &    &    &    &    &       \\
+\multicolumn{1}{l}{$|V|$} & \multicolumn{1}{l}{$|D|$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{$\mathcal{M}$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{$\mathcal{M}$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{$\mathcal{M}$} \\
+\hline
+18  & 12   &100.6&100.0&101.4&   &    &    &    &    &       \\
+21  & 14   &     &   &   &   &    &    &    &    &       \\
+24  & 16   &     &   &   &   &    &    &    &    &   \\     
+\hline
+20  & 10   &100.6&100.0&101.4&   &    &    &    &    &       \\
 22  & 11   &     &   &   &   &    &    &    &    &       \\
-24  & 12   &     &   &   &   &    &    &    &    &                                  
+24  & 12   &     &   &   &   &    &    &    &    &   \\                               
+\hline
+21  & 7    &100.6&100.0&101.4&   &    &    &    &    &       \\
+24  & 8    &     &   &   &   &    &    &    &    &       \\
+27  & 9    &     &   &   &   &    &    &    &    &                                  
 \end{tabular}
 }
 \caption{\textcolor{blue}{Comparison of the metaheuristic algorithm and solving IP models with imposed time-limit.}}
