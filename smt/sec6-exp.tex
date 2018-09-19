@@ -121,6 +121,7 @@ However, there is a manifold of a thorough research of the minimum Steiner tree 
 We turn our attention to recently pusblished paper \citet{pajor18} which notains a metaheuristic algorithm for a fast generation of good solution to the Steiner tree problem.
 The method is general, and is therefore very suitable for adaptation to our purposes.
 The high level description is as follows:}
+
 \begin{algorithm}
 \textcolor{blue}{
 Create an empty pool $P$ of elite solutions with capacity $\gamma=\left\lceil\sqrt{M/2}\right\rceil$\;
@@ -156,24 +157,24 @@ If an edge appears in neither of the solutions, its edge is multiplied by 1000, 
 }
 \begin{table}[]
 \centering
-\setlength{\tabcolsep}{8pt} % Default value: 6pt
+\setlength{\tabcolsep}{7pt} % Default value: 6pt
 \renewcommand{\arraystretch}{1.4} % Default value: 1
 \textcolor{blue}{
 \begin{tabular}{rrrrrrrrrrr}
 \multicolumn{1}{l}{}      & \multicolumn{1}{l}{}      & \multicolumn{3}{c}{5 min}  & \multicolumn{3}{c}{10 min} & \multicolumn{3}{c}{20 min}     \\\hline
 \multicolumn{1}{l}{$|V|$} & \multicolumn{1}{l}{$|D|$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{$\mathcal{M}$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{$\mathcal{M}$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{$\mathcal{M}$} \\
 \hline
-18  & 12   &100.6&100.0&101.4&   &    &    &    &    &       \\
-21  & 14   &     &   &   &   &    &    &    &    &       \\
-24  & 16   &     &   &   &   &    &    &    &    &   \\     
+18  & 12   &100.0&100.0&101.8 &   &    &    &    &    &       \\
+21  & 14   &106.5&107.4&101.2&   &    &    &    &    &       \\
+24  & 16   &144.2&112.2&101.3&   &    &    &    &    &   \\     
 \hline
 20  & 10   &100.6&100.0&101.4&   &    &    &    &    &       \\
-22  & 11   &     &   &   &   &    &    &    &    &       \\
-24  & 12   &     &   &   &   &    &    &    &    &   \\                               
+22  & 11   &102.1&103.2&101.7&   &    &    &    &    &       \\
+24  & 12   &106.6&111.7&101.7&105.0&105.5&100.0&    &    &   \\                               
 \hline
-21  & 7    &100.6&100.0&101.4&   &    &    &    &    &       \\
+21  & 7    & & & &   &    &    &    &    &       \\
 24  & 8    &     &   &   &   &    &    &    &    &       \\
-27  & 9    &     &   &   &   &    &    &    &    &                                  
+27  & 9    &127.4&114.0&101.6&111.2&109.0&100.1&    &    &                                  
 \end{tabular}
 }
 \caption{\textcolor{blue}{Comparison of the metaheuristic algorithm and solving IP models with imposed time-limit.}}
@@ -184,6 +185,7 @@ If an edge appears in neither of the solutions, its edge is multiplied by 1000, 
 Tab.\ref{tab:metamod} summarizes the comparison of the metaheuristic algorithm with the ability of IP models to produce feasible solutions when restricted time limit.
 Each column represents the average percentage of objective function of the best method in a given instance.
 The averages are calculated over all instances of given $V$ and $D$.
+Experiments with results in Tab. \ref{tab:small_inst} and Tab. \ref{tab:metamod} are carried out on the same sets of intsances.
 }
 
 \textcolor{blue}{
@@ -209,7 +211,8 @@ The results are illustrated in Fig. \ref{fig:cggr}.
 Each curve represents the progress of the lower bound within each instance set.
 The horizontal axes represent running times ranging from 0 to 20 CPU-minutes.
 The vertical axes correspond to the lower bounds as a percentage of $z\left(\text{LP}(\mathcal{F}_1)\right)$, averaged over all instances in the set.
- 
+\textcolor{blue}{The values can be retrieved from the output of Cplex during the course of simplex and B\&B algorithm.}
+
 \begin{figure}[!htb]
     \centering
     \begin{subfigure}[b]{0.49\textwidth}
@@ -259,6 +262,7 @@ The vertical axes correspond to the lower bounds as a percentage of $z\left(\tex
 	which is happening until the curve reaches 100\%.
 	After that point the bound grows rather slowly.
 	CG on the other hand produces bound that grows faster even after the value of first relaxation in the root is reached.
+%	The values can be retrieved from the output of CPLEX during the course of simplex and B\&B algorithm.
 	}}
   \label{fig:cggr}
 \end{figure} 
