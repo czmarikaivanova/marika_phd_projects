@@ -118,9 +118,8 @@ This applies to both $\mathcal{F}_1$ and $\mathcal{X}_1$.
 \textcolor{blue}{
 To the best of our knowledge, SMT has not been studied extensively in terms of inexact methods.
 However, there is a manifold of a thorough research of the minimum Steiner tree problem, with the possibility of adapting the methods on SMT.
-We turn our attention to recently pusblished paper \citet{pajor18} which notains a metaheuristic algorithm for a fast generation of good solution to the Steiner tree problem.
-The method is general, and is therefore very suitable for adaptation to our purposes.
-The high level description is as follows:}
+We turn our attention to recently published paper \citet{pajor18} which contains a metaheuristic algorithm for a fast generation of good solution to the Steiner tree problem.
+The method is general, and is therefore very suitable for adaptation to our purposes.  The high level description is as follows:}
 
 \begin{algorithm}
 \textcolor{blue}{
@@ -157,24 +156,24 @@ If an edge appears in neither of the solutions, its edge is multiplied by 1000, 
 }
 \begin{table}[]
 \centering
-\setlength{\tabcolsep}{7pt} % Default value: 6pt
+\setlength{\tabcolsep}{6pt} % Default value: 6pt
 \renewcommand{\arraystretch}{1.4} % Default value: 1
 \textcolor{blue}{
 \begin{tabular}{rrrrrrrrrrr}
 \multicolumn{1}{l}{}      & \multicolumn{1}{l}{}      & \multicolumn{3}{c}{5 min}  & \multicolumn{3}{c}{10 min} & \multicolumn{3}{c}{20 min}     \\\hline
 \multicolumn{1}{l}{$|V|$} & \multicolumn{1}{l}{$|D|$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{$\mathcal{M}$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{$\mathcal{M}$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{$\mathcal{M}$} \\
 \hline
-18  & 12   &100.0&100.0&101.8 &   &    &    &    &    &       \\
-21  & 14   &106.5&107.4&101.2&   &    &    &    &    &       \\
-24  & 16   &144.2&112.2&101.3&   &    &    &    &    &   \\     
+18  & 12   &100.0&100.0&101.8&100.0&100.0&100.0&100.0&100.0&100.0\\
+21  & 14   &106.5&107.4&101.2&102.7&103.1&100.1&100.9&100.3&100.0\\
+24  & 16   &144.2&112.2&101.3&124.0&114.0&100.1&104.3&112.7&100.0\\     
 \hline
-20  & 10   &100.6&100.0&101.4&   &    &    &    &    &       \\
-22  & 11   &102.1&103.2&101.7&   &    &    &    &    &       \\
-24  & 12   &106.6&111.7&101.7&105.0&105.5&100.0&    &    &   \\                               
+20  & 10   &100.6&100.0&101.4&100.1&100.0&100.0&100.1&100.0&100.0\\
+22  & 11   &102.1&103.2&101.7&101.3&100.7&100.1&100.7&100.2&100.1\\
+24  & 12   &106.6&111.7&101.7&105.0&105.5&100.0&103.1&106.2&100.0\\                               
 \hline
-21  & 7    & & & &   &    &    &    &    &       \\
-24  & 8    &     &   &   &   &    &    &    &    &       \\
-27  & 9    &127.4&114.0&101.6&111.2&109.0&100.1&    &    &                                  
+21  & 7    &100.1&100.0&100.0&100.0&100.0&100.0&100.0&100.0&100.0\\
+24  & 8    &102.3&101.4&102.0&102.1&100.7&100.1&101.1&100.1&100.0\\
+27  & 9    &127.4&114.0&101.6&111.2&109.0&100.1&108.2&104.1&100.0                                  
 \end{tabular}
 }
 \caption{\textcolor{blue}{Comparison of the metaheuristic algorithm and solving IP models with imposed time-limit.}}
@@ -183,13 +182,19 @@ If an edge appears in neither of the solutions, its edge is multiplied by 1000, 
 
 \textcolor{blue}{
 Tab.\ref{tab:metamod} summarizes the comparison of the metaheuristic algorithm with the ability of IP models to produce feasible solutions when restricted time limit.
-Each column represents the average percentage of objective function of the best method in a given instance.
+Each entry represents the average percentage  of the objective value yielded by the most successful method in a given instance.
+For example, if all methods find the optimum in every instance, the three corresponding values are all 100.0.
+Thus, the lowest value in a given instance type indicates that the corresponding method performed the most successfully. 
 The averages are calculated over all instances of given $V$ and $D$.
-Experiments with results in Tab. \ref{tab:small_inst} and Tab. \ref{tab:metamod} are carried out on the same sets of intsances.
+Experiments with results in Tab. \ref{tab:small_inst} and Tab. \ref{tab:metamod} are carried out on the same sets of instances.
 }
 
 \textcolor{blue}{
-The resulting values reveal that...
+The resulting values reveal that the metaheuristic algorithm converges quickly, and is often able to find optimal solutions faster than solving the IP models.
+The solutions are, however, not guaranteed to be optimal.
+The optimality is proven only on smaller instances, where the B\&B finds the optimum before the time limit is exceeded.
+It is likely that the inexact method run on large instances does not find the optimum, but it very clearly outperforms B\&B, 
+where the solutions found within the given time limit are far from the optimum.
 }
 
 \subsection{Experiments on strong lower bounds}
@@ -257,7 +262,7 @@ The vertical axes correspond to the lower bounds as a percentage of $z\left(\tex
 	\textcolor{blue}{Each figure depicts a progress of lower bounds for instances with varying number of destination and non-destination nodes.
 	The lower bounds are obtained by solving CG scheme applied on model $\mathcal{F}_1$ (black curves), and produced during the course of classic B\&B algorithm (grey curves)
 	The tightness of the bounds increases with time, and it can be observed from the graphs that the CG bound becomes tighter at some point.
-	We express the quality of lower bounds with respect to the value of simple continuous relaxatin, as indicated by the vertical axes.
+	We express the quality of lower bounds with respect to the value of simple continuous relaxation, as indicated by the vertical axes.
 	It can also be noted that the lower bound obtained from B\&B grows sharply during the computation of the simplex method in the root of the B\&B tree, 
 	which is happening until the curve reaches 100\%.
 	After that point the bound grows rather slowly.
