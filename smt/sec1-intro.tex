@@ -56,24 +56,27 @@ Contributions from the present work include two sets of IP models for SMT, prese
 By rigorous analysis of the models, we prove relations between the bounds offered by the corresponding continuous relaxations.
 Intended for instances beyond the size that can be solved to optimality, we also develop a constraint generation procedure by which strong bounds can be computed.
 
+\textcolor{blue}{When proven optimality is out of reach, effective methods for computing near-optimal solutions are crucial.
+A heuristic method tailored for SMT is another contribution from the current text,
+which thus demonstrates how recent progress on the \textsc{Minimum Steiner Tree} problem can be transferred to the problem under study.}
+
+\textcolor{blue}{\subsection{Scope and structure of the paper}}
+
 For the same reasons that MEB has been generalized to MEM, it is natural and desirable to extend SBT to its multicast equivalent.
 The \textsc{Minimum Shared Multicast Tree} (SMT) problem is thus at the forefront of this paper,
-and neither MEB, MEM, nor RAP will be considered further.
+and neither MEB, MEM, nor RAP will be \textcolor{blue}{given much attention}.
 Focus is henceforth on instances in which some of the nodes neither initiate new messages nor need messages from others.
 Utilizing such \emph{non-destination} nodes to forward messages can in many cases contribute to substantial reductions in the total power consumption.
 Non-destination nodes thus have the potential to play the role of Steiner nodes in the multicast tree.
 All devices that can initiate a transmission, referred to as \emph{destination} nodes, also have to receive every message.
 
-
-\textcolor{blue}{\subsection{Structure of the paper}}
-
 The remainder of this paper is organized as follows: 
 \textcolor{blue}{Section \ref{sec:literature} summarizes relevant literature and previous works.}
-%Section \ref{sec:SBT} describes the SMT problem and gives detailed explanation of its objective function.
-\textcolor{blue}{Section \ref{sec:SBT} divided into three subsections introduces the notation, explains the network model, and gives formal definition of the problem.}
+\textcolor{blue}{Section \ref{sec:SBT} introduces the notation, explains the network model, and gives a formal definition of the problem.}
 Integer linear programming formulations, valid inequalities and their analysis are presented in Section \ref{sec:ILP},
 followed by Section \ref{sec:comp}, where the models under study are compared with respect to strength.
 In Section \ref{sec:strong}, the models are further extended by variables in higher dimensional spaces,
 and a constraint generation procedure is developed.
+\textcolor{blue}{A fast method for computing good, but not necessarily optimal solutions is given in Section \ref{sec:heur}.}
 Computational results are reported in Section \ref{sec:exp},
 and suggestions to future work are summarized in Section \ref{sec:conclusion}.

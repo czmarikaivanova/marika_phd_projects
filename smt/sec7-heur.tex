@@ -1,4 +1,4 @@
-\textcolor{blue}{\section{Computing near-optimal solutions}} \label{sec:heur}
+\textcolor{blue}{\section{Computing near-optimal solutions} \label{sec:heur}}
 
 \textcolor{blue}{
 Instances of size that prohibits computation of the optimal solution should be approached by some fast, but possibly inexact method.
@@ -58,13 +58,13 @@ Further, in the merge process, the adjusted weights $\tilde{p}_{ij}$ are determi
 promote edges that appear in both $T$ and the randomly selected tree $T_{\gamma}$ in $\mathcal{T}$. 
 The cost of edges appearing in exactly one of the trees are thus magnified.
 For the purpose of diversification, the factor by which the cost is multiplied is chosen randomly.
-To discourage the appearence of edges outside both $T$ and $T_r$ in the merge $\tilde{T}$,
+To discourage the appearance of edges outside both $T$ and $T_r$ in the merge $\tilde{T}$,
 their cost is magnified by a factor dominating the factors drawn for edges that occur in one of the trees.
 }
 
 \textcolor{blue}{
 A few minor simplification over the approach taken by \citet{pajor18} are made in Alg.\ \ref{alg:meta}:
 Rather than selecting the tree to leave $\mathcal{T}$ randomly, we consistently remove $T_{\gamma}$ when a new tree is added.
-Also, for each new tre $T$ constructed, Alg.\ \ref{alg:meta} makes only one attempt to merge it with some $T_r$ stored in $\mathcal{T}$.
+Also, for each new tree $T$ constructed, Alg.\ \ref{alg:meta} makes only one attempt to merge it with some $T_r$ stored in $\mathcal{T}$.
 This contrasts the method in the cited work, where $\tilde{T}$ is chosen as the best tree found in a sequence of merges.
 }
