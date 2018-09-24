@@ -3,20 +3,21 @@
 
 \subsection{Assumptions and notation} \label{sec:notation}
 
-A WANET is modeled by a complete graph $G=(V,E)$, where the set $V$ of nodes represents the set of wireless devices and the set of edges $E=\{\{i,j\}:i,j\in V, i\neq j\}$ corresponds to the potential links between them.
+A WANET is modeled by a complete graph $G=(V,E)$, where the set $V$ of nodes represents the set of wireless devices,
+and the set of edges $E=\{\{i,j\}:i,j\in V, i\neq j\}$ corresponds to the potential links between them.
 The set $A=\{(i,j):i,j\in V,\{i,j\}\in E\}$ consists of all arcs that can be derived by directing the edges in $E$.
 Nodes in the set $D\subseteq V$ are the destination nodes, also referred to as \emph{source} nodes.
 For an arbitrary $i\in V$, sets $V\setminus \{i\}$ and $D\setminus\{i\}$ are denoted $V_i$ and $D_i$, respectively.
 
-Sending a message directly from (to) node $i$ to (from) node $j$ requires a certain \emph{power} $p_{ij}=p_{ji}$.
+Sending a message directly from (to) node $i$ to (from) node $j$ requires a certain \emph{transmission power} $p_{ij}=p_{ji}$.
 Whenever appropriate, $p_{ij}$ is referred to as the \emph{cost} of $\{i,j\}$,
 and edges with higher cost than others are said to be \emph{more expensive}.
-When the nodes are embedded in the plane, $p_{ij}$ is often assumed \citep{Papadimitriou06SBT,Haugland12Dual} to be
+When the nodes are embedded in the plane, $p_{ij}$ is often assumed \citep{Papadimitriou06SBT,Haugland12Dual,halgamuge} to be
 proportional to the Euclidean distance between $i$ and $j$ raised to a power between 2 and 4.
 For simplicity, we assume for all $i\in V$ that $p_{ij}\neq p_{ik}$ when $j\neq k$, and define
 $W_{ij}=\left\{k\in V_i: p_{ik}\geq p_{ij}\right\}$
 as the set of nodes requiring no less power at $i$ than $j$ does.
-The notation $G'\subseteq G$ means that $G'=(V',E')$ is a subgraph of $G$, i.e., $E'\subseteq E$ consists of the edges in $E$ with both end nodes in $V'\subseteq V$.
+The notation $G'\subseteq G$ means that $G'=(V_{G'},E_{G'})$ is a subgraph of $G$, i.e., $E_{G'}\subseteq E$ consists of the edges in $E$ with both end nodes in $V_{G'}\subseteq V$.
 
 Let $y \in \{0,1\}^E$ and $X\in\{0,1\}^{A\times D}$ be binary vectors with components corresponding to
 edges and pairs of arcs and destination nodes, respectively.
@@ -66,7 +67,7 @@ This is accomplished by power $p_{ii_2}$.
 \label{fig:objexp}
 \end{figure}
 
-In more general terms, let $T$ be a multicast tree, and let $i\in V_T$ be a node with at least two neighbors in $T$.
+In more general terms, let $T\subseteq G$ be a multicast tree, and let $i\in V_T$ be a node with at least two neighbors in $T$.
 For multicasting a message, the power to be assigned to node $i$ is either $p_{ii_1}$ or $p_{ii_2}$, where $i_1$ and $i_2$ are neighbors of $i$ such that
 $p_{ii_1}>p_{ii_2}>p_{ij}$ for all other neighbors $j\in V_T\setminus\{i_1,i_2\}$.
 If the path from the message source to $i$ intersects $i_1$, then power $p_{ii_2}$ is sufficient.
@@ -78,24 +79,18 @@ The frequency at which power levels $p_{ii_1}$ and $p_{ii_2}$ (let $p_{ii_2}=0$ 
 is thus proportional to the number of sources in $D$ that utilize the respective arc for message forwarding.
 In the example in Fig.\ \ref{fig:objexp}, the expected power consumption at node $i$ is thus proportional to $4p_{ii_1} + 3p_{ii_2}$.
 Summing over all nodes yields the total cost of the tree.
-% The objective in the problem addressed in the current work is to minimize this cost.
 
 \textcolor{blue}{
-Different energy models can be found in the literature. 
-\cite{halgamuge} present a comprehensive energy model for wireless sensor networks, 
-where the sources of energy consumption consist of sensing, logging, processing, transimission, actuation, transient and cluster formation.
-Our energy model focuses on the energy consumed by transmission, which is also tho most energy consuming aspect of wireless networks (51\% according to \cite{halgamuge}).
-Some of the measures such as sensing and cluster formation are not relevant in our model.
-Another distinction is that nodes in our model are all equivalent and the data is not aggregated in the nodes.
-On top of that, all the related works menioned in Section \ref{sec:literature} assume transmission as the sole energy consumption source. 
-For these reasons we disregard the potential energy consumption sources occuring in sensor networks.}
-
-\textcolor{blue}{
-However, it is easy to incorporate some of the disregarded measures by adding a constant for every used Steiner node.}
+The cost model outlined above aims for minimization of the transmission energy.
+As pointed out by \citet{halgamuge}, transmission constitutes a substantial part of the total energy consumption in wireless sensor networks.
+The energy consumed by other operations, such as sensing, logging, processing, actuation, and cluster formation is less sensitive to the topology
+of the multicast tree, and is neglected in the current work.
+This is in line with the approach taken in the wide range of literature on optimization models for wireless networks mentioned in Section \ref{sec:literature}.
+For a detailed energy model for wireless sensor networks, the reader is referred to the article by \citet{halgamuge}.}
 
 \subsection{Problem definition} \label{sec:probdef}
 
-To express the cost of $T$ more rigorously, let $T^s=(V_T,A^s)$ denote the directed tree (arborescence) obtained by directing all edges in $E_T$ such that they point away from the \emph{root} at $s$.
+To express the cost of the multicast tree more rigorously, let $T^s=(V_T,A^s)$ denote the directed tree (arborescence) obtained by directing all edges in $T$ such that they point away from the \emph{root} at $s$.
 For each arc $(i,j)\in A$, we let $n_{ij}(T)$ denote the number of destinations $s$ such that $(i,j)$ is the most expensive arc leaving node $i$ in $T^s$.
 That is,
 \[
