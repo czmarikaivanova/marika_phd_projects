@@ -121,25 +121,6 @@ However, there is a manifold of a thorough research of the minimum Steiner tree 
 We turn our attention to recently published paper \citet{pajor18} which contains a metaheuristic algorithm for a fast generation of good solution to the Steiner tree problem.
 The method is general, and is therefore very suitable for adaptation to our purposes.  The high level description is as follows:}
 
-\begin{algorithm}
-\textcolor{blue}{
-Create an empty pool $P$ of elite solutions with capacity $\gamma=\left\lceil\sqrt{M/2}\right\rceil$\;
-\For {$i\in \{1,\dots,M$\}} {
-Generate a new solution $S$ using a constructive algorithm, local search, and randomization\;
-\If {$i<\gamma$} {$P\leftarrow P\cup \{S\}$}
-\Else {
-$\hat{S}\leftarrow\arg\max_{S'\in P} c(S')$\;
-\If {$c(\hat{S})> c(S)$}{$P\leftarrow P\cup \{S\}\setminus\{\hat{S}\}$}
-$\hat{S}\leftarrow\arg\max_{S'\in P} c(S')$\;
-Generate a solution $\tilde{S}$ by combining $S$ with solutions in $P$\;
-\If {$c(\hat{S})> c(\tilde{S})$}{$P\leftarrow P\cup \{\tilde{S}\}\setminus\{\hat{S}\}$}
-}
-}
-\Return $\arg\min_{S'\in P} c(S')$\;
- \caption{Outline of the metaheuristic algorithm}
-}
-\label{alg:meta}
-\end{algorithm}
 \textcolor{blue}{The construction procedure and local search is the adapted BIP algorithm together with refinements presented in \citet{ivanova16isco}.
 The remaining parts of the algorithm are carried out as discussed in \citet{pajor18}.
 The randomization is achieved by perturbing the edge costs in the input graph.
