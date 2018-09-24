@@ -119,8 +119,7 @@ This applies to both $\mathcal{F}_1$ and $\mathcal{X}_1$.
 To the best of our knowledge, SMT has not been studied extensively in terms of inexact methods.
 However, there is a manifold of a thorough research of the minimum Steiner tree problem, with the possibility of adapting the methods on SMT.
 We turn our attention to recently published paper \citet{pajor18} which contains a metaheuristic algorithm for a fast generation of good solution to the Steiner tree problem.
-The method is general, and is therefore very suitable for adaptation to our purposes.  The high level description is as follows:}
-
+The method is general, and is therefore very suitable for adaptation to our purposes.  The high level description is as follows:} 
 \textcolor{blue}{The construction procedure and local search is the adapted BIP algorithm together with refinements presented in \citet{ivanova16isco}.
 The remaining parts of the algorithm are carried out as discussed in \citet{pajor18}.
 The randomization is achieved by perturbing the edge costs in the input graph.
@@ -144,7 +143,7 @@ If an edge appears in neither of the solutions, its edge is multiplied by 1000, 
 \multicolumn{1}{l}{}      & \multicolumn{1}{l}{}      & \multicolumn{3}{c}{5 min}  & \multicolumn{3}{c}{10 min} & \multicolumn{3}{c}{20 min}     \\\hline
 \multicolumn{1}{l}{$|V|$} & \multicolumn{1}{l}{$|D|$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{$\mathcal{M}$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{$\mathcal{M}$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{$\mathcal{M}$} \\
 \hline
-18  & 12   &100.0&100.0&101.8&100.0&100.0&100.0&100.0&100.0&100.0\\
+18  & 12   &100.1&100.1&100.0&100.0&100.0&100.0&100.0&100.0&100.0\\
 21  & 14   &106.5&107.4&101.2&102.7&103.1&100.1&100.9&100.3&100.0\\
 24  & 16   &144.2&112.2&101.3&124.0&114.0&100.1&104.3&112.7&100.0\\     
 \hline
@@ -153,8 +152,8 @@ If an edge appears in neither of the solutions, its edge is multiplied by 1000, 
 24  & 12   &106.6&111.7&101.7&105.0&105.5&100.0&103.1&106.2&100.0\\                               
 \hline
 21  & 7    &100.1&100.0&100.0&100.0&100.0&100.0&100.0&100.0&100.0\\
-24  & 8    &102.3&101.4&102.0&102.1&100.7&100.1&101.1&100.1&100.0\\
-27  & 9    &127.4&114.0&101.6&111.2&109.0&100.1&108.2&104.1&100.0                                  
+24  & 8    &102.8&101.9&100.0&102.1&100.7&100.1&101.1&100.1&100.0\\
+27  & 9    &133.2&118.7&100.0&111.2&109.0&100.1&108.2&104.1&100.0                                  
 \end{tabular}
 }
 \caption{\textcolor{blue}{Comparison of the metaheuristic algorithm and solving IP models with imposed time-limit.}}
