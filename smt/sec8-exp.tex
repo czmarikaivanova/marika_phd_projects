@@ -116,7 +116,7 @@ This applies to both $\mathcal{F}_1$ and $\mathcal{X}_1$.
 \textcolor{blue}{\subsection{Comparison with alternative methods}}
 \textcolor{blue}{
 We now investigate the ability of IP models $\mathcal{X}_1$ and $\mathcal{F}_1$ to produce good feasible solutions when a time limit is imposed.
-We compare the quality of obtained solutions with those calculated by Alg. \ref{alg:meta}.
+We compare the quality of obtained solutions with those calculated by Alg.\ \ref{alg:meta}.
 The results for time restrictions 5, 10 and 20 CPU-minutes, respectively, are reported in Tab. \ref{tab:metamod}.
 These experiments are carried out on the instance sets that are investigated in the experiments reported in Section \ref{sec:expsmall}.
 }
@@ -179,17 +179,17 @@ and, possibly, also in the corresponding lower bound.
 
 We compare the progress of the lower bounds obtained by the CG method with the one obtained by B\&B applied to $\mathcal{F}_1$ as a function of running time.
 Instances with $|V|=2|D|\in\{24, 26,\ldots, 34\}$ are investigated, with 5 instances for each value of $|V|$.
-The results are illustrated in Fig. \ref{fig:cggr}.
+The results are illustrated in Fig.\ \ref{fig:cggr}.
 Each curve represents the progress of the lower bound within each instance set.
 The horizontal axes represent running times ranging from 0 to 20 CPU-minutes.
 The vertical axes correspond to the lower bounds as a percentage of $z\left(\text{LP}(\mathcal{F}_1)\right)$, averaged over all instances in the set.
 \textcolor{blue}{
-	The tightness of the bounds increases with time, and it can be observed from the graphs that the CG bound becomes tighter at some point.
-	We express the lower bounds relative to $z\left(\text{LP}(\mathcal{F}_1)\right)$, as indicated by the vertical axes.
-	The lower bound obtained from B\&B grows sharply while the dual simplex method is solving the root problem of the B\&B tree, 
-	which goes on until the curve reaches 100\%.
-	After that point, the bound grows rather slowly.
-	In contrast, CG produces a bound that grows faster even after it has reached the value $z\left(\text{LP}(\mathcal{X}_1)\right)$.}
+The tightness of the bounds increases with time, and it can be observed from the graphs that the CG bound becomes tighter at some point.
+We express the lower bounds relative to $z\left(\text{LP}(\mathcal{F}_1)\right)$, as indicated by the vertical axes.
+The lower bound obtained from B\&B grows sharply while the dual simplex method is solving the root problem of the B\&B tree, 
+which goes on until the curve reaches 100\%.
+After that point, the bound grows rather slowly.
+In contrast, CG produces a bound that grows faster even after it has reached the value $z\left(\text{LP}(\mathcal{X}_1)\right)$.}
 
 \begin{figure}[!htb]
     \centering
