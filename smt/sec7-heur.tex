@@ -13,7 +13,11 @@ and an algorithm for merging two Steiner trees in order to create a better one.
 Construction and local improvement are applied in order to generate Steiner trees of presumably low cost.
 If the cost is sufficiently low, the tree is stored in an ordered set $\mathcal{T}$ of at most $\gamma$ distinct trees.
 Diversity among the trees is achieved by perturbing the edge costs randomly before construction and local improvement are applied.
-After each tree generation, the new tree is merged with a randomly chosen tree from $\mathcal{T}$, and the resulting tree is kept in $\mathcal{T}$ if its cost is small.}
+After each tree generation, the new tree is merged with a randomly chosen tree from $\mathcal{T}$, and the resulting tree is kept in $\mathcal{T}$ if its cost is small.
+%After each tree generation, the new tree is merged with a randomly chosen tree from $\mathcal{T}$, 
+%and the resulting tree is kept in $\mathcal{T}$ if its cost is smaller than some other tree already in $\mathcal{T}$.
+%If there is no empty capacity in $\mathcal{T}$, its most expensive tree is discarded.
+}
 
 \textcolor{blue}{
 Adapting the method by \citet{pajor18} to our problem is straightforward,
