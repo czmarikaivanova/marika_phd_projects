@@ -25,3 +25,4 @@
 *.swp
 *.synctex.gz
 !lower-bound*.pdf
+*.spl
