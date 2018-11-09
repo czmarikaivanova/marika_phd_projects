@@ -22,6 +22,7 @@
 *.ods
 *.out
 *.pdf
+*.swo
 *.swp
 *.synctex.gz
 !lower-bound*.pdf
