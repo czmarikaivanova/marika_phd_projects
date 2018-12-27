@@ -1,7 +1,7 @@
 \section{The Minimum Shared Multicast Tree Problem}
 \label{sec:SBT}
-\textcolor{blue}{Like in studies of other problems in combinatorial optimization,
-a theoretical investigation of SMT requires abstraction and simplification of the real-world communication network.}
+Like in studies of other problems in combinatorial optimization,
+a theoretical investigation of SMT requires abstraction and simplification of the real-world communication network.
 
 \subsection{Assumptions and notation} \label{sec:notation}
 
@@ -11,7 +11,7 @@ The set $A=\{(i,j):i,j\in V,\{i,j\}\in E\}$ consists of all arcs that can be der
 Nodes in the set $D\subseteq V$ are the destination nodes, also referred to as \emph{source} nodes.
 For an arbitrary $i\in V$, sets $V\setminus \{i\}$ and $D\setminus\{i\}$ are denoted $V_i$ and $D_i$, respectively.
 
-Sending a message directly from (to) node $i$ to (from) node $j$ requires a certain \emph{transmission power} $p_{ij}=p_{ji}$.
+Sending a message directly from (to) node $i$ to (from) node $j$ requires a positive \emph{transmission power} $p_{ij}=p_{ji}$.
 Whenever appropriate, $p_{ij}$ is referred to as the \emph{cost} of $\{i,j\}$,
 and edges with higher cost than others are said to be \emph{more expensive}.
 When the nodes are embedded in the plane, $p_{ij}$ is often assumed \citep{Papadimitriou06SBT,Haugland12Dual,halgamuge} to be
@@ -19,10 +19,11 @@ proportional to the Euclidean distance between $i$ and $j$ raised to a power bet
 For simplicity, we assume for all $i\in V$ that $p_{ij}\neq p_{ik}$ when $j\neq k$, and define
 $W_{ij}=\left\{k\in V_i: p_{ik}\geq p_{ij}\right\}$
 as the set of nodes requiring no less power at $i$ than $j$ does.
-The notation $G'\subseteq G$ means that $G'=(V_{G'},E_{G'})$ is a subgraph of $G$, i.e., $E_{G'}\subseteq E$ consists of the edges in $E$ with both end nodes in $V_{G'}\subseteq V$.
+The notation $G'\subseteq G$ means that $G'=(V_{G'},E_{G'})$ is a subgraph of $G$, 
+i.e., $E_{G'}\subseteq E$ consists uniquely of edges in $E$ with both end nodes in $V_{G'}\subseteq V$.
 
-Let $y \in \{0,1\}^E$ and $X\in\{0,1\}^{A\times D}$ be binary vectors with components corresponding to
-edges and pairs of arcs and destination nodes, respectively.
+Let $y \in \{0,1\}^E$ and $X\in\{0,1\}^{A\times D}$ be binary vectors with components corresponding to edges,
+and pairs of arcs and destination nodes, respectively.
 The vector $X^s$ then consists of all components of $X$ corresponding to a pair of which $s$ is the destination.
 The subgraph of $G$ \emph{induced by} $y$ is defined as $G_y=(V,E_y)$, where $E_y=\left\{\{i,j\}\in E: y_{ij}=1\right\}$.
 Directed graphs induced by binary vectors over $A$ are defined analogously.
@@ -33,16 +34,16 @@ where the domain of each variable is replaced by the interval $[0,1]$.
 Further, $z\left(\mathcal{M}\right)$ and $z\left(\text{LP}(\mathcal{M})\right)$ denote the optimal objective function values of the respective models.
 
 
-\textcolor{blue}{\subsection{Network model} \label{sec:netmod}}
+\subsection{Network model} \label{sec:netmod}
 
 To illustrate the problem under study, consider the tree depicted in Fig. \ref{fig:objexp}.
-Six destination nodes ($D=\{i_1,i_2,a,b,c,d\}$) are spanned by use of three Steiner nodes ($V\setminus D = \{e,i,i_3\}$).
+Seven destination nodes ($D=\{i_1,i_2,a,b,c,d,e\}$) are spanned by use of two Steiner nodes ($V\setminus D = \{i,i_3\}$).
 Consider node $i$ and its three neighbour nodes $i_1$, $i_2$ and $i_3$, ordered by decreasing power requirement at $i$.
 That is, $p_{ii_1}>p_{ii_2}>p_{ii_3}$.
-If the transmitting node is outside the shaded area ($i_2$, $c$, or $d$), then node $i$ relays the signal to two of its neighbors, \emph{including $i_1$}.
-Exploiting the wireless advantage, node $i$ reaches both neighbors if it is assigned power level $p_{ii_1}$.
+If the transmitting node is outside the shaded area ($i_2$, $c$, $d$, or $e$), then node $i$ relays the signal to two of its neighbors, \emph{including $i_1$}.
+Exploiting the wireless advantage, the signal from node $i$ reaches both neighbors if it is assigned power level $p_{ii_1}$.
 Otherwise, if the signal source is either $i_1$, $a$, or $b$, node $i$ passes the signal on to neighbors $i_2$ and $i_3$.
-This is accomplished by power $p_{ii_2}$.
+This is accomplished by setting the power level of $i$ to $p_{ii_2}$.
 
 \begin{figure}[h!]
 \centering
@@ -57,7 +58,7 @@ This is accomplished by power $p_{ii_2}$.
   \node[scale=.85] (i2) at (4,3.1) {$i_2$};
   \node[scale=.85,fill=none] (i3) at (5.8,1.2) {$i_3$};
   \node[fill=none] (i) at (4.5,1.5) {$i$};
-  \node[fill=none] (e) at (8,1.5) {$e$};
+  \node (e) at (8,1.5) {$e$};
  \end{scope}
  \draw (a) -- (i1) -- (b);
  \draw (i1) -- (i) -- (i3) -- (e) -- (c);
@@ -82,13 +83,12 @@ is thus proportional to the number of sources in $D$ that utilize the respective
 In the example in Fig.\ \ref{fig:objexp}, the expected power consumption at node $i$ is thus proportional to $4p_{ii_1} + 3p_{ii_2}$.
 Summing over all nodes yields the total cost of the tree.
 
-\textcolor{blue}{
 The cost model outlined above aims for minimization of the transmission energy.
 As pointed out by \citet{halgamuge}, transmission constitutes a substantial part of the total energy consumption in wireless sensor networks.
 The energy consumed by other operations, such as sensing, logging, processing, actuation, and cluster formation is less sensitive to the topology
 of the multicast tree, and is neglected in the current work.
 This is in line with the approach taken in the wide range of literature on optimization models for wireless networks mentioned in Section \ref{sec:literature}.
-For a detailed energy model for wireless sensor networks, the reader is referred to the article by \citet{halgamuge}.}
+For a detailed energy model for wireless sensor networks, the reader is referred to the article by \citet{halgamuge}.
 
 \subsection{Problem definition} \label{sec:probdef}
 
@@ -119,7 +119,7 @@ Only edges that are the most or second-most expensive edge incident to either of
 Some edges in $T$ can thus be scaled down to zero cost, while the most expensive ones are scaled up.
 
 Problem \ref{def:problem} also has close resemblance with the SBT problem, which is the special case of SMT where $D=V$.
-Like many other network design problems, \textsc{Minimum Shared Multicast Tree} is NP-hard.
+Like many other network design problems, SMT is NP-hard.
 This follows directly from the NP-hardness of SBT \citep{Papadimitriou06SBT}.
 
 

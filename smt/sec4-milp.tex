@@ -66,9 +66,9 @@ Constraints (\ref{con:dd:oneDir}) imply that $G_y$ consists of undirected versio
 showing that no cycle in $G_y$ contains destination nodes.
 Let $t\in D$, and let $P$
 be the maximal path in $G_{X^s}$ that terminates in $t$.
-Existence and uniqueness of this path is assured since $t$ belongs to an acyclic connected component.
+Existence and uniqueness of this path are assured since $t$ belongs to an acyclic connected component.
 According to (\ref{con:dd:arrowFromNonDestA}), each non-destination in $P$ has an entering arc in $P$,
-while (\ref{con:dd:arrowFromDest}) ensures that the same is true for every destination node, except $s$.
+while constraints (\ref{con:dd:arrowFromDest}) ensure that the same is true for every destination node, except $s$.
 It follows that the first node of $P$ is $s$.
 Thus, destinations $s$ and $t$ belong to a joint, acyclic connected component of $G_y$.
 
@@ -95,9 +95,9 @@ leading to the following formulation $\mathcal{X}_1$ of SMT:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{subequations}[resume]\label{eq:smt-x2}
 \begin{align}
-\label{objective:mf} \makebox[0pt][l]{$\displaystyle{} \min \sum\limits_{(i,j) \in A} p_{ij} \sum\limits_{s \in D} \pi^s_{ij} $}\\
+\label{objective:mf} \makebox[0pt][l]{$\displaystyle{} \min \sum\limits_{(i,j) \in A} p_{ij} \sum\limits_{s \in D} \pi^s_{ij}, $}\\
 \notag\text{s.t.}\\
-\notag(\ref{con:dd:arrowFromDest}) &- (\ref{con:dd:vardim})\\
+\notag(\ref{con:dd:arrowFromDest}) &- (\ref{con:dd:vardim}),\\
 \label{con:dd:yvar} X^s_{ij} & \leq \sum_{k\in W_{ij}}\pi^s_{ik} & s\in D, (i,j)\in A,\\
 \label{con:dd:vardimy} \pi & \in \{0,1\}^{A\times D}.
 \end{align}~
@@ -113,7 +113,7 @@ If $(X,y,\pi)$ is an optimal solution to $\mathcal{X}_1$, then $G_y$ consists of
 solves Problem \ref{def:problem}.
 \end{prop}
 \begin{proof}
-Follows directly from $p\geq 0$ and Lemma \ref{lem:x0valid}.
+Follows directly from $p>0$ and Lemma \ref{lem:x0valid}.
 \qed
 \end{proof}
 
@@ -140,7 +140,7 @@ Adding the following valid inequalities to $\mathcal{X}_1$ gives another SMT-mod
 \end{subequations}
 Constraints (\ref{con:dd:extraCon}) ensure that the number of arcs leaving a non-destination in $T^s$ is no less than the number of entering arcs.
 Their effect is to disallow non-destination leaves.
-Equations (\ref{con:vi:Y1}) say that in arborescence $T^s$, exactly one arc $(s,j)$ leaving the root $s$ is declared to be largest.
+Equations (\ref{con:vi:Y1}) say that in arborescence $T^s$, exactly one arc $(s,j)$ leaving the root $s$ is declared to be the largest.
 Validity of the constraints follows immediately because the root has at least one leaving arc.
 As constraints (\ref{con:vi:sumYImpSumX}) state, if an arc enters non-destination node $i$ in $T^s$, then $i$ also has at least one out-going arc,
 exactly one of which is the most expensive.
@@ -218,7 +218,7 @@ Multi-commodity flow formulations appear abundantly in the network design litera
 \begin{lemma}
 \label{lem:modelcorrect}
 Assume $(F,g)$ satisfies (\ref{con:pf1:xfrel})--(\ref{con:pf1:dim}).
-Then some connected component $T^0\subseteq G_{g}$ is an $s_0$-rooted arborescence spanning $D$,
+Then, some connected component $T^0\subseteq G_{g}$ is an $s_0$-rooted arborescence spanning $D$,
 and some connected component of $G_{F^s}\subseteq T^0$ is a path from $s_0$ to $s\in D_0$.
 Conversely, for any $s_0$-rooted arborescence $T^0$ spanning $D$, there exists a pair $(F,g)$ satisfying (\ref{con:pf1:xfrel})--(\ref{con:pf1:dim}) such that $T^0$
 is a connected component of $G_g$.
@@ -233,7 +233,8 @@ To model the objective function of SMT, the following result is useful:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{prop}\label{prop:transx}
 Assume $(F,g)$ satisfies (\ref{con:pf1:xfrel})--(\ref{con:pf1:dim}),
-and let $T^s=(V^s,A^s)$ be the arborescence obtained by redirecting the arcs in $T^0$ such that they point away from $s\in D_0$. Then
+and let $T^s=(V^s,A^s)$ be the arborescence obtained by redirecting the arcs in $T^0$ such that they point away from $s\in D_0$. 
+Then,
 $$
 g_{ij} - F^s_{ij}+F^s_{ji} = 
 	\begin{cases}
@@ -244,12 +245,12 @@ $$
 \end{prop}
 %
 \begin{proof}
-Because $T^0$ is acyclic, it follows from the capacity constraints (\ref{con:pf1:xfrel}) that $g_{ij}+F^s_{ji}\leq 1$.
+Because $T^0$ is acyclic, $g_{ij}+g_{ji}\leq 1$, and it follows from the capacity constraints (\ref{con:pf1:xfrel}) that $g_{ij}+F^s_{ji}\leq 1$.
 The same constraints also imply $g_{ij} - F^s_{ij}\geq 0$.
 Hence, $g_{ij} - F^s_{ij}+F^s_{ji}\in\{0,1\}$.
 
 Arborescence $T^s$ contains arc $(i,j)$ iff $(i,j)$ is in $A^0$ but not on a path to $s$, or its reverse arc $(j,i)$ is on such a path.
-By Lemma \ref{lem:modelcorrect}, this disjunction is equivalent to $g_{ij}-F_{ij}^s=1$ or $F_{ji}=1$.
+By Lemma \ref{lem:modelcorrect}, this disjunction is equivalent to $g_{ij}-F_{ij}^s=1$ or $F_{ji}^s=1$.
 The result then follows since the two conditions are mutually exclusive.
 \qed
 \end{proof}
@@ -270,9 +271,9 @@ resulting in model $\mathcal{F}_1$:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{subequations}[resume]
 \begin{align}
-\notag\min & \sum\limits_{(i,j) \in A} p_{ij} \sum\limits_{s \in D} \pi^s_{ij}\\ 
+\notag\min & \sum\limits_{(i,j) \in A} p_{ij} \sum\limits_{s \in D} \pi^s_{ij},\\ 
 \notag\text{s.t.} && \\
-\notag(\ref{con:pf1:xfrel}) - (\ref{con:pf1:dim})\\
+\notag(\ref{con:pf1:xfrel}) - (\ref{con:pf1:dim}),\\
 \label{con:pf1:yvar} g_{ij} - F^s_{ij}+F^s_{ji} & \leq \sum_{k\in W_{ij}}\pi^s_{ik}  & s\in D_0, (i,j)\in A,\\
 \label{con:pf1:yvar0} g_{ij} & \leq \sum_{k\in W_{ij}}\pi^0_{ik}   &  (i,j)\in A,\\
 \label{con:pf1:dimy} \pi&\in \{0,1\}^{A\times D}.
@@ -436,7 +437,7 @@ the following constraints are introduced \citep{Polzin}:
 According to Prop.\ \ref{prop:transx}, if $i\in V\setminus D$ and $g_{ji} - F^s_{ji}+F^s_{ij}=1$ for some $j\in V_i$ and $s\in D_0$,
 then $i$ is a Steiner node used to establish connection between $s$ and some other destination.
 Since $i$ also has a leaving arc in $T^s$, we have $\pi_{ik}^s=1$ for some $k\neq i,s$.
-This proves validity of the constraint $\sum_{j\in V_i}\left(g_{ji} - F^s_{ji}+F^s_{ij}\right)=\sum_{j\in V_i\setminus\{s\}}\pi_{ij}^s$
+This proves validity of the constraint $\sum_{j\in V_i}\left(g_{ji} - F^s_{ji}+F^s_{ij}\right)=\sum_{j\in V_i\setminus\{s\}}\pi_{ij}^s$.
 Application of flow conservation (\ref{con:pf1:flow}) yields the valid constraints
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                     %
@@ -455,5 +456,5 @@ completing formulation $\mathcal{F}_2$ as model $\mathcal{F}_1$ extended by (\re
 %
 \begin{remark} \label{rem:f2}
 With $s_0$ equal to the destination node in position (47, 65), the instance given in Remark \ref{rem:x2} also proves independence of the three sets
-(\ref{con:vi:Y1}), (\ref{con:vi:sumYImpSumXTrans})--(\ref{con:pf1:flowX}) of valid inequalities.
+(\ref{con:vi:Y1}), (\ref{con:pf1:flowX})--(\ref{con:vi:sumYImpSumXTrans}) of valid inequalities.
 \end{remark}

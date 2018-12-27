@@ -48,7 +48,7 @@ Thus, $(F,g,\pi)$ is feasible in $\text{LP}(\mathcal{F}_1)$.\qed
 If $(F,g,\pi)$ is feasible in $\text{LP}(\mathcal{F}_1)$ with (\ref{eq:lemlpf1a})--(\ref{eq:lemlpf1b}) satisfied, then
 \begin{equation}
 \begin{aligned}
- & g_{ij}+g_{ji} \leq 1 & \{i,j\}\in E. \label{eq:lemlpf1c}
+ & g_{ij}+g_{ji} \leq 1 & \text{ for all } \{i,j\}\in E. \label{eq:lemlpf1c}
 \end{aligned}
 \end{equation}
 \end{lemma}
@@ -149,7 +149,7 @@ By exploiting $g\leq\bar{g}$, $g_{ij}-g_{ji}=\bar{g}_{ij}-\bar{g}_{ji}$, and fea
 it is seen straightforwardly that also $(F,g,\pi)$ is feasible.
 
 For $j\in D_0$ (for $j=s_0$), (\ref{eq:lemlpf2b}) follows directly from (\ref{con:pf1:fitt=xit}) (from (\ref{con:pf1:xi0=0})).
-Consider an $i\in D$ and $j\in V_i$ such that $g_{ij}>F_{ij}^*$.
+Consider an $i\in D$ and $j\in V_i\setminus D$ such that $g_{ij}>F_{ij}^*$.
 Reducing $g_{ij}$ to $F_{ij}^*$, while keeping all other variables unchanged, preserves feasibility and the objective function value.
 Thus, $(F,g)$ is henceforth assumed to satisfy (\ref{eq:lemlpf2b}).
 
@@ -183,10 +183,11 @@ Node $j_p$ exists since the digraph is acyclic.
 Define the maximum capacity reduction as
 \[ \sigma^*=\min\left\{\sigma_{j_0j_1}(F,g),\min\left\{g_{j_l,j_{l+1}}-F^*_{j_l,j_{l+1}}: l=1,\ldots,p-1\right\}\right\}>0.\]
 Let $\tilde{g}_{j_lj_{l+1}}=g_{j_lj_{l+1}}-\sigma^*$ for $l=0,1,\ldots,p-1$, and let $\tilde{g}_{ij}=g_{ij}$ for all other arcs $(i,j)\in A$.
-Then $(F,\tilde{g},\pi)$ is feasible since, in comparison to $(F,g,\pi)$,  the left hand side of inequality (\ref{con:pf1:flowX}) is
+Then, $(F,\tilde{g},\pi)$ is feasible since, in comparison to $(F,g,\pi)$,  the left hand side of inequality (\ref{con:pf1:flowX}) is
 increased by no more than the current slack at node $i=j_0$, reduced at node $i=j_p$, and unchanged at all other nodes $i\in V\setminus D$.
 For all arcs $(i,j)$ between non-destination nodes, $\sigma_{ij}(F,\tilde{g})\leq\sigma_{ij}(F,g)$, except from arcs for which $i=j_p$.
-But since $(j_p,j)\not\in A[F,g]$, $\sigma_{j_pj}(F,g)>0$.
+But since $(j_p,j)\not\in A[F,g]$, we have that $\sigma_{j_pj}(F,\tilde{g})\leq\tilde{g}_{j_pj}-F^*_{j_pj}=g_{j_pj}-F^*_{j_pj}=0$.
+%$\sigma_{j_pj}(F,g)>0$.
 % and the capacity reduction introduces no new violations of (\ref{eq:lemlpf2a})--(\ref{eq:lemlpf2c}).
 It is finally observed that $\sigma_{j_0j_1}(F,\tilde{g})=0$ if $\sigma^*=\sigma_{j_0j_1}(F,g)$,
 and that $\left(j_l,j_{l+1}\right)\in A[F,g]\setminus A[F,\tilde{g}]$ if $\sigma^*=g_{j_l,j_{l+1}}-F^*_{j_l,j_{l+1}}$ for some $l=1,\ldots,p-1$.
@@ -206,7 +207,7 @@ Moreover,
 To prove (\ref{eq:lemlpf2d}), we only consider arcs $(i,j)$ where $g_{ij}>0$, as the inequality to be proved obviously holds otherwise.
 
 Assume first that $g_{ij}=F_{ij}^*$.
-Then there exists a destination node $t\in D_0\setminus\{i\}$ such that $F_{ij}^t=g_{ij}$.
+Then, there exists a destination node $t\in D_0\setminus\{i\}$ such that $F_{ij}^t=g_{ij}$.
 Because (\ref{eq:lemlpf1a}) gives $F_{ji}^t=0$, flow conservation (\ref{con:pf1:flow}) at node $i$ implies 
 $g_{ij}=F_{ij}^t\leq \sum_{k\in V_i\setminus\{j\}}F_{ki}^t\leq \sum_{k\in V_i\setminus\{j\}}g_{ki}$.
 
@@ -241,7 +242,7 @@ The proof that $(X,y,\pi)$ satisfies constraints (\ref{con:dd:arrowFromDest})--(
 and (\ref{con:dd:yvar}),
 follows the proof of Prop.\ \ref{prop:f1strx1}.
 To prove (\ref{con:dd:arrowFromNonDestA}), let $i\in V\setminus D$, $j\in V_i$, and $s\in D$.
-Then transformations (\ref{eq:trangX0})--(\ref{eq:trangX}) yield
+Then, transformations (\ref{eq:trangX0})--(\ref{eq:trangX}) yield
 $X_{ij}^s - \sum_{k\in V_{i}\setminus \{j\}}X_{ki}^s
 = g_{ij} - \sum_{k\in V_{i}\setminus \{j\}}g_{ki}$, and (\ref{con:dd:arrowFromNonDestA}) follows from (\ref{eq:lemlpf2d}) in Lemma \ref{lem:lpf2gijgji}.
 Because Lemma \ref{lem:lpf2gijgji} also states that $g_{ij}+g_{ji}\leq 1$, we further have that $X_{ij}^s\in[0,1]$ and $y_{ij}\in[0,1]$.

@@ -113,19 +113,16 @@ This applies to both $\mathcal{F}_1$ and $\mathcal{X}_1$.
 \label{tab:small_inst}
 \end{table}
 
-\textcolor{blue}{\subsection{Comparison with alternative methods}}
-\textcolor{blue}{
+\subsection{Comparison with alternative methods}
 We now investigate the ability of IP models $\mathcal{X}_1$ and $\mathcal{F}_1$ to produce good feasible solutions when a time limit is imposed.
 We compare the quality of obtained solutions with those calculated by Alg.\ \ref{alg:meta}.
 The results for time restrictions 5, 10 and 20 CPU-minutes, respectively, are reported in Tab. \ref{tab:metamod}.
 These experiments are carried out on the instance sets that are investigated in the experiments reported in Section \ref{sec:expsmall}.
-}
 
 \begin{table}[]
 \centering
 \setlength{\tabcolsep}{6pt} % Default value: 6pt
 \renewcommand{\arraystretch}{1.4} % Default value: 1
-\textcolor{blue}{
 \begin{tabular}{rrrrrrrrrrr}
 \multicolumn{1}{l}{}      & \multicolumn{1}{l}{}      & \multicolumn{3}{c}{5 min}  & \multicolumn{3}{c}{10 min} & \multicolumn{3}{c}{20 min}     \\\hline
 \multicolumn{1}{l}{$|V|$} & \multicolumn{1}{l}{$|D|$} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{Alg.\ \ref{alg:meta}} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{Alg.\ \ref{alg:meta}} & \multicolumn{1}{c}{$\mathcal{X}_1$} & \multicolumn{1}{c}{$\mathcal{F}_1$} & \multicolumn{1}{c}{Alg.\ \ref{alg:meta}} \\
@@ -142,32 +139,27 @@ These experiments are carried out on the instance sets that are investigated in 
 24  & 8    &102.8&101.9&100.0&102.1&100.7&100.0&101.1&100.1&100.0\\
 27  & 9    &133.2&118.7&100.0&111.3&109.1&100.0&108.2&104.1&100.0                                  
 \end{tabular}
-}
-\caption{\textcolor{blue}{Comparison of the metaheuristic algorithm (Alg.\ \ref{alg:meta}) and interrupted B\&B applied to IP models $\mathcal{X}_1$ and $\mathcal{F}_1$}}
+\caption{Comparison of the metaheuristic algorithm (Alg.\ \ref{alg:meta}) and interrupted B\&B applied to IP models $\mathcal{X}_1$ and $\mathcal{F}_1$}
 \label{tab:metamod}
 \end{table}
 
-\textcolor{blue}{
 For a given instance, we define the relative performance of a method as the objective function value obtained by the method relative to the best performing method in that instance.
 For each time bound imposed, and for each instance set,
 we report the relative performances of $\mathcal{X}_1$, $\mathcal{F}_1$, and Alg.\ \ref{alg:meta}, averaged over all instances in the set.
 For example, if all methods find the optimum in every instance, the three corresponding values are all 100.0\%.
 Thus, the lowest value in a given instance set indicates the best performing method.
-}
 
-\textcolor{blue}{
 Table \ref{tab:metamod} reveals that Alg.\ \ref{alg:meta} gives the best average results for all combinations of time limits and most instance set.
 Even when the time bound is set beyond what is needed to compute the optimal solution by submitting $\mathcal{X}_1$ or $\mathcal{F}_1$ to B\&B (see Tab.\ \ref{tab:small_inst}),
 this observation applies.
 Although Alg.\ \ref{alg:meta} fails to prove optimality, it appears to be a better procedure than B\&B for computing near-optimal solutions within a given time bound.
-}
 \newline
 
 \subsection{Experiments on strong lower bounds}
 
 As the instance size increases, exact solution of the SMT problem becomes unrealistic.
-To assess the quality of fast and possible inexact methods, \textcolor{blue}{such as Alg.\ \ref{alg:meta}, 
-or the construction methods by \citep{ivanova16isco}},  access to tightest possible lower bounds is crucial.
+To assess the quality of fast and possible inexact methods, such as Alg.\ \ref{alg:meta}, 
+or the construction methods by \citep{ivanova16isco},  access to tightest possible lower bounds is crucial.
 In the next set of experiments, we compare two different methods for computing the bounds.
 Section \ref{sec:expcomplp} indicates that $z\left(\text{LP}(\mathcal{X}_3)\right)$ is a strong bound,
 but solving $\text{LP}(\mathcal{X}_3)$ requires excessive computations.
@@ -183,13 +175,12 @@ The results are illustrated in Fig.\ \ref{fig:cggr}.
 Each curve represents the progress of the lower bound within each instance set.
 The horizontal axes represent running times ranging from 0 to 20 CPU-minutes.
 The vertical axes correspond to the lower bounds as a percentage of $z\left(\text{LP}(\mathcal{F}_1)\right)$, averaged over all instances in the set.
-\textcolor{blue}{
 The tightness of the bounds increases with time, and it can be observed from the graphs that the CG bound becomes tighter at some point.
 We express the lower bounds relative to $z\left(\text{LP}(\mathcal{F}_1)\right)$, as indicated by the vertical axes.
 The lower bound obtained from B\&B grows sharply while the dual simplex method is solving the root problem of the B\&B tree, 
 which goes on until the curve reaches 100\%.
 After that point, the bound grows rather slowly.
-In contrast, CG produces a bound that grows faster even after it has reached the value $z\left(\text{LP}(\mathcal{X}_1)\right)$.}
+In contrast, CG produces a bound that grows faster even after it has reached the value $z\left(\text{LP}(\mathcal{X}_1)\right)$.
 
 \begin{figure}[!htb]
     \centering
@@ -232,9 +223,9 @@ In contrast, CG produces a bound that grows faster even after it has reached the
         \label{fig:cggr34-17}
     \end{subfigure}
   \caption{Comparison of lower bounds obtained by CG and B\&B on model $\mathcal{F}_1$.
-	\textcolor{blue}{Each figure depicts the progress of lower bounds for instances with varying number of destination and non-destination nodes.
+	Each figure depicts the progress of lower bounds for instances with varying number of destination and non-destination nodes.
 	The lower bounds are obtained by applying the CG scheme to model $\mathcal{F}_1$ (black curves), and by running the B\&B algorithm (grey curves), respectively.
-	}}
+	}
   \label{fig:cggr}
 \end{figure} 
 

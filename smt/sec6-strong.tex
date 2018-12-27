@@ -29,9 +29,9 @@ Model $\mathcal{X}_2$ is strengthened by constraints on $x$, which yields model 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{subequations}[resume]\label{eq:smt-x3}
 \begin{align}
-\notag\makebox[0pt][l]{$\displaystyle{} \min \sum\limits_{(i,j) \in A} p_{ij} \sum\limits_{s \in D} \pi^s_{ij} $}\\
+\notag\makebox[0pt][l]{$\displaystyle{} \min \sum\limits_{(i,j) \in A} p_{ij} \sum\limits_{s \in D} \pi^s_{ij}, $}\\
 \text{s.t.} \notag \\
-(\ref{con:dd:arrowFromDest}) - (\ref{con:dd:vardim}) &\text{ and }(\ref{con:dd:yvar}) - (\ref{con:vi:sumYImpSumX}) \notag\\
+(\ref{con:dd:arrowFromDest}) - (\ref{con:dd:vardim}) &\text{ and }(\ref{con:dd:yvar}) - (\ref{con:vi:sumYImpSumX}), \notag\\
 \label{con:mf:flowNormal} \sum\limits_{\substack{ j\in V_i}}x^{st}_{ij}-\sum\limits_{\substack{j\in V_i }}x^{st}_{ji} & = 0 & (s,t)\in A(D), i\in V\setminus\{s,t\},\\
 \label{con:mf:flowDest} \sum\limits_{\substack{j\in V_t}}x^{st}_{jt}    & = 1  & (s,t)\in A(D),\\
 \label{con:mf:fcap} x^{st}_{ij} &\leq X^{s}_{ij}& (i,j)\in A, (s,t)\in A(D),\\
@@ -46,7 +46,7 @@ Correspondingly, (\ref{con:mf:flowNormal})--(\ref{con:mf:flowDest}) can be viewe
 stating that there exists a path from $s$ to $t$ in $T^s$.
 Next, constraints (\ref{con:mf:fcap}) express the obvious relation between $X$ and $x$, that $(i,j)$ is an arc on the path from $s$ to $t$ only if it exists in $T^s$.
 The flow symmetry equations (\ref{con:mf:fsym}) state that the path from $s$ to $t$ contains $(i,j)$ iff the reverse path contains the reverse arc $(j,i)$.
-Finally, constraints (\ref{con:vi:sumFImpSumY}) reflect that if the path from $s$ to $t$ intersects $(i,j)$,
+Finally, constraints (\ref{con:vi:sumFImpSumY}) reflect the fact that if the path from $s$ to $t$ intersects $(i,j)$,
 then the most expensive arc leaving $i$ in $T^s$ has cost $p_{ij}$ or more.
 
 % In terms of multicast trees, $x_{ij}^{st}=1$ if and only if $(i,j)$ carries a signal that is initiated in $s$ and destined for $t$.
@@ -57,7 +57,7 @@ then the most expensive arc leaving $i$ in $T^s$ has cost $p_{ij}$ or more.
 \subsection{Extension of $\mathcal{F}_2$ by variables of joint flow [$\mathcal{F}_3$]}
 
 Similarly to the extension $\mathcal{X}_3$ of $\mathcal{X}_2$ by $x$-variables, the model $\mathcal{F}_2$ is extended by variables with four node indices.
-Analogously to $A(D)$, let $E(D_0)=E\cap (D_0\times D_0)$ be the set of pairs of \emph{unordered} destination nodes other than $s_0$.
+Analogously to $A(D)$, let $E(D_0)=E\cap (D_0\times D_0)$ be the set of \emph{unordered} pairs of destination nodes other than $s_0$.
 Define variables $f\in\{0,1\}^{A\times E(D)}$, where
 $f_{ij}^{st}=f_{ji}^{ts}$ takes the value 1 iff the path in $T^0$ from $s_0$ to $s$ intersects with the path from $s_0$ to $t$ at arc $(i,j)$.
 % \newline\newline
@@ -80,9 +80,9 @@ The new variables enable formulation of an extended model denoted $\mathcal{F}_3
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{subequations}[resume]
 \begin{align}
-\notag\min & \sum\limits_{(i,j) \in A} p_{ij} \sum\limits_{s \in D} \pi^s_{ij}\\ \notag
+\notag\min & \sum\limits_{(i,j) \in A} p_{ij} \sum\limits_{s \in D} \pi^s_{ij},\\ \notag
 \text{s.t.}& && \\
-\notag(\ref{con:pf1:flow})-(\ref{con:vi:sumYImpSumXTrans}) & ~\text{and} ~(\ref{con:vi:Y1}) \\
+\notag(\ref{con:pf1:flow})-(\ref{con:vi:sumYImpSumXTrans}) & ~\text{and} ~(\ref{con:vi:Y1}), \\
 \label{con:pf2:flowHook} \sum\limits_{\substack{ j \in V_i }}\left(f^{st}_{ij}-f^{st}_{ji}\right) & \leq 
   \begin{cases}
     1, & i = s_0, \\
@@ -100,7 +100,7 @@ The new variables enable formulation of an extended model denoted $\mathcal{F}_3
 By (\ref{con:pf2:flowHook}), it is ensured that the joint flow is non-increasing by increasing distance from the root $s_0$.
 While constraints (\ref{con:pf2:startInSource})--(\ref{con:pf2:stopInDest}) ensure $f_{ij}^{st}=0$ if $F_{ij}^s=0$ or $F_{ij}^t=0$,
 inequalities (\ref{con:pf2:stronger}) impose $f_{ij}^{st}=1$ if $F_{ij}^s=F_{ij}^t=1$.
-By virtue of (\ref{con:pf2:stopInDest}), (\ref{con:pf2:stronger}) replace the weaker capacity constraints (\ref{con:pf1:xfrel}).
+By virtue of (\ref{con:pf2:stopInDest}), constraints (\ref{con:pf2:stronger}) replace the weaker capacity constraints (\ref{con:pf1:xfrel}).
 Finally, (\ref{con:pf2:sumFImpSumY})--(\ref{con:pf2:sumFImpSumY2}) are valid inequalities justified by:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                     %
@@ -110,8 +110,9 @@ Finally, (\ref{con:pf2:sumFImpSumY})--(\ref{con:pf2:sumFImpSumY2}) are valid ine
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{prop}\label{prop:transX}
 Assume $(F,f,g,\pi)$ satisfies (\ref{con:pf1:flow})--(\ref{con:vi:sumYImpSumXTrans}), (\ref{con:vi:Y1}), (\ref{con:pf2:flowHook})--(\ref{con:pf2:stronger}), and (\ref{con:pf2:dim}).
-Let $T^0\subseteq G_g$ be the arborescence spanning $D$ (see Lemma \ref{lem:modelcorrect}),
-and let $T^s$ be the arborescence obtained by redirecting the arcs in $T^0$ such that they point away from $s\in D$. Then, for all nodes $i$ and $j$ ($i\neq j$) spanned by $T^0$,
+Let $T^0\subseteq G_g$ be the corresponding arborescence spanning $D$ (see Lemma \ref{lem:modelcorrect}),
+and let $T^s$ be the arborescence obtained by redirecting the arcs in $T^0$ such that they point away from $s\in D$. 
+Then, for all nodes $i$ and $j$ ($i\neq j$) spanned by $T^0$,
 $$
 F^t_{ij}+F^s_{ji}-f^{st}_{ij}-f^{st}_{ji} = 
 	\begin{cases}
@@ -195,15 +196,15 @@ How to make this selection is discussed next.
 %                                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{algorithm}
-$Q\leftarrow\emptyset$\;
+$Q\leftarrow\emptyset$\\
 \Do {$\Delta Q\neq\emptyset$}{
-	$(X,y,\pi)\leftarrow\text{optimal solution to $\text{LP}(\mathcal{X}_2+Q)$}$\;
+	$(X,y,\pi)\leftarrow\text{optimal solution to $\text{LP}(\mathcal{X}_2+Q)$}$\\
 	\For{$\{s,t\}\in E(D)\setminus Q$} {
-		$v_{st}\leftarrow \text{optimal objective function value in $\mathcal{MF}$}$\;
+		$v_{st}\leftarrow \text{optimal objective function value in $\mathcal{MF}$}$\\
 	}
-	$Q'\leftarrow\left\{\{s,t\}\in E(D)\setminus Q: v_{st}<1\right\}$\;
-	Select some $\Delta Q\subseteq Q'$ such that $\Delta Q\neq\emptyset$ if $Q'\neq\emptyset$\;
-	$Q\leftarrow Q\cup\Delta Q$\;
+	$Q'\leftarrow\left\{\{s,t\}\in E(D)\setminus Q: v_{st}<1\right\}$\\
+	Select some $\Delta Q\subseteq Q'$ such that $\Delta Q\neq\emptyset$ if $Q'\neq\emptyset$\\
+	$Q\leftarrow Q\cup\Delta Q$\\
 }
  \caption{Constraint generation}
 \label{alg:cg}
@@ -223,8 +224,10 @@ Selection of pairs $\{s,t\}$ to be included in $\Delta Q$ in Algorithm \ref{alg:
 
 Balancing the needs for rapid growth in $z\left(\text{LP}(\mathcal{X}_2+Q)\right)$ and small value of $|Q|$,
 we pursue the CG scheme as follows:
-In the graph $(D,Q')$, where edges correspond to pairs $\{s,t\}$ at which $v_{st}<1$, let the edge weights be $1-v_{st}$.
+In the graph $(D,Q')$, where $Q'=\{\{s,t\}\in E(D):v_{st}<1\}$,
+%edges correspond to pairs $\{s,t\}$ at which $v_{st}<1$, 
+let the edge weights be $1-v_{st}$.
 Let $\Delta Q$ be a matching of maximum weight in $(D,Q')$.
-Thus, for each $\{u,w\}\in E(D)\setminus Q$ where (\ref{con:mf:flowNormal})--(\ref{con:vi:sumFImpSumY}) are not satisfiable given the current values of $X$ and $\pi$,
+Thus, for each $\{u,w\}\in E(D)\setminus Q$ where constraints (\ref{con:mf:flowNormal})--(\ref{con:vi:sumFImpSumY}) are not satisfiable given the current values of $X$ and $\pi$,
 $Q$ is extended by an adjacent edge.
 
