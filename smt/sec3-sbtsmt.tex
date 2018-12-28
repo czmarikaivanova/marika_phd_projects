@@ -72,7 +72,7 @@ This is accomplished by setting the power level of $i$ to $p_{ii_2}$.
 
 In more general terms, let $T\subseteq G$ be a multicast tree, and let $i\in V_T$ be a node with at least two neighbors in $T$.
 For multicasting a message, the power to be assigned to node $i$ is either $p_{ii_1}$ or $p_{ii_2}$, where $i_1$ and $i_2$ are neighbors of $i$ such that
-$p_{ii_1}>p_{ii_2}>p_{ij}$ for all other neighbors $j\in V_T\setminus\{i_1,i_2\}$.
+$p_{ii_1}>p_{ii_2}>p_{ij}$ for all other neighbors $j\neq i_1,i_2$ of $i$ in $V_T$.
 If the path from the message source to $i$ intersects $i_1$, then power $p_{ii_2}$ is sufficient.
 Otherwise, the power $p_{ii_1}$ is required.
 At a leaf $i$ with neighbor $i_1$ in $T$, the power assignment is $p_{ii_1}$ if $i$ also is the message source, and zero otherwise.
