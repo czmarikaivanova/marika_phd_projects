@@ -3,7 +3,8 @@
 
 The practical part of this work focuses on comparison of models presented in Sections \ref{sec:ILP} and \ref{sec:strong}.
 Instances of given number of nodes and destinations are generated with random coordinates uniformly distributed on the square with corners at [0, 0] and [100, 100].
-A time limit of 20 CPU-minutes is imposed on each run.
+All edge costs equal the square of the distance between the end nodes.
+A time limit of 20 CPU-minutes is imposed on each run, unless otherwise is stated.
 All experiments are run on an Intel Core 2 Quad CPU at 2.83 GHz and 8 GB RAM.
 The models are implemented in Java with Concert technology and solved using Cplex 12.5.1 optimizer.
  
@@ -48,8 +49,10 @@ $|V|$ & $|D|$ & $\text{LP}(\mathcal{X}_1)$ & $\text{LP}(\mathcal{F}_1)$ & $\text
 
 Average running times are reported in Tab. \ref{tab:small_inst_time}.
 The 20 CPU-minutes time restriction manifests itself when applying the strongest LP relaxations to some instances.
-Solving $\text{LP}(\mathcal{F}_k), (k=1,2,3)$ is consistently more time-consuming than solving $\text{LP}(\mathcal{X}_k)$, which demonstrates a trade-off between strength and running time.  
-Moreover, the running times of $\text{LP}(\mathcal{X}_3)$ and $\text{LP}(\mathcal{F}_3)$ are, in instances of the actual size, considerably longer than the time it takes to solve $\mathcal{F}_1$ to optimality using branch-and-bound (B\&B).
+Solving $\text{LP}(\mathcal{F}_k), (k=1,2,3)$ is consistently more time-consuming than solving $\text{LP}(\mathcal{X}_k)$, 
+which demonstrates a trade-off between strength and running time.  
+Moreover, the running times of $\text{LP}(\mathcal{X}_3)$ and $\text{LP}(\mathcal{F}_3)$ are, in instances of the actual size, 
+considerably longer than the time it takes to solve $\mathcal{F}_1$ to optimality (see the last column) using branch-and-bound (B\&B).
 This implies that both $\text{LP}(\mathcal{X}_3)$ and $\text{LP}(\mathcal{F}_3)$ are impractical in their basic form.
 Bounds corresponding to the other models are computed in a few seconds.
 
@@ -78,7 +81,7 @@ Bounds corresponding to the other models are computed in a few seconds.
 
 Small instances are often solved to optimality relatively quickly with B\&B.
 We investigate what is the maximum size of instances that can be solved to optimality within 20 CPU-minutes using models $\mathcal{X}_1$ and $\mathcal{F}_1$.
-The experiments compare sets of instances with different $|V|/|D|$ ratios.
+The experiments compare sets of instances with different values of $|V|/|D|$.
 For instances of the size given in columns 1--2, Table \ref{tab:small_inst} shows the average running time in CPU-seconds (columns 3--4),
 the number of instances solved to optimality (columns 5--6),
 and the average ratio between the upper and lower bounds on the minimum cost (columns 7--8) upon interruption of the solver.
@@ -90,7 +93,7 @@ As a consequence, the number of instances solved to optimality within the given 
 B\&B applied to $\mathcal{F}_1$ solves to optimality all the instances with no more than 20 nodes, as well as those where $|V|=21$ and $|D|=7$.
 When the weaker model $\mathcal{X}_1$ is used, more time is needed in some of these instances.
 Furthermore, when instances are not solved to optimality, $\mathcal{F}_1$ leaves a tighter optimality gap than does $\mathcal{X}_1$.
-Note that instances with lower $|V|/|D|$ ratio are more difficult to solve than those with higher $|V|/|D|$.
+Note that the lower the value of $|V|/|D|$, the more difficult are the instances to solve.
 This applies to both $\mathcal{F}_1$ and $\mathcal{X}_1$.
 \begin{table}[h!]
 \centering
@@ -139,28 +142,28 @@ These experiments are carried out on the instance sets that are investigated in 
 24  & 8    &102.8&101.9&100.0&102.1&100.7&100.0&101.1&100.1&100.0\\
 27  & 9    &133.2&118.7&100.0&111.3&109.1&100.0&108.2&104.1&100.0                                  
 \end{tabular}
-\caption{Comparison of the metaheuristic algorithm (Alg.\ \ref{alg:meta}) and interrupted B\&B applied to IP models $\mathcal{X}_1$ and $\mathcal{F}_1$}
+\caption{Comparison between the metaheuristic algorithm (Alg.\ \ref{alg:meta}) and interrupted B\&B applied to IP models $\mathcal{X}_1$ and $\mathcal{F}_1$}
 \label{tab:metamod}
 \end{table}
 
 For a given instance, we define the relative performance of a method as the objective function value obtained by the method relative to the best performing method in that instance.
 For each time bound imposed, and for each instance set,
 we report the relative performances of $\mathcal{X}_1$, $\mathcal{F}_1$, and Alg.\ \ref{alg:meta}, averaged over all instances in the set.
-For example, if all methods find the optimum in every instance, the three corresponding values are all 100.0\%.
+For example, if all methods find an optimum in every instance, the three corresponding values are all 100.0\%.
 Thus, the lowest value in a given instance set indicates the best performing method.
 
-Table \ref{tab:metamod} reveals that Alg.\ \ref{alg:meta} gives the best average results for all combinations of time limits and most instance set.
-Even when the time bound is set beyond what is needed to compute the optimal solution by submitting $\mathcal{X}_1$ or $\mathcal{F}_1$ to B\&B (see Tab.\ \ref{tab:small_inst}),
-this observation applies.
-Although Alg.\ \ref{alg:meta} fails to prove optimality, it appears to be a better procedure than B\&B for computing near-optimal solutions within a given time bound.
+Table \ref{tab:metamod} reveals that Alg.\ \ref{alg:meta} gives the best average results for all combinations of time limit and instance set.
+Even when the time bound is set beyond what is needed to compute an optimal solution by submitting or $\mathcal{F}_1$ to B\&B (see Tab.\ \ref{tab:small_inst}),
+Alg.~\ref{alg:meta} produces no worse solutions, and is thus able to identify an optimal solution in each considered instance.
+Although Alg.\ \ref{alg:meta} fails to prove optimality in general, it appears to be a better procedure than B\&B for computing near-optimal solutions within a given time bound.
 \newline
 
 \subsection{Experiments on strong lower bounds}
 
 As the instance size increases, exact solution of the SMT problem becomes unrealistic.
 To assess the quality of fast and possible inexact methods, such as Alg.\ \ref{alg:meta}, 
-or the construction methods by \citep{ivanova16isco},  access to tightest possible lower bounds is crucial.
-In the next set of experiments, we compare two different methods for computing the bounds.
+or the construction methods by \cite{ivanova16isco},  access to tightest possible lower bounds is crucial.
+In the next set of experiments, 
 Section \ref{sec:expcomplp} indicates that $z\left(\text{LP}(\mathcal{X}_3)\right)$ is a strong bound,
 but solving $\text{LP}(\mathcal{X}_3)$ requires excessive computations.
 At this point, the CG scheme (Alg.\ \ref{alg:cg}) comes into play.
@@ -180,7 +183,7 @@ We express the lower bounds relative to $z\left(\text{LP}(\mathcal{F}_1)\right)$
 The lower bound obtained from B\&B grows sharply while the dual simplex method is solving the root problem of the B\&B tree, 
 which goes on until the curve reaches 100\%.
 After that point, the bound grows rather slowly.
-In contrast, CG produces a bound that grows faster even after it has reached the value $z\left(\text{LP}(\mathcal{X}_1)\right)$.
+In contrast, CG produces a bound that grows faster, even after it has reached the value $z\left(\text{LP}(\mathcal{X}_1)\right)$.
 
 \begin{figure}[!htb]
     \centering
@@ -232,7 +235,7 @@ In contrast, CG produces a bound that grows faster even after it has reached the
 Reflecting the progress of the dual simplex method applied to $\text{LP}(\mathcal{X}_2)$ and $\text{LP}(\mathcal{F}_1)$, respectively,
 both CG and B\&B increase the lower bound sharply at the beginning. 
 While solution of $\text{LP}(\mathcal{F}_1)$ is still in progress, the growth of the lower bound is faster than what is observed for CG (solution of $\text{LP}(\mathcal{F}_1)$). 
-This is particularly apparent for instances of size 28 and larger (Fig. \ref{fig:cggr28-14} - \ref{fig:cggr34-17}). %and can be explained as a consequence of Prop. \ref{prop:f1strx1}.
+This is particularly apparent for instances of size 28 and beyond (Fig. \ref{fig:cggr28-14} - \ref{fig:cggr34-17}). %and can be explained as a consequence of Prop. \ref{prop:f1strx1}.
 Once $\text{LP}(\mathcal{F}_1)$ is solved, the increase slows down substantially, and remains modest until the time limit is reached. 
 An analogous, but more moderate, gradual slow-down is also observed for CG.
 In each instance set, the two curves intersect at some point in time.

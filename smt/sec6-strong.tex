@@ -169,7 +169,7 @@ By applying the symmetry $x_{ij}^{st}=x_{ji}^{ts}$ also to (\ref{con:vi:sumFImpS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{subequations}\label{eq:mf}
 \begin{align}
-\label{objective:maxf} &\max\sum\limits_{i \in V_s} x_{si} \\ 
+\label{objective:maxf} &\max\sum\limits_{i \in V_s} x_{si}, \\ 
 \text{s.t.}  \notag   \\
 \label{con:maxf:flowNormal}  \sum\limits_{\substack{ j\in V_i}}\left(x_{ij}-x_{ji}\right) & = 0 & i\in V\setminus\{s,t\},\\
 \label{con:maxf:fcapst}   x_{ij} &\leq \min\{X_{ij}^s, X_{ji}^t\}     &  (i,j)\in A,  \\ 	 
